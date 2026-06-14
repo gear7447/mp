@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Entraîneur">
+  <meta name="theme-color" content="#0d0b0a">
+  <title>Entraîneur de techniques</title>
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.svg">
+</head>
+<body>
+
+<!-- ===================== BIBLIOTHÈQUE ===================== -->
+<section id="screen-library" class="screen">
+  <div class="topbar">
+    <div><p class="eyebrow">Magie · Travail des techniques</p><h1 class="serif">Mon répertoire</h1></div>
+    <div style="display:flex;gap:4px;align-items:center">
+      <button class="link" id="statsBtn" aria-label="Statistiques" style="font-size:1.2rem">📊</button>
+      <button class="link" id="settingsBtn" aria-label="Réglages" style="font-size:1.25rem">⚙</button>
+      <button class="link" id="manageBtn">Gérer</button>
+    </div>
+  </div>
+  <div id="reviewBox"></div>
+  <div class="tech-list" id="techList"></div>
+  <div class="actions">
+    <button class="btn btn-primary" id="startSessionBtn">Démarrer une séance</button>
+  </div>
+</section>
+
+<!-- ===================== GÉRER LES TECHNIQUES ===================== -->
+<section id="screen-manage" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="manageBack">‹ Retour</button>
+    <h1 class="serif">Gérer les techniques</h1>
+    <button class="link" id="manageAdd">+ Ajouter</button>
+  </div>
+  <div class="tech-list" id="manageList"></div>
+</section>
+
+<!-- ===================== ÉDITEUR ===================== -->
+<section id="screen-editor" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="editCancel">‹ Annuler</button>
+    <h1 class="serif" id="editTitle">Technique</h1>
+    <span style="width:54px"></span>
+  </div>
+  <div class="form">
+    <div class="field"><label>Nom</label><input type="text" id="f_name" placeholder="ex. Saut de coupe"></div>
+    <div class="field"><label>Famille</label><select id="f_family"></select></div>
+
+    <div class="field">
+      <label>Avancement pendant le bloc</label>
+      <select id="f_mode">
+        <option value="tap">À chaque appui — la consigne change quand je touche l'écran</option>
+        <option value="interval">À intervalle régulier — nouvelle consigne toutes les X s</option>
+        <option value="fixed">Fixe — une seule consigne pendant tout le bloc</option>
+      </select>
+    </div>
+    <div class="field hidden" id="f_intervalWrap">
+      <label>Intervalle (secondes)</label><input type="number" id="f_interval" min="1" step="1" value="10">
+    </div>
+
+    <div class="row">
+      <div class="field"><label>Durée du bloc (min)</label><input type="number" id="f_block" min="0.5" step="0.5" value="5"></div>
+      <div class="field"><label>Niveau</label><select id="f_level"></select></div>
+    </div>
+
+    <div class="field">
+      <label>Consigne (modèle)</label>
+      <textarea id="f_template" placeholder="ex. Culle le {carte}"></textarea>
+      <p class="hint">Variables : <code>{carte}</code> carte au hasard · <code>{n}</code> nombre tiré au sort · <code>{nx}</code> le multiple (simple, double, triple…) lié au même <code>{n}</code>.</p>
+    </div>
+    <div class="row" id="f_nWrap">
+      <div class="field"><label>{n} minimum</label><input type="number" id="f_nmin" min="1" max="20" value="1"></div>
+      <div class="field"><label>{n} maximum</label><input type="number" id="f_nmax" min="1" max="20" value="6"></div>
+    </div>
+
+    <label class="check"><input type="checkbox" id="f_focus"> Technique en focus ⭐ (revient plus souvent)</label>
+    <label class="check"><input type="checkbox" id="f_metro"> Métronome pendant le bloc</label>
+    <div class="field hidden" id="f_bpmWrap"><label>Tempo (BPM)</label><input type="number" id="f_bpm" min="30" max="240" value="60"></div>
+
+    <button class="btn btn-danger hidden" id="deleteBtn">Supprimer cette technique</button>
+  </div>
+  <div class="actions"><button class="btn btn-primary" id="saveTechBtn">Enregistrer</button></div>
+</section>
+
+<!-- ===================== SETUP SÉANCE ===================== -->
+<section id="screen-setup" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="setupCancel">‹ Retour</button>
+    <h1 class="serif">Nouvelle séance</h1>
+    <span style="width:54px"></span>
+  </div>
+  <div class="form">
+    <div class="field">
+      <label>Format</label>
+      <div class="modes" id="modeChoices">
+        <label class="mode"><input type="radio" name="mode" value="once" checked>
+          <span><span class="t">Un passage</span><span class="d">Toutes les techniques, une fois chacune, ordre aléatoire. Fin automatique.</span></span></label>
+        <label class="mode"><input type="radio" name="mode" value="total">
+          <span><span class="t">Durée totale</span><span class="d">Tu choisis les techniques et une durée totale. Les blocs s'enchaînent (répétitions possibles, focus ⭐ pris en compte).</span></span></label>
+        <label class="mode"><input type="radio" name="mode" value="free">
+          <span><span class="t">Libre</span><span class="d">Tu choisis les techniques, ça tourne jusqu'à ce que tu appuies sur Terminer.</span></span></label>
+      </div>
+    </div>
+
+    <div class="field hidden" id="totalWrap">
+      <label>Durée totale (min)</label><input type="number" id="s_total" min="1" step="1" value="15">
+    </div>
+
+    <div class="field" id="pickWrap">
+      <label>Techniques de la séance <span id="pickHint" class="hint" style="display:inline"></span></label>
+      <div class="pick" id="pickList"></div>
+    </div>
+  </div>
+  <div class="actions"><button class="btn btn-primary" id="beginBtn">Commencer</button></div>
+</section>
+
+<!-- ===================== DRILL ===================== -->
+<section id="screen-drill" class="screen hidden">
+  <div class="drill-head">
+    <div class="timer"><span id="blockTimer">5:00</span><small>Bloc</small></div>
+    <div class="timer hidden" id="totalTimerWrap" style="text-align:right"><span id="totalTimer">15:00</span><small>Séance</small></div>
+  </div>
+  <div class="drill-stage" id="drillStage">
+    <div class="drill-tech"><div class="fam" id="d_fam"></div><div class="nm" id="d_name"></div></div>
+    <div class="card hidden" id="d_card"></div>
+    <div class="consigne serif" id="d_consigne"></div>
+    <div class="taphint" id="d_hint"></div>
+  </div>
+  <div class="paused-ind hidden" id="pausedInd">En pause</div>
+  <button class="btn btn-ghost" id="pauseBtn" style="margin-bottom:10px">⏸ Pause</button>
+  <div class="drill-controls">
+    <button class="btn btn-ghost" id="endBtn">Terminer</button>
+    <button class="btn btn-primary" id="nextBtn">Suivant ▸</button>
+  </div>
+</section>
+
+<!-- ===================== RECAP ===================== -->
+<section id="screen-recap" class="screen hidden">
+  <div class="topbar"><h1 class="serif">Séance terminée</h1></div>
+  <div class="stat" id="recapStat"></div>
+  <div class="recap-list" id="recapList"></div>
+  <div class="actions"><button class="btn btn-primary" id="recapSave">Enregistrer et fermer</button></div>
+</section>
+
+<!-- ===================== RÉGLAGES ===================== -->
+<section id="screen-settings" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="setBack">‹ Retour</button>
+    <h1 class="serif">Réglages</h1>
+    <span style="width:54px"></span>
+  </div>
+  <div class="form">
+    <div class="field">
+      <label>Poids du focus ⭐</label>
+      <input type="number" id="set_focusW" min="1" max="10" step="0.5" value="2">
+      <p class="hint">Une technique en focus apparaît environ ce nombre de fois plus souvent qu'une technique normale (modes Durée totale et Libre). <code>1</code> = aucun effet, <code>2</code> = deux fois plus, etc.</p>
+    </div>
+    <label class="check"><input type="checkbox" id="set_byLevel"> Pondérer selon le niveau de maîtrise</label>
+    <p class="hint">Si activé, les techniques les moins maîtrisées reviennent plus souvent : le niveau le plus bas pèse le plus, le plus haut le moins. Se combine avec le focus.</p>
+
+    <div class="field">
+      <label>Noms des niveaux de maîtrise</label>
+      <div id="set_levels" style="display:flex;flex-direction:column;gap:8px"></div>
+      <p class="hint">Renomme, ajoute ou retire des niveaux (2 minimum), du moins maîtrisé (en haut) au plus maîtrisé (en bas). Ces noms s'appliquent à toutes les techniques.</p>
+    </div>
+
+    <button class="btn btn-ghost" type="button" id="goData" style="margin-top:4px">Sauvegarde & transfert ›</button>
+  </div>
+  <div class="actions"><button class="btn btn-primary" id="setSave">Enregistrer</button></div>
+</section>
+
+<!-- ===================== STATISTIQUES ===================== -->
+<section id="screen-stats" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="statsBack">‹ Retour</button>
+    <h1 class="serif">Statistiques</h1>
+    <span style="width:54px"></span>
+  </div>
+  <div class="stats-body" id="statsBody"></div>
+</section>
+
+<!-- ===================== SAUVEGARDE / TRANSFERT ===================== -->
+<section id="screen-data" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="dataBack">‹ Retour</button>
+    <h1 class="serif">Sauvegarde & transfert</h1>
+    <span style="width:54px"></span>
+  </div>
+  <div class="form">
+    <div class="sec-h" style="margin-top:0">Exporter</div>
+    <p class="hint">Crée une copie de ton répertoire, tes niveaux et ton historique. Transfère-la sur ton autre appareil (AirDrop, iCloud Drive…) puis importe-la.</p>
+    <div class="row">
+      <button class="btn btn-ghost" type="button" id="expFile">Fichier .json</button>
+      <button class="btn btn-ghost" type="button" id="expCopy">Copier le code</button>
+    </div>
+    <textarea id="dataCode" readonly placeholder="Le code d'export s'affichera ici" style="min-height:84px;font-family:ui-monospace,monospace;font-size:.7rem"></textarea>
+
+    <div class="sec-h">Importer</div>
+    <p class="hint"><b>Fusionner</b> additionne les données importées aux tiennes — les séances sont dédupliquées, donc réimporter le même fichier ne compte jamais deux fois. C'est l'option pour que les stats des deux appareils s'additionnent. <b>Remplacer</b> écrase tout par le contenu importé.</p>
+    <input type="file" id="impFile" accept=".json,application/json" style="color:var(--muted);font-size:.85rem">
+    <textarea id="impCode" placeholder="…ou colle un code d'export ici" style="min-height:78px;font-family:ui-monospace,monospace;font-size:.7rem"></textarea>
+    <div class="row">
+      <button class="btn btn-primary" type="button" id="impMerge">Fusionner</button>
+      <button class="btn btn-danger" type="button" id="impReplace">Remplacer tout</button>
+    </div>
+    <div id="dataStatus" class="hint" style="min-height:1.3em;color:var(--brass)"></div>
+  </div>
+</section>
+
+<!-- ===================== CONFIRMATION SUIVANT ===================== -->
+<div id="confirmNext" class="overlay hidden">
+  <div class="dialog">
+    <div class="dlg-t">Passer au bloc suivant&nbsp;?</div>
+    <div class="dlg-d">Le chrono est en pause.</div>
+    <div class="dlg-btns">
+      <button class="btn btn-ghost" id="cnCancel">Annuler</button>
+      <button class="btn btn-primary" id="cnOk">Oui, suivant ▸</button>
+    </div>
+  </div>
+</div>
+
+<!-- scripts dans l'ordre des dépendances -->
+<script src="js/constants.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/library.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/session.js"></script>
+<script src="js/recap.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

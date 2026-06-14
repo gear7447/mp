@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- fond sombre arrondi -->
+  <rect width="512" height="512" rx="96" fill="#1d1812"/>
+  <!-- carte blanche légèrement inclinée -->
+  <rect x="120" y="90" width="272" height="352" rx="22" fill="#f8f5ee"
+        transform="rotate(-6 256 266)"/>
+  <!-- bordure intérieure -->
+  <rect x="134" y="104" width="244" height="324" rx="16" fill="none" stroke="#0000001a" stroke-width="2"
+        transform="rotate(-6 256 266)"/>
+  <!-- As de cœur central -->
+  <text x="256" y="310" font-family="Georgia,serif" font-size="200" fill="#c23341"
+        text-anchor="middle" transform="rotate(-6 256 266)">♥</text>
+  <!-- rang coin haut-gauche -->
+  <text x="148" y="170" font-family="Georgia,serif" font-size="72" fill="#c23341"
+        text-anchor="middle" transform="rotate(-6 256 266)">A</text>
+</svg>
