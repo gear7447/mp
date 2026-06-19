@@ -7,7 +7,10 @@
   }
 
   document.querySelectorAll('.nav-tab').forEach(tab => {
-    tab.addEventListener('click', () => show(tab.dataset.module));
+    tab.addEventListener('click', () => {
+      show(tab.dataset.module);
+      if (tab.dataset.module === 'physique') renderPhyExList();
+    });
   });
 
   const { data: { session } } = await supabaseClient.auth.getSession();

@@ -244,12 +244,104 @@
 <section id="screen-physique" class="screen hidden">
   <div class="topbar">
     <div><p class="eyebrow">Magie</p><h1 class="serif">Physique</h1></div>
+    <button class="link" id="phyRoutinesBtn">Routines</button>
   </div>
-  <div class="module-coming">
-    <div class="module-coming-icon">💪</div>
-    <div class="module-coming-title">Physique</div>
-    <div class="module-coming-desc">Exercices de flexibilité, mobilité, force et précision des doigts — créer des exercices et composer des routines</div>
-    <div class="module-coming-badge">Bientôt disponible</div>
+  <div class="phy-cat-filter" id="phyCatFilter">
+    <button class="cat-pill active" data-cat="">Tout</button>
+    <button class="cat-pill" data-cat="Flexibilité">🤸 Flex.</button>
+    <button class="cat-pill" data-cat="Mobilité">🔄 Mob.</button>
+    <button class="cat-pill" data-cat="Force">💪 Force</button>
+    <button class="cat-pill" data-cat="Précision">🎯 Préc.</button>
+  </div>
+  <div class="tech-list" id="phyExList"></div>
+  <div class="actions">
+    <button class="btn btn-primary" id="phyAddExBtn">+ Ajouter un exercice</button>
+  </div>
+</section>
+
+<!-- ===================== PHYSIQUE — éditeur exercice ===================== -->
+<section id="screen-physique-editor" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="phyExCancel">‹ Retour</button>
+    <h1 class="serif" id="phyExTitle">Exercice</h1>
+    <span style="width:54px"></span>
+  </div>
+  <div class="form">
+    <div class="field"><label>Nom</label><input type="text" id="phy_name" placeholder="ex. Étirement des doigts"></div>
+    <div class="field">
+      <label>Catégorie</label>
+      <select id="phy_cat">
+        <option value="Flexibilité">🤸 Flexibilité</option>
+        <option value="Mobilité">🔄 Mobilité</option>
+        <option value="Force">💪 Force</option>
+        <option value="Précision">🎯 Précision</option>
+      </select>
+    </div>
+    <div class="field"><label>Description / consigne</label><textarea id="phy_desc" placeholder="Comment réaliser l'exercice…"></textarea></div>
+    <div class="field">
+      <label>Durée par défaut</label>
+      <div class="row">
+        <select id="phy_dur_type" style="flex:1">
+          <option value="time">Secondes</option>
+          <option value="reps">Répétitions</option>
+        </select>
+        <input type="number" id="phy_dur_val" min="1" step="1" value="30" style="flex:0 0 76px">
+      </div>
+    </div>
+    <button class="btn btn-danger hidden" id="phyExDelete">Supprimer cet exercice</button>
+  </div>
+  <div class="actions"><button class="btn btn-primary" id="phyExSave">Enregistrer</button></div>
+</section>
+
+<!-- ===================== PHYSIQUE — routines ===================== -->
+<section id="screen-physique-routines" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="phyRoutinesBack">‹ Physique</button>
+    <h1 class="serif">Mes routines</h1>
+    <button class="link" id="phyAddRoutineBtn">+ Créer</button>
+  </div>
+  <div class="tech-list" id="phyRoutineList"></div>
+</section>
+
+<!-- ===================== PHYSIQUE — éditeur routine ===================== -->
+<section id="screen-physique-routine-editor" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="phyRtCancel">‹ Retour</button>
+    <h1 class="serif" id="phyRtTitle">Routine</h1>
+    <span style="width:54px"></span>
+  </div>
+  <div class="form">
+    <div class="field"><label>Nom</label><input type="text" id="phyRt_name" placeholder="ex. Échauffement du matin"></div>
+    <div class="field">
+      <label>Exercices <span class="hint" id="phyRtDurHint" style="display:inline"></span></label>
+      <div id="phyRtSteps" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
+      <button class="btn btn-ghost" id="phyRtAddStep">+ Ajouter un exercice</button>
+    </div>
+    <button class="btn btn-danger hidden" id="phyRtDelete">Supprimer cette routine</button>
+  </div>
+  <div class="actions"><button class="btn btn-primary" id="phyRtSave">Enregistrer</button></div>
+</section>
+
+<!-- ===================== PHYSIQUE — session ===================== -->
+<section id="screen-physique-session" class="screen hidden">
+  <div class="phy-sess-head">
+    <div class="timer">
+      <span id="phySessTimerDisplay">—</span>
+      <small id="phySessTimerLbl">secondes</small>
+    </div>
+    <div class="timer" style="text-align:right">
+      <span id="phySessProgress">1 / 1</span>
+      <small>Exercice</small>
+    </div>
+  </div>
+  <div class="phy-sess-stage">
+    <div class="phy-sess-cat" id="phySessCat"></div>
+    <div class="phy-sess-name serif" id="phySessName"></div>
+    <div class="phy-sess-desc" id="phySessDesc"></div>
+  </div>
+  <div class="actions" style="flex-direction:column;gap:10px">
+    <button class="btn btn-primary" id="phySessNext">Suivant ▸</button>
+    <button class="btn btn-ghost" id="phySessEnd">Terminer la routine</button>
   </div>
 </section>
 
@@ -356,6 +448,7 @@
 <script src="js/data.js"></script>
 <script src="js/notes.js"></script>
 <script src="js/auth.js"></script>
+<script src="js/physique.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

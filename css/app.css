@@ -220,6 +220,48 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 .note-del:hover { color: #d98; }
 .notes-empty { color: var(--muted); font-size: .85rem; padding: 8px 0; }
 
+/* ---------- physique ---------- */
+.phy-cat-filter {
+  display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; margin-bottom: 10px; padding-bottom: 2px; flex-shrink: 0;
+}
+.phy-cat-filter::-webkit-scrollbar { display: none; }
+.cat-pill {
+  background: var(--panel); border: 1px solid var(--line); color: var(--muted);
+  border-radius: 999px; padding: 6px 13px; font-size: .78rem; white-space: nowrap;
+  cursor: pointer; flex-shrink: 0; transition: all .15s;
+}
+.cat-pill.active { background: rgba(202,168,95,.12); border-color: rgba(202,168,95,.35); color: var(--brass); }
+.phy-ex-row { cursor: pointer; }
+.phy-cat-icon { font-size: 1.35rem; flex: none; line-height: 1; }
+
+.phy-step-row {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 10px 12px; display: flex; align-items: center; gap: 8px;
+}
+.phy-step-num { font-size: .72rem; color: var(--muted); font-family: Georgia,serif; min-width: 16px; text-align:center; }
+.phy-step-name { flex: 1; font-size: .9rem; }
+.phy-step-del { background: none; border: none; color: var(--muted); font-size: .8rem; padding: 4px 6px; cursor: pointer; }
+.phy-ex-picker {
+  width: 100%; padding: 12px; font-size: .95rem; margin-bottom: 8px;
+  background: var(--panel); border: 1px solid rgba(202,168,95,.4);
+  border-radius: 10px; color: var(--text);
+}
+
+#screen-physique-session { justify-content: space-between; }
+.phy-sess-head { display: flex; justify-content: space-between; align-items: flex-start; }
+.phy-sess-stage {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 12px 0;
+}
+.phy-sess-cat { font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--brass-soft); }
+.phy-sess-name { font-family: "Georgia",serif; font-size: 1.7rem; color: #f3ecdd; line-height: 1.2; }
+.phy-sess-desc { font-size: .88rem; color: var(--muted); max-width: 88%; line-height: 1.55; }
+@keyframes phy-pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.04); box-shadow: 0 0 28px rgba(202,168,95,.45); }
+}
+
 /* ---------- barre de navigation ---------- */
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0;

@@ -29,6 +29,9 @@ function normalize() {
   if (!Array.isArray(state.history)) state.history = [];
   state.history.forEach(s => { if (!s.id) s.id = uid() + '-' + (s.date || 0); });
   if (!state.notes || typeof state.notes !== 'object' || Array.isArray(state.notes)) state.notes = {};
+  if (!state.physique || typeof state.physique !== 'object') state.physique = { exercises: [], routines: [] };
+  if (!Array.isArray(state.physique.exercises)) state.physique.exercises = [];
+  if (!Array.isArray(state.physique.routines)) state.physique.routines = [];
   state.techniques.forEach(t => {
     if (!t.id) t.id = uid();
     if (!t.updated) t.updated = t.last || Date.now();
@@ -87,7 +90,7 @@ async function save() {
 }
 
 /* ============ navigation ============ */
-const SCREENS = ['login','library','manage','editor','setup','drill','recap','settings','stats','data','tours','mentalisme','physique'];
+const SCREENS = ['login','library','manage','editor','setup','drill','recap','settings','stats','data','tours','mentalisme','physique','physique-editor','physique-routines','physique-routine-editor','physique-session'];
 const NAV_SCREENS = new Set(['library','tours','mentalisme','physique']);
 
 function show(name) {
