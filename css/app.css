@@ -257,6 +257,10 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 .phy-sess-cat { font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--brass-soft); }
 .phy-sess-name { font-family: "Georgia",serif; font-size: 1.7rem; color: #f3ecdd; line-height: 1.2; }
 .phy-sess-desc { font-size: .88rem; color: var(--muted); max-width: 88%; line-height: 1.55; }
+.phy-sess-sets-info {
+  font-family: "Georgia", serif; font-size: 1rem; color: var(--brass);
+  letter-spacing: .04em; margin-top: 4px;
+}
 @keyframes phy-pulse {
   0%,100% { transform: scale(1); }
   50% { transform: scale(1.04); box-shadow: 0 0 28px rgba(202,168,95,.45); }
