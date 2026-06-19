@@ -81,7 +81,12 @@ document.getElementById('saveTechBtn').addEventListener('click', () => {
 document.getElementById('deleteBtn').addEventListener('click', () => {
   if (!editingId) return;
   const t = state.techniques.find(x => x.id === editingId);
-  if (!confirm('Supprimer « ' + (t ? t.name : 'cette technique') + ' » ? Cette action est définitive.')) return;
-  state.techniques = state.techniques.filter(x => x.id !== editingId);
-  save(); renderLibrary(); renderManage(); show(editorReturn);
+  confirmDelete(
+    'Supprimer « ' + (t ? t.name : 'cette technique') + ' » ?',
+    'Cette action est définitive.',
+    () => {
+      state.techniques = state.techniques.filter(x => x.id !== editingId);
+      save(); renderLibrary(); renderManage(); show(editorReturn);
+    }
+  );
 });

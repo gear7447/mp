@@ -59,10 +59,14 @@ function renderPhyCatList() {
       <button class="phy-cat-del link" style="color:${inUse ? 'var(--muted)' : '#d98'};font-size:.85rem" data-cat="${escapeHtml(cat)}">${inUse ? 'utilisée' : '✕'}</button>`;
     el.querySelector('.phy-cat-del').addEventListener('click', () => {
       if (inUse) return;
-      state.physique.categories = state.physique.categories.filter(c => c !== cat);
-      save();
-      renderPhyCatList();
-      renderPhyCatPills();
+      confirmDelete(
+        'Supprimer la catégorie « ' + cat + ' » ?',
+        'Cette action est définitive.',
+        () => {
+          state.physique.categories = state.physique.categories.filter(c => c !== cat);
+          save(); renderPhyCatList(); renderPhyCatPills();
+        }
+      );
     });
     list.appendChild(el);
   });
@@ -192,11 +196,16 @@ function savePhyEx() {
 function deletePhyEx() {
   if (!phyExEditId) return;
   phyInit();
-  state.physique.exercises = state.physique.exercises.filter(e => e.id !== phyExEditId);
-  state.physique.routines.forEach(r => { r.steps = r.steps.filter(s => s.exId !== phyExEditId); });
-  save();
-  renderPhyExList();
-  show('physique');
+  const ex = state.physique.exercises.find(e => e.id === phyExEditId);
+  confirmDelete(
+    'Supprimer « ' + (ex ? ex.name : 'cet exercice') + ' » ?',
+    'Cette action est définitive. Les routines qui utilisent cet exercice seront mises à jour.',
+    () => {
+      state.physique.exercises = state.physique.exercises.filter(e => e.id !== phyExEditId);
+      state.physique.routines.forEach(r => { r.steps = r.steps.filter(s => s.exId !== phyExEditId); });
+      save(); renderPhyExList(); show('physique');
+    }
+  );
 }
 
 /* ============ routines : liste ============ */
@@ -342,10 +351,15 @@ function savePhyRt() {
 
 function deletePhyRt() {
   if (!phyRtEditId) return;
-  state.physique.routines = state.physique.routines.filter(r => r.id !== phyRtEditId);
-  save();
-  renderPhyRoutineList();
-  show('physique-routines');
+  const rt = state.physique.routines.find(r => r.id === phyRtEditId);
+  confirmDelete(
+    'Supprimer « ' + (rt ? rt.name : 'cette routine') + ' » ?',
+    'Cette action est définitive.',
+    () => {
+      state.physique.routines = state.physique.routines.filter(r => r.id !== phyRtEditId);
+      save(); renderPhyRoutineList(); show('physique-routines');
+    }
+  );
 }
 
 /* ============ session ============ */

@@ -106,6 +106,23 @@ function show(name) {
   }
 }
 
+/* ============ confirmation suppression ============ */
+let _delCallback = null;
+function confirmDelete(title, desc, onConfirm) {
+  _delCallback = onConfirm;
+  document.getElementById('confirmDelTitle').textContent = title || 'Supprimer ?';
+  document.getElementById('confirmDelDesc').textContent = desc || 'Cette action est définitive.';
+  document.getElementById('confirmDelOverlay').classList.remove('hidden');
+}
+document.getElementById('confirmDelCancel').addEventListener('click', () => {
+  _delCallback = null;
+  document.getElementById('confirmDelOverlay').classList.add('hidden');
+});
+document.getElementById('confirmDelOk').addEventListener('click', () => {
+  document.getElementById('confirmDelOverlay').classList.add('hidden');
+  if (_delCallback) { _delCallback(); _delCallback = null; }
+});
+
 /* ============ utilitaires ============ */
 function escapeHtml(s) {
   return (s || '').replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
