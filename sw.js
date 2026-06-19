@@ -1,12 +1,14 @@
 /* Service Worker — cache hors-ligne
    Incrémenter CACHE_NAME à chaque déploiement pour forcer la mise à jour. */
-const CACHE_NAME = 'entraineur-v1';
+const CACHE_NAME = 'entraineur-v2';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon.svg',
   './css/app.css',
+  './js/supabase.min.js',
+  './js/supabase-client.js',
   './js/constants.js',
   './js/storage.js',
   './js/library.js',
@@ -16,6 +18,7 @@ const ASSETS = [
   './js/settings.js',
   './js/stats.js',
   './js/data.js',
+  './js/auth.js',
   './js/app.js',
 ];
 

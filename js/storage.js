@@ -36,20 +36,57 @@ function normalize() {
   });
 }
 
-/* Point d'extension future : remplacer load/save par des appels à un service de sync
-   (Supabase, Firebase, clé secrète partagée…) sans toucher au reste du code. */
+/* ============ sync Supabase + localStorage ============ */
 async function load() {
-  let saved = null;
-  try { const v = localStorage.getItem(KEY); if (v) saved = JSON.parse(v); } catch (e) {}
-  state = saved || { techniques: defaults() };
+  // 1. Essaie Supabase si une session est active
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) {
+      const { data, error } = await supabaseClient
+        .from('user_data')
+        .select('data')
+        .eq('user_id', session.user.id)
+        .single();
+      if (data && !error) {
+        state = data.data;
+        normalize();
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+        return;
+      }
+      // Pas encore de données distantes → migre depuis localStorage si dispo
+      const local = localStorage.getItem(KEY);
+      if (local) {
+        state = JSON.parse(local);
+        normalize();
+        await save();
+        return;
+      }
+    }
+  } catch (e) {}
+  // 2. Repli sur localStorage (hors-ligne ou non connecté)
+  try { const v = localStorage.getItem(KEY); if (v) { state = JSON.parse(v); normalize(); return; } } catch (e) {}
+  state = { techniques: defaults() };
   normalize();
 }
+
 async function save() {
+  // Toujours sauvegarder en local (cache hors-ligne)
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  // Sync Supabase si session active
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) {
+      await supabaseClient.from('user_data').upsert({
+        user_id: session.user.id,
+        data: state,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id' });
+    }
+  } catch (e) {}
 }
 
 /* ============ navigation ============ */
-const SCREENS = ['library','manage','editor','setup','drill','recap','settings','stats','data'];
+const SCREENS = ['login','library','manage','editor','setup','drill','recap','settings','stats','data'];
 function show(name) {
   SCREENS.forEach(s => document.getElementById('screen-' + s).classList.toggle('hidden', s !== name));
 }
