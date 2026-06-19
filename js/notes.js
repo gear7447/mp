@@ -1,5 +1,6 @@
 /* ============ notes par technique ============ */
-let notesForId = null; // id de la technique dont le panneau est ouvert
+let notesForId = null;
+let noteToDeleteId = null;
 
 function notesOf(techId) {
   return state.notes[techId] || [];
@@ -36,10 +37,8 @@ function renderNotesList() {
     </div>`).join('');
   list.querySelectorAll('.note-del').forEach(btn => {
     btn.addEventListener('click', () => {
-      state.notes[notesForId] = notesOf(notesForId).filter(n => n.id !== btn.dataset.id);
-      save();
-      renderNotesList();
-      renderLibrary();
+      noteToDeleteId = btn.dataset.id;
+      document.getElementById('confirmDelNote').classList.remove('hidden');
     });
   });
 }
@@ -56,6 +55,22 @@ document.getElementById('notes_add').addEventListener('click', () => {
 });
 
 document.getElementById('notes_close').addEventListener('click', closeNotes);
+
+document.getElementById('delNoteOk').addEventListener('click', () => {
+  if (noteToDeleteId && notesForId) {
+    state.notes[notesForId] = notesOf(notesForId).filter(n => n.id !== noteToDeleteId);
+    save();
+    renderNotesList();
+    renderLibrary();
+  }
+  noteToDeleteId = null;
+  document.getElementById('confirmDelNote').classList.add('hidden');
+});
+
+document.getElementById('delNoteCancel').addEventListener('click', () => {
+  noteToDeleteId = null;
+  document.getElementById('confirmDelNote').classList.add('hidden');
+});
 
 /* bouton Notes pendant le drill */
 document.getElementById('drillNotesBtn').addEventListener('click', () => {
