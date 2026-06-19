@@ -39,7 +39,8 @@ button { font-family: inherit; cursor: pointer; }
 .tech .meta { font-size: .76rem; color: var(--muted); margin-top: 3px; display: flex; flex-wrap: wrap; gap: 4px 10px; }
 .badge { display: inline-flex; align-items: center; gap: 4px; }
 .lvl { color: var(--brass); }
-.star { font-size: 1.35rem; line-height: 1; background: none; border: none; color: #4a4032; padding: 4px; }
+.tech-actions { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: none; width: 36px; }
+.star { font-size: 1.35rem; line-height: 1; background: none; border: none; color: #4a4032; padding: 2px; }
 .star.on { color: var(--brass); }
 .empty { text-align: center; color: var(--muted); padding: 40px 10px; line-height: 1.6; }
 

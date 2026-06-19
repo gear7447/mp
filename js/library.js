@@ -50,8 +50,11 @@ function renderLibrary() {
     const el = document.createElement('div');
     el.className = 'tech ro';
     const nCount = (state.notes[t.id] || []).length;
-    const notesBadge = `<button class="notes-btn ${nCount ? 'has-notes' : ''}" data-id="${t.id}" title="Notes" aria-label="Notes">📝${nCount ? `<span class="notes-count">${nCount}</span>` : ''}</button>`;
-    el.innerHTML = techRowHTML(t) + notesBadge + (t.focus ? '<span class="star on" style="pointer-events:none">★</span>' : '');
+    el.innerHTML = techRowHTML(t) + `
+      <div class="tech-actions">
+        <button class="notes-btn ${nCount ? 'has-notes' : ''}" data-id="${t.id}" title="Notes" aria-label="Notes">📝${nCount ? `<span class="notes-count">${nCount}</span>` : ''}</button>
+        <span class="star ${t.focus ? 'on' : ''}" style="pointer-events:none">${t.focus ? '★' : '☆'}</span>
+      </div>`;
     el.querySelector('.notes-btn').addEventListener('click', e => { e.stopPropagation(); openNotes(t.id); });
     list.appendChild(el);
   }
@@ -67,7 +70,7 @@ function renderManage() {
   for (const t of sortedTechs()) {
     const el = document.createElement('div');
     el.className = 'tech';
-    el.innerHTML = techRowHTML(t) + `<button class="star ${t.focus ? 'on' : ''}" title="Focus">★</button>`;
+    el.innerHTML = techRowHTML(t) + `<button class="star ${t.focus ? 'on' : ''}" title="Focus">${t.focus ? '★' : '☆'}</button>`;
     el.querySelector('.body').addEventListener('click', () => openEditor(t.id, 'manage'));
     el.querySelector('.star').addEventListener('click', e => {
       e.stopPropagation();
