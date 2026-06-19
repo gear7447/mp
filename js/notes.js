@@ -6,10 +6,17 @@ function notesOf(techId) {
   return state.notes[techId] || [];
 }
 
-function openNotes(techId) {
-  notesForId = techId;
-  const t = state.techniques.find(x => x.id === techId);
-  document.getElementById('notes_title').textContent = t ? t.name : '';
+let notesOnChange = null;
+
+function openNotes(id, title, onChange) {
+  notesForId = id;
+  notesOnChange = onChange || null;
+  if (title !== undefined) {
+    document.getElementById('notes_title').textContent = title;
+  } else {
+    const t = state.techniques.find(x => x.id === id);
+    document.getElementById('notes_title').textContent = t ? t.name : '';
+  }
   document.getElementById('notes_input').value = '';
   renderNotesList();
   document.getElementById('notesOverlay').classList.remove('hidden');
@@ -51,7 +58,7 @@ document.getElementById('notes_add').addEventListener('click', () => {
   document.getElementById('notes_input').value = '';
   save();
   renderNotesList();
-  renderLibrary();
+  if (notesOnChange) notesOnChange(); else renderLibrary();
 });
 
 document.getElementById('notes_close').addEventListener('click', closeNotes);
@@ -61,7 +68,7 @@ document.getElementById('delNoteOk').addEventListener('click', () => {
     state.notes[notesForId] = notesOf(notesForId).filter(n => n.id !== noteToDeleteId);
     save();
     renderNotesList();
-    renderLibrary();
+    if (notesOnChange) notesOnChange(); else renderLibrary();
   }
   noteToDeleteId = null;
   document.getElementById('confirmDelNote').classList.add('hidden');

@@ -27,6 +27,8 @@ function openEditor(id, from) {
   document.getElementById('f_template').value = t.template;
   document.getElementById('f_nmin').value = t.nMin;
   document.getElementById('f_nmax').value = t.nMax;
+  document.getElementById('f_learnedAt').value = t.learnedAt
+    ? new Date(t.learnedAt).toISOString().split('T')[0] : '';
   document.getElementById('f_focus').checked = t.focus;
   document.getElementById('f_metro').checked = t.metro;
   document.getElementById('f_bpm').value = t.bpm;
@@ -66,6 +68,7 @@ document.getElementById('saveTechBtn').addEventListener('click', () => {
     focus: document.getElementById('f_focus').checked,
     metro: document.getElementById('f_metro').checked,
     bpm: Math.min(240, Math.max(30, parseInt(document.getElementById('f_bpm').value) || 60)),
+    learnedAt: (() => { const v = document.getElementById('f_learnedAt').value; return v ? new Date(v).getTime() : (editingId ? (state.techniques.find(x=>x.id===editingId)||{}).learnedAt||null : null); })(),
     updated: Date.now(),
   };
   if (obj.nMax < obj.nMin) obj.nMax = obj.nMin;
