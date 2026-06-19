@@ -214,6 +214,45 @@
   <div class="stats-body" id="statsBody"></div>
 </section>
 
+<!-- ===================== TOURS ===================== -->
+<section id="screen-tours" class="screen hidden">
+  <div class="topbar">
+    <div><p class="eyebrow">Magie</p><h1 class="serif">Mes tours</h1></div>
+  </div>
+  <div class="module-coming">
+    <div class="module-coming-icon">🎩</div>
+    <div class="module-coming-title">Tours de magie</div>
+    <div class="module-coming-desc">Liste de tours avec niveau de maîtrise, description du déroulé et techniques liées depuis la cartomagie</div>
+    <div class="module-coming-badge">Bientôt disponible</div>
+  </div>
+</section>
+
+<!-- ===================== MENTALISME ===================== -->
+<section id="screen-mentalisme" class="screen hidden">
+  <div class="topbar">
+    <div><p class="eyebrow">Magie</p><h1 class="serif">Mentalisme</h1></div>
+  </div>
+  <div class="module-coming">
+    <div class="module-coming-icon">🧠</div>
+    <div class="module-coming-title">Mentalisme</div>
+    <div class="module-coming-desc">Mémorisation d'anniversaires de personnalités et de fêtes nationales avec répétition espacée et système majeur</div>
+    <div class="module-coming-badge">Bientôt disponible</div>
+  </div>
+</section>
+
+<!-- ===================== PHYSIQUE ===================== -->
+<section id="screen-physique" class="screen hidden">
+  <div class="topbar">
+    <div><p class="eyebrow">Magie</p><h1 class="serif">Physique</h1></div>
+  </div>
+  <div class="module-coming">
+    <div class="module-coming-icon">💪</div>
+    <div class="module-coming-title">Physique</div>
+    <div class="module-coming-desc">Exercices de flexibilité, mobilité, force et précision des doigts — créer des exercices et composer des routines</div>
+    <div class="module-coming-badge">Bientôt disponible</div>
+  </div>
+</section>
+
 <!-- ===================== SAUVEGARDE / TRANSFERT ===================== -->
 <section id="screen-data" class="screen hidden">
   <div class="topbar">
@@ -282,6 +321,26 @@
     </div>
   </div>
 </div>
+
+<!-- ===================== NAVIGATION ===================== -->
+<nav id="bottomNav" class="bottom-nav hidden" role="navigation" aria-label="Modules">
+  <button class="nav-tab" data-module="library">
+    <span class="nav-icon">🃏</span>
+    <span class="nav-label">Cartomagie</span>
+  </button>
+  <button class="nav-tab" data-module="tours">
+    <span class="nav-icon">🎩</span>
+    <span class="nav-label">Tours</span>
+  </button>
+  <button class="nav-tab" data-module="mentalisme">
+    <span class="nav-icon">🧠</span>
+    <span class="nav-label">Mentalisme</span>
+  </button>
+  <button class="nav-tab" data-module="physique">
+    <span class="nav-icon">💪</span>
+    <span class="nav-label">Physique</span>
+  </button>
+</nav>
 
 <!-- scripts dans l'ordre des dépendances -->
 <script src="js/supabase.min.js"></script>

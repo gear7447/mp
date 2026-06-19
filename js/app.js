@@ -6,6 +6,10 @@
     });
   }
 
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => show(tab.dataset.module));
+  });
+
   const { data: { session } } = await supabaseClient.auth.getSession();
   if (!session) {
     show('login');

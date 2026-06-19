@@ -87,9 +87,19 @@ async function save() {
 }
 
 /* ============ navigation ============ */
-const SCREENS = ['login','library','manage','editor','setup','drill','recap','settings','stats','data'];
+const SCREENS = ['login','library','manage','editor','setup','drill','recap','settings','stats','data','tours','mentalisme','physique'];
+const NAV_SCREENS = new Set(['library','tours','mentalisme','physique']);
+
 function show(name) {
   SCREENS.forEach(s => document.getElementById('screen-' + s).classList.toggle('hidden', s !== name));
+  const nav = document.getElementById('bottomNav');
+  const showNav = NAV_SCREENS.has(name);
+  nav.classList.toggle('hidden', !showNav);
+  if (showNav) {
+    nav.querySelectorAll('.nav-tab').forEach(tab =>
+      tab.classList.toggle('active', tab.dataset.module === name)
+    );
+  }
 }
 
 /* ============ utilitaires ============ */
