@@ -158,7 +158,10 @@
     <div class="taphint" id="d_hint"></div>
   </div>
   <div class="paused-ind hidden" id="pausedInd">En pause</div>
-  <button class="btn btn-ghost" id="pauseBtn" style="margin-bottom:10px">⏸ Pause</button>
+  <div style="display:flex;gap:10px;margin-bottom:10px">
+    <button class="btn btn-ghost" id="pauseBtn" style="flex:1">⏸ Pause</button>
+    <button class="btn btn-ghost" id="drillNotesBtn" style="flex:none;padding:15px 16px">📝</button>
+  </div>
   <div class="drill-controls">
     <button class="btn btn-ghost" id="endBtn">Terminer</button>
     <button class="btn btn-primary" id="nextBtn">Suivant ▸</button>
@@ -239,6 +242,23 @@
   </div>
 </section>
 
+<!-- ===================== OVERLAY NOTES ===================== -->
+<div id="notesOverlay" class="overlay hidden">
+  <div class="dialog" style="max-width:420px;text-align:left">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="dlg-t" id="notes_title" style="margin:0"></div>
+      <button class="link" id="notes_close" style="font-size:1.3rem;padding:4px 8px">✕</button>
+    </div>
+    <div id="notes_list" style="max-height:240px;overflow-y:auto;margin-bottom:14px"></div>
+    <div style="display:flex;gap:8px">
+      <textarea id="notes_input" placeholder="Question, remarque, point à retravailler…" style="flex:1;min-height:64px;font-size:.9rem"></textarea>
+    </div>
+    <div class="actions" style="margin-top:10px">
+      <button class="btn btn-primary" id="notes_add">Ajouter</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===================== CONFIRMATION SUIVANT ===================== -->
 <div id="confirmNext" class="overlay hidden">
   <div class="dialog">
@@ -263,6 +283,7 @@
 <script src="js/settings.js"></script>
 <script src="js/stats.js"></script>
 <script src="js/data.js"></script>
+<script src="js/notes.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/app.js"></script>
 </body>

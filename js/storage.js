@@ -28,6 +28,7 @@ function normalize() {
     state.settings.levelNames = DEFAULT_LEVELS.slice();
   if (!Array.isArray(state.history)) state.history = [];
   state.history.forEach(s => { if (!s.id) s.id = uid() + '-' + (s.date || 0); });
+  if (!state.notes || typeof state.notes !== 'object' || Array.isArray(state.notes)) state.notes = {};
   state.techniques.forEach(t => {
     if (!t.id) t.id = uid();
     if (!t.updated) t.updated = t.last || Date.now();

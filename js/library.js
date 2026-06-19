@@ -49,7 +49,10 @@ function renderLibrary() {
   for (const t of sortedTechs()) {
     const el = document.createElement('div');
     el.className = 'tech ro';
-    el.innerHTML = techRowHTML(t) + (t.focus ? '<span class="star on" style="pointer-events:none">★</span>' : '');
+    const nCount = (state.notes[t.id] || []).length;
+    const notesBadge = `<button class="notes-btn ${nCount ? 'has-notes' : ''}" data-id="${t.id}" title="Notes" aria-label="Notes">📝${nCount ? `<span class="notes-count">${nCount}</span>` : ''}</button>`;
+    el.innerHTML = techRowHTML(t) + notesBadge + (t.focus ? '<span class="star on" style="pointer-events:none">★</span>' : '');
+    el.querySelector('.notes-btn').addEventListener('click', e => { e.stopPropagation(); openNotes(t.id); });
     list.appendChild(el);
   }
 }

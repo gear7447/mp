@@ -190,3 +190,31 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 .st-tech .l .s { color: var(--muted); font-size: .74rem; margin-top: 2px; }
 .st-tech .r { text-align: right; white-space: nowrap; color: var(--brass); font-size: .86rem; }
 .st-tech .r small { display: block; color: var(--muted); font-size: .7rem; }
+
+/* ---------- notes ---------- */
+.notes-btn {
+  background: none; border: none; font-size: 1rem; padding: 4px 6px;
+  color: var(--muted); position: relative; line-height: 1;
+}
+.notes-btn.has-notes { color: var(--brass); }
+.notes-count {
+  position: absolute; top: -2px; right: -4px;
+  background: var(--brass); color: #1a140c;
+  font-size: .55rem; font-weight: 700; border-radius: 999px;
+  padding: 1px 4px; font-family: system-ui;
+}
+.note-item {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 10px 12px; margin-bottom: 8px;
+}
+.note-text { font-size: .9rem; color: var(--text); line-height: 1.5; white-space: pre-wrap; }
+.note-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 6px; font-size: .72rem; color: var(--muted);
+}
+.note-del {
+  background: none; border: none; color: var(--muted); font-size: .85rem;
+  padding: 2px 6px; cursor: pointer;
+}
+.note-del:hover { color: #d98; }
+.notes-empty { color: var(--muted); font-size: .85rem; padding: 8px 0; }
