@@ -287,6 +287,15 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 }
 .tour-picker-item:hover { border-color: var(--brass-soft); }
 
+/* --- anniversaires célébrités --- */
+.ment-upcoming { margin-top: 18px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.ment-upcoming-title { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--brass-soft); margin-bottom: 10px; }
+.ment-upcoming-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.ment-upcoming-item:last-child { border-bottom: none; }
+.ment-upcoming-name { font-size: .9rem; color: var(--text); }
+.ment-upcoming-day { font-size: .8rem; color: var(--muted); white-space: nowrap; }
+.ment-upcoming-day.today { color: #c85050; font-weight: 600; }
+
 /* ---------- physique ---------- */
 .phy-cat-filter {
   display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch;

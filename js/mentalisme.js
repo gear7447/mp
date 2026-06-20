@@ -4,6 +4,34 @@ const MENT_INTERVALS = [1, 2, 4, 8, 16, 32]; // sessions avant prochaine révisi
 const MONTHS_FR = ['janvier','février','mars','avril','mai','juin',
                    'juillet','août','septembre','octobre','novembre','décembre'];
 
+function fmtBirthDate(iso) {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-').map(Number);
+  return `${d} ${MONTHS_FR[m - 1]} ${y}`;
+}
+function _parseBirthDateStr(str) {
+  const mat = (str || '').match(/^(\d+)\s+(\w+)\s+(\d{4})$/i);
+  if (!mat) return '';
+  const mi = MONTHS_FR.indexOf(mat[2].toLowerCase()) + 1;
+  if (!mi) return '';
+  return `${mat[3]}-${String(mi).padStart(2,'0')}-${String(parseInt(mat[1])).padStart(2,'0')}`;
+}
+function mentUpcomingBirthdays(daysAhead = 14) {
+  const deck = mentDeck('anniversaires');
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const result = [];
+  deck.items.forEach(item => {
+    const iso = item.birthDate || _parseBirthDateStr(item.answer);
+    if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+    const [, m, d] = iso.split('-').map(Number);
+    let bday = new Date(today.getFullYear(), m - 1, d);
+    if (bday < today) bday = new Date(today.getFullYear() + 1, m - 1, d);
+    const diff = Math.round((bday - today) / 86400000);
+    if (diff <= daysAhead) result.push({ item, diff });
+  });
+  return result.sort((a, b) => a.diff - b.diff);
+}
+
 const MENT_DECK_INFO = {
   fetes:         { icon: '🌍', label: 'Fêtes nationales', qLabel: 'Pays',         aLabel: 'Date fête nationale' },
   anniversaires: { icon: '🎂', label: 'Anniversaires',    qLabel: 'Personnalité', aLabel: 'Date de naissance'    }
@@ -172,6 +200,21 @@ function renderMentalisme() {
     }));
   body.querySelectorAll('.ment-btn-paliers').forEach(b =>
     b.addEventListener('click', () => mentOpenPaliers(b.dataset.deck)));
+
+  const upcoming = mentUpcomingBirthdays(14);
+  if (upcoming.length) {
+    const sec = document.createElement('div');
+    sec.className = 'ment-upcoming';
+    sec.innerHTML = '<div class="ment-upcoming-title">🎂 Prochains anniversaires</div>' +
+      upcoming.map(u => {
+        const dayLbl = u.diff === 0 ? "Aujourd'hui !" : u.diff === 1 ? 'Demain' : `Dans ${u.diff} j`;
+        return `<div class="ment-upcoming-item">
+          <span class="ment-upcoming-name">${escapeHtml(u.item.question)}</span>
+          <span class="ment-upcoming-day${u.diff === 0 ? ' today' : ''}">${dayLbl}</span>
+        </div>`;
+      }).join('');
+    body.appendChild(sec);
+  }
 }
 
 function renderMentGestion() {
@@ -707,6 +750,10 @@ function mentOpenItemEditor() {
   document.getElementById('mentItemQLabel').textContent = info.qLabel;
   document.getElementById('mentItemALabel').textContent = info.aLabel;
 
+  const isAnniv = mentEditDeck === 'anniversaires';
+  document.getElementById('mentItemARow').classList.toggle('hidden', isAnniv);
+  document.getElementById('mentItemBirthRow').classList.toggle('hidden', !isAnniv);
+
   // reset image state
   _mentPendingImg = null; _mentDeleteImg = false;
   if (_mentImgBlobUrl) { URL.revokeObjectURL(_mentImgBlobUrl); _mentImgBlobUrl = null; }
@@ -717,6 +764,7 @@ function mentOpenItemEditor() {
     document.getElementById('mentItemEditorTitle').textContent = 'Modifier la carte';
     document.getElementById('mentItemQ').value     = item.question;
     document.getElementById('mentItemA').value     = item.answer;
+    document.getElementById('mentItemBirthDate').value = item.birthDate || _parseBirthDateStr(item.answer) || '';
     document.getElementById('mentItemMajor').value = item.majorHint || '';
     document.getElementById('mentItemMnem').value  = item.mnemonic  || '';
     document.getElementById('mentItemLvlRow').classList.remove('hidden');
@@ -728,6 +776,7 @@ function mentOpenItemEditor() {
     document.getElementById('mentItemEditorTitle').textContent = 'Nouvelle carte';
     document.getElementById('mentItemQ').value     = '';
     document.getElementById('mentItemA').value     = '';
+    document.getElementById('mentItemBirthDate').value = '';
     document.getElementById('mentItemMajor').value = '';
     document.getElementById('mentItemMnem').value  = '';
     document.getElementById('mentItemLvlRow').classList.add('hidden');
@@ -753,7 +802,11 @@ function mentItemGoBack() {
 
 async function saveMentItem() {
   const q = document.getElementById('mentItemQ').value.trim();
-  const a = document.getElementById('mentItemA').value.trim();
+  const isAnniv = mentEditDeck === 'anniversaires';
+  const birthDateVal = isAnniv ? document.getElementById('mentItemBirthDate').value : '';
+  const a = isAnniv
+    ? (birthDateVal ? fmtBirthDate(birthDateVal) : (mentEditItem ? (mentDeck(mentEditDeck).items.find(i => i.id === mentEditItem)?.answer || '') : ''))
+    : document.getElementById('mentItemA').value.trim();
   if (!q || !a) return;
   const deck      = mentDeck(mentEditDeck);
   const palierId  = document.getElementById('mentItemPalier').value;
@@ -770,10 +823,11 @@ async function saveMentItem() {
     _mentPendingImg = null;
   }
 
+  const extra = isAnniv ? { birthDate: birthDateVal } : {};
   if (mentEditItem) {
-    Object.assign(deck.items.find(i => i.id === mentEditItem), { question:q, answer:a, majorHint:major, mnemonic:mnem, palierId, imageUrl });
+    Object.assign(deck.items.find(i => i.id === mentEditItem), { question:q, answer:a, majorHint:major, mnemonic:mnem, palierId, imageUrl, ...extra });
   } else {
-    deck.items.push({ id:resolvedId, palierId, question:q, answer:a, majorHint:major, mnemonic:mnem, imageUrl, level:0, lastSession:0, nextSession:0 });
+    deck.items.push({ id:resolvedId, palierId, question:q, answer:a, majorHint:major, mnemonic:mnem, imageUrl, level:0, lastSession:0, nextSession:0, ...extra });
   }
   save();
   mentItemGoBack();

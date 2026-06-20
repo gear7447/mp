@@ -101,12 +101,22 @@ function normalize() {
     }
   }
 
+  const ANNIV_CATS = ['Acteurs & actrices','Musiciens & chanteurs','Sportifs','Personnalités politiques','Divers'];
   if (!state.mentalisme.decks.anniversaires || typeof state.mentalisme.decks.anniversaires !== 'object') {
-    const ap1 = uid();
     state.mentalisme.decks.anniversaires = {
-      paliers: [{ id:ap1, name:'Mes célébrités', unlockedAt: Date.now() }],
+      paliers: ANNIV_CATS.map(name => ({ id: uid(), name, unlockedAt: Date.now() })),
       items:   []
     };
+  } else {
+    const adeck = state.mentalisme.decks.anniversaires;
+    if (adeck.paliers.length === 1 && adeck.paliers[0].name === 'Mes célébrités') {
+      adeck.paliers[0].name = 'Divers';
+      ['Acteurs & actrices','Musiciens & chanteurs','Sportifs','Personnalités politiques'].forEach(name => {
+        adeck.paliers.push({ id: uid(), name, unlockedAt: Date.now() });
+      });
+    }
+    adeck.paliers.forEach(p => { if (!p.unlockedAt) p.unlockedAt = Date.now(); });
+    adeck.items.forEach(item => { if (!('birthDate' in item)) item.birthDate = ''; });
   }
 
   // assure imageUrl sur tous les items mentalisme existants
