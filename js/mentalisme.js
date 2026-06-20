@@ -199,9 +199,15 @@ function mentRenderCard() {
   majorEl.classList.toggle('hidden', !item.majorHint);
   document.getElementById('mentSessMnemInput').value = item.mnemonic || '';
 
-  const imgEl = document.getElementById('mentSessImg');
-  if (item.imageUrl) { imgEl.src = item.imageUrl; imgEl.classList.remove('hidden'); }
-  else { imgEl.src = ''; imgEl.classList.add('hidden'); }
+  const imgEl    = document.getElementById('mentSessImg');
+  const imgBtn   = document.getElementById('mentSessImgBtn');
+  imgEl.src = ''; imgEl.classList.add('hidden');
+  if (item.imageUrl) {
+    imgEl.src = item.imageUrl;
+    imgBtn.classList.remove('hidden');
+  } else {
+    imgBtn.classList.add('hidden');
+  }
 
   const inp = document.getElementById('mentSessInput');
   inp.value = '';
@@ -241,7 +247,7 @@ function mentSubmitAnswer() {
   const { deckId, queue, idx } = mentSess;
   const item    = queue[idx];
   const correct = mentCheckAnswer(typed, item.answer);
-  const rating  = !correct ? 'bad' : elapsed < 3000 ? 'good' : 'ok';
+  const rating  = !correct ? 'bad' : elapsed < 6000 ? 'good' : 'ok';
 
   mentSess.answered = true;
 
@@ -668,6 +674,12 @@ document.getElementById('mentSessInput').addEventListener('input', function() {
   this.value = d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d;
 });
 document.getElementById('mentSessGiveUpBtn').addEventListener('click', mentGiveUp);
+document.getElementById('mentSessImgBtn').addEventListener('click', () => {
+  const imgEl = document.getElementById('mentSessImg');
+  const btn   = document.getElementById('mentSessImgBtn');
+  imgEl.classList.toggle('hidden');
+  btn.textContent = imgEl.classList.contains('hidden') ? '🖼 Voir l\'image' : '🖼 Masquer l\'image';
+});
 document.getElementById('mentSessContinueBtn').addEventListener('click', mentContinue);
 document.getElementById('mentSessRecapBack').addEventListener('click', () => { show('mentalisme'); renderMentalisme(); });
 document.getElementById('mentSessQuit').addEventListener('click', () => {
