@@ -580,7 +580,7 @@ document.getElementById('mentStatsBack').addEventListener('click', () => { show(
 
 // Session
 document.getElementById('mentSessSubmitBtn').addEventListener('click', mentSubmitAnswer);
-document.getElementById('mentSessInput').addEventListener('keydown', e => { if (e.key === 'Enter') mentSubmitAnswer(); });
+document.getElementById('mentSessInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); mentSubmitAnswer(); } });
 document.getElementById('mentSessInput').addEventListener('input', function() {
   let d = this.value.replace(/\D/g, '').slice(0, 4);
   this.value = d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d;
