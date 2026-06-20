@@ -56,40 +56,47 @@ function normalize() {
     });
     state.mentalisme.decks.fetes = { paliers, items };
   } else {
-    // Migration : renommer anciens paliers + ajouter les paliers manquants
-    const RENAME_MAP = {
-      'Europe Lot 1': 'Europe Lot 1 — phares',
-      'Europe Lot 2': 'Europe Lot 2 — connus',
-      'Europe Lot 3': 'Europe Lot 3 — moyens',
-      'Amériques':    'Amériques Lot 1 — phares',
-      'Asie & Océanie': 'Asie Lot 1 — phares',
-    };
     const deck = state.mentalisme.decks.fetes;
-    deck.paliers.forEach(p => { if (RENAME_MAP[p.name]) p.name = RENAME_MAP[p.name]; });
-    const existingNames = new Set(deck.paliers.map(p => p.name));
-    MENT_FETES_DATA.forEach(def => {
-      if (!existingNames.has(def.name)) {
-        const pId = uid();
-        deck.paliers.push({ id: pId, name: def.name, unlockedAt: null });
+    const validNames = new Set(MENT_FETES_DATA.map(d => d.name));
+    const needsRebuild = deck.paliers.some(p => !validNames.has(p.name));
+    if (needsRebuild) {
+      // Structure ancienne détectée → reconstruction complète en préservant la progression par pays
+      const progressByQ = {};
+      deck.items.forEach(item => {
+        progressByQ[item.question] = { level: item.level || 0, lastSession: item.lastSession || 0, nextSession: item.nextSession || 0, mnemonic: item.mnemonic || '' };
+      });
+      const palierMap = {};
+      const paliers = MENT_FETES_DATA.map((def, i) => {
+        const id = uid();
+        palierMap[def.name] = id;
+        return { id, name: def.name, unlockedAt: i === 0 ? Date.now() : null };
+      });
+      MENT_FETES_DATA.forEach((def, i) => {
+        if (i === 0) return;
+        if (def.items.some(item => (progressByQ[item.question] || {}).level > 0)) paliers[i].unlockedAt = Date.now();
+      });
+      const items = [];
+      MENT_FETES_DATA.forEach(def => {
+        const pId = palierMap[def.name];
         def.items.forEach(item => {
-          deck.items.push({ id: uid(), palierId: pId, question: item.question, answer: item.answer, majorHint: item.majorHint, mnemonic: '', level: 0, lastSession: 0, nextSession: 0 });
+          const prog = progressByQ[item.question] || {};
+          items.push({ id: uid(), palierId: pId, question: item.question, answer: item.answer, majorHint: item.majorHint, mnemonic: prog.mnemonic || '', level: prog.level || 0, lastSession: prog.lastSession || 0, nextSession: prog.nextSession || 0 });
         });
-      }
-    });
-  }
-  // Correction des dates incorrectes dans les données existantes
-  if (state.mentalisme.decks.fetes) {
-    const DATE_FIXES = {
-      'Slovaquie':    { old: '1er septembre', answer: '1er janvier',   majorHint: '01→S·T | 01→S·T' },
-      'Thaïlande':   { old: '5 décembre',    answer: '28 juillet',    majorHint: '28→N·F | 07→S·K' },
-      'Paraguay':    { old: '15 mai',         answer: '14 mai',        majorHint: '14→T·R | 05→S·L' },
-      'Turkménistan':{ old: '27 octobre',    answer: '27 septembre',  majorHint: '27→N·K | 09→S·P' },
-      'Niger':       { old: '18 décembre',   answer: '3 août',        majorHint: '03→S·M | 08→S·F' },
-    };
-    state.mentalisme.decks.fetes.items.forEach(item => {
-      const fix = DATE_FIXES[item.question];
-      if (fix && item.answer === fix.old) { item.answer = fix.answer; item.majorHint = fix.majorHint; }
-    });
+      });
+      state.mentalisme.decks.fetes = { paliers, items };
+    } else {
+      // Structure actuelle : ajouter uniquement les paliers manquants
+      const existingNames = new Set(deck.paliers.map(p => p.name));
+      MENT_FETES_DATA.forEach(def => {
+        if (!existingNames.has(def.name)) {
+          const pId = uid();
+          deck.paliers.push({ id: pId, name: def.name, unlockedAt: null });
+          def.items.forEach(item => {
+            deck.items.push({ id: uid(), palierId: pId, question: item.question, answer: item.answer, majorHint: item.majorHint, mnemonic: '', level: 0, lastSession: 0, nextSession: 0 });
+          });
+        }
+      });
+    }
   }
 
   if (!state.mentalisme.decks.anniversaires || typeof state.mentalisme.decks.anniversaires !== 'object') {
