@@ -296,6 +296,10 @@
     <div><p class="eyebrow">Magie</p><h1 class="serif">Mentalisme</h1></div>
     <button class="link" id="mentStatsBtn" aria-label="Statistiques" style="font-size:1.2rem">📊</button>
   </div>
+  <div class="ment-hub-tabs">
+    <button class="ment-hub-tab active" id="mentTabRevision">Révision</button>
+    <button class="ment-hub-tab" id="mentTabGestion">Gérer</button>
+  </div>
   <div id="mentHubMsg" class="ment-hub-msg hidden"></div>
   <div id="mentBody" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding-bottom:4px"></div>
 </section>
@@ -313,8 +317,12 @@
     <div id="mentSessLvl" class="ment-dots-row"></div>
     <div class="ment-flash-card">
       <div id="mentSessQ" class="ment-flash-q serif"></div>
-      <button id="mentSessImgBtn" class="btn btn-ghost ment-giveup-btn hidden" style="margin-top:8px;font-size:.82rem;padding:7px 16px">🖼 Voir l'image</button>
+      <div class="ment-sess-hint-btns">
+        <button id="mentSessImgBtn" class="btn btn-ghost hidden" style="font-size:.82rem;padding:7px 14px">🖼 Image</button>
+        <button id="mentSessHintBtn" class="btn btn-ghost hidden" style="font-size:.82rem;padding:7px 14px">💬 Aide</button>
+      </div>
       <img id="mentSessImg" class="ment-sess-img hidden" alt="">
+      <div id="mentSessHintText" class="ment-sess-hint-text hidden"></div>
       <div id="mentSessAnswerBlock" class="ment-answer-block hidden">
         <div id="mentSessFeedbackLine" class="ment-feedback-line"></div>
         <div id="mentSessDate" class="ment-flash-date serif"></div>

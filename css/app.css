@@ -568,6 +568,61 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 }
 .cours-btn:hover { opacity: 1; }
 
+/* ---------- Mentalisme — hub tabs ---------- */
+.ment-hub-tabs {
+  display: flex; gap: 6px; margin-bottom: 14px;
+}
+.ment-hub-tab {
+  flex: 1; padding: 9px 0; border-radius: 8px; font-size: .88rem;
+  background: var(--panel); border: 1px solid var(--line); color: var(--muted);
+  cursor: pointer; transition: all .15s;
+}
+.ment-hub-tab.active {
+  background: rgba(202,168,95,.12); border-color: var(--brass-soft); color: var(--brass); font-weight: 600;
+}
+
+/* ---------- Mentalisme — onglet Gérer ---------- */
+.ment-gest-deck-tabs {
+  display: flex; gap: 6px; margin-bottom: 14px;
+}
+.ment-gest-deck-tab {
+  flex: 1; padding: 8px 4px; border-radius: 7px; font-size: .82rem;
+  background: var(--panel); border: 1px solid var(--line); color: var(--muted); cursor: pointer;
+}
+.ment-gest-deck-tab.active {
+  background: rgba(202,168,95,.1); border-color: var(--brass-soft); color: var(--brass);
+}
+.ment-gest-palier {
+  margin-bottom: 16px;
+}
+.ment-gest-palier-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.ment-gest-palier-name {
+  font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--brass-soft); font-weight: 600;
+}
+.ment-gest-item {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 9px 12px; margin-bottom: 5px; cursor: pointer;
+  transition: border-color .15s;
+}
+.ment-gest-item:hover { border-color: var(--brass-soft); }
+.ment-gest-item-q { font-size: .88rem; font-weight: 500; flex: 1; min-width: 0; }
+.ment-gest-item-a { font-size: .82rem; color: var(--muted); flex-shrink: 0; }
+
+/* ---------- Mentalisme — session hint ---------- */
+.ment-sess-hint-btns {
+  display: flex; gap: 8px; margin: 8px 0 0; justify-content: center;
+}
+.ment-sess-hint-text {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 14px; font-size: .85rem; color: var(--muted); margin-top: 8px;
+  line-height: 1.5; white-space: pre-wrap;
+}
+
 /* ---------- Mentalisme — images ---------- */
 .ment-img-preview {
   display: block; width: 100%; max-height: 220px; object-fit: contain;

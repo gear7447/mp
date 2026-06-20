@@ -16,6 +16,8 @@ let mentEditDeck   = null;
 let mentEditPalier = null;
 let mentEditItem   = null;
 let mentEditorFrom = null;  // 'browse' | 'paliers'
+let mentHubMode   = 'revision'; // 'revision' | 'gestion'
+let mentGestDeck  = 'fetes';   // deck actif dans l'onglet Gérer
 let _mentNewItemId    = null; // pré-généré pour les nouveaux items
 let _mentPendingImg   = null; // Blob en attente d'upload
 let _mentDeleteImg    = false;
@@ -114,6 +116,10 @@ function mentLevelDots(level) {
 
 /* ============ HUB PRINCIPAL ============ */
 function renderMentalisme() {
+  document.getElementById('mentTabRevision').classList.toggle('active', mentHubMode === 'revision');
+  document.getElementById('mentTabGestion').classList.toggle('active', mentHubMode === 'gestion');
+  if (mentHubMode === 'gestion') { renderMentGestion(); return; }
+
   const body = document.getElementById('mentBody');
   if (!body) return;
   body.innerHTML = '';
@@ -142,7 +148,6 @@ function renderMentalisme() {
       ${active.length ? `<div class="ment-progbar"><div class="ment-progfill" style="width:${pct}%"></div></div>` : ''}
       <div class="ment-deck-btns">
         <button class="btn btn-primary ment-btn-start" data-deck="${deckId}">Pratiquer</button>
-        <button class="btn btn-ghost ment-btn-browse" data-deck="${deckId}">Consulter</button>
         <button class="btn btn-ghost ment-btn-paliers" data-deck="${deckId}" style="flex:none;padding:14px 16px" title="Gérer les paliers">≡</button>
       </div>
     `;
@@ -151,10 +156,63 @@ function renderMentalisme() {
 
   body.querySelectorAll('.ment-btn-start').forEach(b =>
     b.addEventListener('click', () => mentStartSession(b.dataset.deck)));
-  body.querySelectorAll('.ment-btn-browse').forEach(b =>
-    b.addEventListener('click', () => mentOpenBrowse(b.dataset.deck)));
   body.querySelectorAll('.ment-btn-paliers').forEach(b =>
     b.addEventListener('click', () => mentOpenPaliers(b.dataset.deck)));
+}
+
+function renderMentGestion() {
+  const body = document.getElementById('mentBody');
+  if (!body) return;
+
+  const deckId = mentGestDeck;
+  const deck   = mentDeck(deckId);
+
+  let html = `<div class="ment-gest-deck-tabs">`;
+  Object.entries(MENT_DECK_INFO).forEach(([id, info]) => {
+    html += `<button class="ment-gest-deck-tab${id === deckId ? ' active' : ''}" data-deck="${id}">${info.icon} ${info.label}</button>`;
+  });
+  html += `</div>`;
+
+  deck.paliers.forEach(palier => {
+    const items = deck.items.filter(i => i.palierId === palier.id);
+    const locked = !palier.unlockedAt;
+    html += `
+      <div class="ment-gest-palier">
+        <div class="ment-gest-palier-hdr">
+          <span class="ment-gest-palier-name">${locked ? '🔒 ' : ''}${escapeHtml(palier.name)}</span>
+          <button class="btn-sm ment-gest-add-btn" data-deck="${deckId}" data-pid="${palier.id}">+ Ajouter</button>
+        </div>
+        ${items.map(item => `
+          <div class="ment-gest-item" data-deck="${deckId}" data-pid="${palier.id}" data-id="${item.id}">
+            <span class="ment-gest-item-q">${escapeHtml(item.question)}</span>
+            <span class="ment-gest-item-a">${escapeHtml(item.answer)}</span>
+            ${item.imageUrl ? '<span style="font-size:.8rem;opacity:.6">🖼</span>' : ''}
+            <div class="ment-dots-sm" style="flex-shrink:0">${mentLevelDots(item.level)}</div>
+          </div>
+        `).join('')}
+        ${!items.length ? '<div class="hint" style="padding:4px 0 8px;font-size:.8rem">Aucune carte.</div>' : ''}
+      </div>
+    `;
+  });
+
+  body.innerHTML = html;
+
+  body.querySelectorAll('.ment-gest-deck-tab').forEach(b =>
+    b.addEventListener('click', () => { mentGestDeck = b.dataset.deck; renderMentGestion(); }));
+
+  body.querySelectorAll('.ment-gest-add-btn').forEach(b =>
+    b.addEventListener('click', () => {
+      mentEditDeck = b.dataset.deck; mentEditPalier = b.dataset.pid;
+      mentEditItem = null; mentEditorFrom = 'gestion';
+      mentOpenItemEditor();
+    }));
+
+  body.querySelectorAll('.ment-gest-item').forEach(row =>
+    row.addEventListener('click', () => {
+      mentEditDeck = row.dataset.deck; mentEditPalier = row.dataset.pid;
+      mentEditItem = row.dataset.id;  mentEditorFrom = 'gestion';
+      mentOpenItemEditor();
+    }));
 }
 
 /* ============ SESSION ============ */
@@ -201,13 +259,16 @@ function mentRenderCard() {
 
   const imgEl    = document.getElementById('mentSessImg');
   const imgBtn   = document.getElementById('mentSessImgBtn');
+  const hintBtn  = document.getElementById('mentSessHintBtn');
+  const hintText = document.getElementById('mentSessHintText');
   imgEl.src = ''; imgEl.classList.add('hidden');
-  if (item.imageUrl) {
-    imgEl.src = item.imageUrl;
-    imgBtn.classList.remove('hidden');
-  } else {
-    imgBtn.classList.add('hidden');
-  }
+  hintText.classList.add('hidden'); hintText.textContent = '';
+  imgBtn.textContent  = '🖼 Image';
+  hintBtn.textContent = '💬 Aide';
+  imgBtn.classList.toggle('hidden', !item.imageUrl);
+  hintBtn.classList.toggle('hidden', !item.mnemonic);
+  if (item.imageUrl) imgEl.src = item.imageUrl;
+  if (item.mnemonic) hintText.textContent = item.mnemonic;
 
   const inp = document.getElementById('mentSessInput');
   inp.value = '';
@@ -613,6 +674,9 @@ function mentItemGoBack() {
   if (mentEditorFrom === 'paliers') {
     renderMentPaliers();
     show('mentalisme-paliers');
+  } else if (mentEditorFrom === 'gestion') {
+    show('mentalisme');
+    renderMentalisme();
   } else {
     renderMentBrowse(document.getElementById('mentBrowseSearch').value || '');
     show('mentalisme-browse');
@@ -678,7 +742,19 @@ document.getElementById('mentSessImgBtn').addEventListener('click', () => {
   const imgEl = document.getElementById('mentSessImg');
   const btn   = document.getElementById('mentSessImgBtn');
   imgEl.classList.toggle('hidden');
-  btn.textContent = imgEl.classList.contains('hidden') ? '🖼 Voir l\'image' : '🖼 Masquer l\'image';
+  btn.textContent = imgEl.classList.contains('hidden') ? '🖼 Image' : '🖼 Masquer';
+});
+document.getElementById('mentSessHintBtn').addEventListener('click', () => {
+  const el  = document.getElementById('mentSessHintText');
+  const btn = document.getElementById('mentSessHintBtn');
+  el.classList.toggle('hidden');
+  btn.textContent = el.classList.contains('hidden') ? '💬 Aide' : '💬 Masquer';
+});
+document.getElementById('mentTabRevision').addEventListener('click', () => {
+  mentHubMode = 'revision'; renderMentalisme();
+});
+document.getElementById('mentTabGestion').addEventListener('click', () => {
+  mentHubMode = 'gestion'; renderMentalisme();
 });
 document.getElementById('mentSessContinueBtn').addEventListener('click', mentContinue);
 document.getElementById('mentSessRecapBack').addEventListener('click', () => { show('mentalisme'); renderMentalisme(); });
