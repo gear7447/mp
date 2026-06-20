@@ -51,10 +51,10 @@ async function _mentUserId() {
 
 async function _mentUploadImg(itemId, blob) {
   const userId = await _mentUserId();
-  if (!userId) { alert('Upload image : non connecté.'); return null; }
+  if (!userId) return null;
   const path = `${userId}/${itemId}`;
   const { error } = await supabaseClient.storage.from(MENT_IMG_BUCKET).upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
-  if (error) { alert('Erreur upload image : ' + error.message); return null; }
+  if (error) { console.error('image upload:', error.message); return null; }
   const { data } = supabaseClient.storage.from(MENT_IMG_BUCKET).getPublicUrl(path);
   return data.publicUrl;
 }

@@ -1,6 +1,6 @@
 /* Service Worker — cache hors-ligne
    Incrémenter CACHE_NAME à chaque déploiement pour forcer la mise à jour. */
-const CACHE_NAME = 'entraineur-v20';
+const CACHE_NAME = 'entraineur-v21';
 const ASSETS = [
   './',
   './index.html',
