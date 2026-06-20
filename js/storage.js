@@ -77,6 +77,21 @@ function normalize() {
       }
     });
   }
+  // Correction des dates incorrectes dans les données existantes
+  if (state.mentalisme.decks.fetes) {
+    const DATE_FIXES = {
+      'Slovaquie':    { old: '1er septembre', answer: '1er janvier',   majorHint: '01→S·T | 01→S·T' },
+      'Thaïlande':   { old: '5 décembre',    answer: '28 juillet',    majorHint: '28→N·F | 07→S·K' },
+      'Paraguay':    { old: '15 mai',         answer: '14 mai',        majorHint: '14→T·R | 05→S·L' },
+      'Turkménistan':{ old: '27 octobre',    answer: '27 septembre',  majorHint: '27→N·K | 09→S·P' },
+      'Niger':       { old: '18 décembre',   answer: '3 août',        majorHint: '03→S·M | 08→S·F' },
+    };
+    state.mentalisme.decks.fetes.items.forEach(item => {
+      const fix = DATE_FIXES[item.question];
+      if (fix && item.answer === fix.old) { item.answer = fix.answer; item.majorHint = fix.majorHint; }
+    });
+  }
+
   if (!state.mentalisme.decks.anniversaires || typeof state.mentalisme.decks.anniversaires !== 'object') {
     const ap1 = uid();
     state.mentalisme.decks.anniversaires = {

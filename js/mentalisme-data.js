@@ -45,7 +45,7 @@ const MENT_FETES_DATA = [
     items: [
       { question: 'Hongrie',       answer: '20 août',        majorHint: '20→N·S | 08→S·F' },
       { question: 'Rép. tchèque',  answer: '28 octobre',     majorHint: '28→N·F | 10→T·S' },
-      { question: 'Slovaquie',     answer: '1er septembre',  majorHint: '01→S·T | 09→S·P' },
+      { question: 'Slovaquie',     answer: '1er janvier',    majorHint: '01→S·T | 01→S·T' },
       { question: 'Croatie',       answer: '30 mai',         majorHint: '30→M·S | 05→S·L' },
       { question: 'Serbie',        answer: '15 février',     majorHint: '15→T·L | 02→S·N' },
       { question: 'Luxembourg',    answer: '23 juin',        majorHint: '23→N·M | 06→S·J' },
@@ -103,7 +103,7 @@ const MENT_FETES_DATA = [
     items: [
       { question: 'Équateur',      answer: '10 août',        majorHint: '10→T·S | 08→S·F' },
       { question: 'Bolivie',       answer: '6 août',         majorHint: '06→S·J | 08→S·F' },
-      { question: 'Paraguay',      answer: '15 mai',         majorHint: '15→T·L | 05→S·L' },
+      { question: 'Paraguay',      answer: '14 mai',         majorHint: '14→T·R | 05→S·L' },
       { question: 'Uruguay',       answer: '25 août',        majorHint: '25→N·L | 08→S·F' },
       { question: 'Guatemala',     answer: '15 septembre',   majorHint: '15→T·L | 09→S·P' },
       { question: 'Honduras',      answer: '15 septembre',   majorHint: '15→T·L | 09→S·P' },
@@ -158,7 +158,7 @@ const MENT_FETES_DATA = [
   {
     name: 'Asie Lot 2 — connus',
     items: [
-      { question: 'Thaïlande',       answer: '5 décembre',    majorHint: '05→S·L | 12→T·N' },
+      { question: 'Thaïlande',       answer: '28 juillet',    majorHint: '28→N·F | 07→S·K' },
       { question: 'Malaisie',        answer: '31 août',       majorHint: '31→M·T | 08→S·F' },
       { question: 'Singapour',       answer: '9 août',        majorHint: '09→S·P | 08→S·F' },
       { question: 'Bangladesh',      answer: '26 mars',       majorHint: '26→N·J | 03→S·M' },
@@ -234,7 +234,7 @@ const MENT_FETES_DATA = [
     items: [
       { question: 'Kazakhstan',       answer: '16 décembre',   majorHint: '16→T·J | 12→T·N' },
       { question: 'Ouzbékistan',      answer: '1er septembre', majorHint: '01→S·T | 09→S·P' },
-      { question: 'Turkménistan',     answer: '27 octobre',    majorHint: '27→N·K | 10→T·S' },
+      { question: 'Turkménistan',     answer: '27 septembre',  majorHint: '27→N·K | 09→S·P' },
       { question: 'Kirghizistan',     answer: '31 août',       majorHint: '31→M·T | 08→S·F' },
       { question: 'Tadjikistan',      answer: '9 septembre',   majorHint: '09→S·P | 09→S·P' },
     ]
@@ -265,7 +265,7 @@ const MENT_FETES_DATA = [
       { question: 'Togo',             answer: '27 avril',      majorHint: '27→N·K | 04→S·R' },
       { question: 'Bénin',            answer: '1er août',      majorHint: '01→S·T | 08→S·F' },
       { question: 'Burkina Faso',     answer: '11 décembre',   majorHint: '11→T·T | 12→T·N' },
-      { question: 'Niger',            answer: '18 décembre',   majorHint: '18→T·F | 12→T·N' },
+      { question: 'Niger',            answer: '3 août',        majorHint: '03→S·M | 08→S·F' },
     ]
   },
   {

@@ -1,6 +1,8 @@
 /* ============ MENTALISME ============ */
 
 const MENT_INTERVALS = [1, 2, 4, 8, 16, 32]; // sessions avant prochaine révision
+const MONTHS_FR = ['janvier','février','mars','avril','mai','juin',
+                   'juillet','août','septembre','octobre','novembre','décembre'];
 
 const MENT_DECK_INFO = {
   fetes:         { icon: '🌍', label: 'Fêtes nationales', qLabel: 'Pays',         aLabel: 'Date fête nationale' },
@@ -143,10 +145,26 @@ function mentRenderCard() {
 }
 
 function mentCheckAnswer(typed, correct) {
+  const m = typed.trim().match(/^(\d{1,2})\/(\d{1,2})$/);
+  if (!m) return false;
+  const day = parseInt(m[1], 10), month = parseInt(m[2], 10);
+  if (month < 1 || month > 12 || day < 1 || day > 31) return false;
+  const typedFr = `${day === 1 ? '1er' : day} ${MONTHS_FR[month - 1]}`;
   function norm(s) {
     return (s || '').toLowerCase().trim().replace(/\b1er\b/g, '1').replace(/\s+/g, ' ');
   }
-  return norm(typed) === norm(correct);
+  return norm(typedFr) === norm(correct);
+}
+
+function answerToJJMM(answer) {
+  const lower = (answer || '').toLowerCase().trim();
+  for (let i = 0; i < MONTHS_FR.length; i++) {
+    if (lower.endsWith(MONTHS_FR[i])) {
+      const day = parseInt(lower.replace(MONTHS_FR[i], '').replace('er', ''), 10);
+      if (!isNaN(day)) return String(day).padStart(2,'0') + '/' + String(i+1).padStart(2,'0');
+    }
+  }
+  return '';
 }
 
 function mentSubmitAnswer() {
@@ -179,7 +197,8 @@ function mentSubmitAnswer() {
     feedbackLine.textContent = rating === 'good' ? '✅ Correct !' : '😐 Correct, mais hésitant…';
     feedbackLine.className   = `ment-feedback-line ${rating}`;
   } else {
-    feedbackLine.innerHTML = `❌ Raté — bonne réponse : <b>${escapeHtml(item.answer)}</b>`;
+    const jjmm = answerToJJMM(item.answer);
+    feedbackLine.innerHTML = `❌ Raté — <b>${escapeHtml(jjmm)}</b> · ${escapeHtml(item.answer)}`;
     feedbackLine.className = 'ment-feedback-line bad';
   }
 
@@ -535,6 +554,10 @@ document.getElementById('mentStatsBack').addEventListener('click', () => { show(
 // Session
 document.getElementById('mentSessSubmitBtn').addEventListener('click', mentSubmitAnswer);
 document.getElementById('mentSessInput').addEventListener('keydown', e => { if (e.key === 'Enter') mentSubmitAnswer(); });
+document.getElementById('mentSessInput').addEventListener('input', function() {
+  let d = this.value.replace(/\D/g, '').slice(0, 4);
+  this.value = d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d;
+});
 document.getElementById('mentSessContinueBtn').addEventListener('click', mentContinue);
 document.getElementById('mentSessRecapBack').addEventListener('click', () => { show('mentalisme'); renderMentalisme(); });
 document.getElementById('mentSessQuit').addEventListener('click', () => {
