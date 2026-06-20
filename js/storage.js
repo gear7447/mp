@@ -31,6 +31,8 @@ function normalize() {
   if (!state.notes || typeof state.notes !== 'object' || Array.isArray(state.notes)) state.notes = {};
   if (!state.tours || typeof state.tours !== 'object') state.tours = {};
   if (!Array.isArray(state.tours.list)) state.tours.list = [];
+  if (!Array.isArray(state.tours.setlists)) state.tours.setlists = [];
+  state.tours.list.forEach(t => { if (!Array.isArray(t.tags)) t.tags = []; });
   if (!state.physique || typeof state.physique !== 'object') state.physique = {};
   if (!Array.isArray(state.physique.categories)) state.physique.categories = ['Flexibilité','Mobilité','Force','Précision'];
   if (!Array.isArray(state.physique.exercises)) state.physique.exercises = [];
@@ -191,7 +193,7 @@ async function save() {
 }
 
 /* ============ navigation ============ */
-const SCREENS = ['login','home','library','manage','editor','setup','drill','recap','settings','stats','data','tours','tours-editor','mentalisme','mentalisme-session','mentalisme-browse','mentalisme-stats','mentalisme-paliers','mentalisme-item-editor','physique','physique-categories','physique-editor','physique-routines','physique-routine-editor','physique-session','budget','budget-gestion','budget-versement-editor','budget-cours-editor','budget-depense-editor','budget-stats'];
+const SCREENS = ['login','home','library','manage','editor','setup','drill','recap','settings','stats','data','tours','tours-editor','tours-setlist','tours-setlist-view','mentalisme','mentalisme-session','mentalisme-browse','mentalisme-stats','mentalisme-paliers','mentalisme-item-editor','physique','physique-categories','physique-editor','physique-routines','physique-routine-editor','physique-session','budget','budget-gestion','budget-versement-editor','budget-cours-editor','budget-depense-editor','budget-stats'];
 const NAV_SCREENS = new Set(['home','library','tours','mentalisme','physique','budget']);
 
 function show(name) {

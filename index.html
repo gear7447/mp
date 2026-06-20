@@ -230,9 +230,13 @@
 <section id="screen-tours" class="screen hidden">
   <div class="topbar">
     <div><p class="eyebrow">Magie</p><h1 class="serif">Mes tours</h1></div>
-    <button class="link" id="tourAddBtn">+ Ajouter</button>
+    <div style="display:flex;gap:12px;align-items:center">
+      <button class="link" id="tourSetlistBtn" title="Setlists" style="font-size:1.2rem">📋</button>
+      <button class="link" id="tourAddBtn">+ Ajouter</button>
+    </div>
   </div>
   <div class="phy-cat-filter" id="tourStatusFilter"></div>
+  <div class="phy-cat-filter" id="tourTagFilter"></div>
   <div id="tourRepertoireBox"></div>
   <div class="tech-list" id="tourList"></div>
 </section>
@@ -286,6 +290,11 @@
     </div>
 
     <div class="field">
+      <label>Tags</label>
+      <div id="tourTagsLinks" class="tour-tags-sel"></div>
+    </div>
+
+    <div class="field">
       <label>Techniques liées</label>
       <div id="tourTechLinks" style="display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto"></div>
     </div>
@@ -297,6 +306,43 @@
     <button class="btn btn-primary" id="tourSaveBtn">Enregistrer</button>
   </div>
 </section>
+
+<!-- ===================== TOURS — setlists ===================== -->
+<section id="screen-tours-setlist" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="tourSetlistBack">‹ Retour</button>
+    <h1 class="serif">Setlists</h1>
+    <button class="link" id="tourSetlistAddBtn">+ Créer</button>
+  </div>
+  <div class="tech-list" id="tourSetlistList"></div>
+</section>
+
+<!-- ===================== TOURS — setlist view ===================== -->
+<section id="screen-tours-setlist-view" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="tourSetlistViewBack">‹ Retour</button>
+    <h1 class="serif" id="tourSetlistViewTitle">Setlist</h1>
+    <span style="width:54px"></span>
+  </div>
+  <div style="padding: 0 0 10px; flex: none;">
+    <div class="field"><label>Nom</label><input type="text" id="tourSetlistName" placeholder="ex. Soirée anniversaire"></div>
+  </div>
+  <div id="tourSetlistTours" class="tour-setlist-tours"></div>
+  <div class="actions" style="gap:8px;flex-wrap:wrap">
+    <button class="btn btn-danger hidden" id="tourSetlistDeleteBtn">Supprimer</button>
+    <button class="btn btn-ghost" id="tourSetlistAddTourBtn" style="flex:1">+ Tour</button>
+    <button class="btn btn-primary" id="tourSetlistSaveBtn" style="flex:1">Enregistrer</button>
+  </div>
+</section>
+
+<!-- overlay picker de tour -->
+<div id="tourPickerOverlay" class="overlay hidden">
+  <div class="dialog" style="max-height:75vh;display:flex;flex-direction:column;gap:12px">
+    <div class="dlg-t">Ajouter un tour</div>
+    <div id="tourPickerList" style="overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
+    <button class="btn btn-ghost" id="tourPickerCancel">Annuler</button>
+  </div>
+</div>
 
 <!-- ===================== MENTALISME — hub ===================== -->
 <section id="screen-mentalisme" class="screen hidden">

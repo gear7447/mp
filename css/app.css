@@ -247,6 +247,46 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 }
 .tour-tech-item input { width: 18px; height: 18px; accent-color: var(--brass); flex: none; }
 
+/* --- tours tags --- */
+.badge-tag { background: rgba(90,170,140,.18); border: 1px solid rgba(90,170,140,.35); color: #5aaa8c; }
+.tour-tags-sel { display: flex; flex-wrap: wrap; gap: 6px; }
+.tour-tag-item {
+  display: flex; align-items: center; gap: 6px; font-size: .88rem;
+  color: var(--text); padding: 5px 10px; cursor: pointer;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 20px;
+  transition: border-color .15s, color .15s;
+}
+.tour-tag-item:has(input:checked) { border-color: rgba(90,170,140,.5); color: #5aaa8c; background: rgba(90,170,140,.1); }
+.tour-tag-item input { display: none; }
+
+/* --- tours setlist --- */
+.tour-setlist-tours { flex: 1; overflow-y: auto; padding: 8px 16px; display: flex; flex-direction: column; gap: 6px; }
+.tour-setlist-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 10px 12px;
+}
+.tour-setlist-n { font-size: .8rem; color: var(--muted); min-width: 20px; text-align: right; }
+.tour-setlist-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.tour-setlist-name { font-size: .92rem; color: var(--text); }
+.tour-setlist-dur { font-size: .75rem; color: var(--muted); }
+.tour-setlist-btns { display: flex; gap: 4px; flex: none; }
+.tour-setlist-total { font-size: .82rem; color: var(--brass-soft); text-align: right; padding: 6px 4px 0; }
+.icon-btn {
+  width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--line);
+  background: var(--panel-2); color: var(--text); font-size: .85rem;
+  display: flex; align-items: center; justify-content: center; cursor: pointer; flex: none;
+}
+.icon-btn:disabled { opacity: .3; cursor: default; }
+.icon-btn-del { border-color: rgba(200,80,80,.3); color: #c85050; }
+.tour-picker-item {
+  width: 100%; text-align: left; padding: 11px 14px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  color: var(--text); font-size: .92rem; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+}
+.tour-picker-item:hover { border-color: var(--brass-soft); }
+
 /* ---------- physique ---------- */
 .phy-cat-filter {
   display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch;
