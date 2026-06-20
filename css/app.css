@@ -339,6 +339,107 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
   padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
 }
 
+/* ---------- mentalisme ---------- */
+.ment-hub-msg {
+  background: rgba(202,168,95,.12); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 14px; font-size: .88rem;
+  color: var(--brass); text-align: center; flex-shrink: 0; margin-bottom: 4px;
+}
+.ment-deck-card {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 11px; flex-shrink: 0;
+}
+.ment-deck-top { display: flex; align-items: center; gap: 12px; }
+.ment-deck-icon { font-size: 1.7rem; line-height: 1; flex-shrink: 0; }
+.ment-deck-name { font-weight: 600; font-size: 1.02rem; color: #f3ecdd; }
+.ment-deck-sub  { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+.ment-due { color: var(--brass); }
+.ment-ok  { color: #6a9; }
+.ment-progbar   { height: 5px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; }
+.ment-progfill  { height: 100%; background: linear-gradient(90deg, var(--brass-soft), var(--brass)); border-radius: 3px; transition: width .4s; }
+.ment-deck-btns { display: flex; gap: 8px; }
+
+/* Dots de niveau */
+.ment-dots-row  { display: flex; gap: 4px; justify-content: center; }
+.ment-dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.1); border: 1px solid var(--line); }
+.ment-dot.filled { background: var(--brass); border-color: var(--brass); }
+.ment-dots-sm   { display: flex; gap: 3px; flex-shrink: 0; }
+.ment-dots-sm .ment-dot { width: 7px; height: 7px; }
+
+/* Session */
+.ment-card-wrap  { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; overflow-y: auto; padding: 4px 0 8px; }
+.ment-flash-card {
+  width: 100%; background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 18px; padding: 28px 22px; text-align: center;
+}
+.ment-flash-q    { font-size: 1.65rem; font-weight: 600; color: #f3ecdd; letter-spacing: .01em; }
+.ment-answer-block { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+.ment-flash-date { font-size: 1.5rem; color: var(--brass); font-weight: 700; }
+.ment-flash-major { font-family: ui-monospace, monospace; font-size: .82rem; color: var(--muted); letter-spacing: .04em; }
+.ment-mnem-area {
+  width: 100%; background: rgba(255,255,255,.04); border: 1px solid var(--line);
+  border-radius: 10px; color: var(--text); font-size: .9rem; padding: 10px 12px;
+  font-family: inherit; resize: none; min-height: 58px; line-height: 1.5; text-align: left;
+}
+.ment-rating { display: flex; gap: 10px; width: 100%; }
+.ment-rating-btn {
+  flex: 1; background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 14px; padding: 14px 6px; font-size: 1.35rem;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  color: var(--text); cursor: pointer; transition: border-color .15s, background .15s;
+}
+.ment-rating-btn small { font-size: .66rem; color: var(--muted); font-family: system-ui; }
+.ment-rating-btn:active { filter: brightness(1.15); transform: scale(.97); }
+#mentSessBtnBad:active  { border-color: #d98; background: rgba(210,130,130,.12); }
+#mentSessBtnOk:active   { border-color: var(--brass); background: rgba(202,168,95,.12); }
+#mentSessBtnGood:active { border-color: #6a9; background: rgba(80,160,100,.12); }
+
+/* Recap session */
+.ment-recap-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.ment-recap-card {
+  width: 100%; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; gap: 10px;
+}
+.ment-recap-done { font-family: "Georgia",serif; font-size: 1.25rem; color: #f3ecdd; text-align: center; margin-bottom: 4px; }
+.ment-recap-row  { display: flex; justify-content: space-between; align-items: center; font-size: .9rem; color: var(--muted); }
+.ment-recap-row b { color: var(--text); font-size: 1rem; }
+.ment-recap-total { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 4px; color: var(--text); }
+
+/* Browse */
+.ment-group-label { font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--brass-soft); margin: 12px 0 5px 2px; }
+.ment-group-label.locked { color: var(--muted); }
+.ment-group-label:first-child { margin-top: 0; }
+.ment-item-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 11px 13px; cursor: pointer; margin-bottom: 6px;
+}
+.ment-item-q  { flex: 1; font-weight: 500; font-size: .95rem; }
+.ment-item-a  { font-size: .8rem; color: var(--muted); white-space: nowrap; }
+
+/* Paliers */
+.ment-palier-card {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  padding: 14px 15px; flex-shrink: 0;
+}
+.ment-palier-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.ment-palier-name { font-weight: 600; font-size: .95rem; }
+.ment-chip-wrap   { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.ment-chip {
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px;
+  padding: 5px 11px; font-size: .78rem; color: var(--text); cursor: pointer;
+  transition: border-color .15s;
+}
+.ment-chip:hover { border-color: var(--brass-soft); }
+
+/* Stats */
+.ment-stat-card  { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+.ment-stat-hdr   { font-family: "Georgia",serif; font-size: 1.05rem; color: #f3ecdd; margin-bottom: 12px; }
+.ment-stat-row   { display: flex; justify-content: space-between; align-items: center; }
+.ment-lvl-bar    { display: flex; gap: 3px; height: 26px; border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+.ment-lvl-seg    { display: flex; align-items: center; justify-content: center; font-size: .65rem; color: rgba(255,255,255,.85); font-weight: 700; min-width: 4px; }
+.ment-lvl-legend { display: flex; justify-content: space-between; margin-top: 4px; margin-bottom: 8px; }
+
 /* ---------- écrans modules (placeholder) ---------- */
 .module-coming {
   flex: 1; display: flex; flex-direction: column;

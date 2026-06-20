@@ -11,6 +11,7 @@
       show(tab.dataset.module);
       if (tab.dataset.module === 'physique') renderPhyExList();
       if (tab.dataset.module === 'tours') { renderTourStatusPills(); renderTourList(); }
+      if (tab.dataset.module === 'mentalisme') renderMentalisme();
     });
   });
 

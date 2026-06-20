@@ -35,6 +35,56 @@ function normalize() {
   if (!Array.isArray(state.physique.categories)) state.physique.categories = ['Flexibilité','Mobilité','Force','Précision'];
   if (!Array.isArray(state.physique.exercises)) state.physique.exercises = [];
   if (!Array.isArray(state.physique.routines)) state.physique.routines = [];
+
+  if (!state.mentalisme || typeof state.mentalisme !== 'object') state.mentalisme = {};
+  if (typeof state.mentalisme.sessionCount !== 'number') state.mentalisme.sessionCount = 0;
+  if (!state.mentalisme.decks || typeof state.mentalisme.decks !== 'object') state.mentalisme.decks = {};
+  if (!state.mentalisme.decks.fetes || typeof state.mentalisme.decks.fetes !== 'object') {
+    // Nouvelle installation : créer tous les paliers depuis MENT_FETES_DATA
+    const palierMap = {};
+    const paliers = MENT_FETES_DATA.map((def, i) => {
+      const id = uid();
+      palierMap[def.name] = id;
+      return { id, name: def.name, unlockedAt: i === 0 ? Date.now() : null };
+    });
+    const items = [];
+    MENT_FETES_DATA.forEach(def => {
+      const pId = palierMap[def.name];
+      def.items.forEach(item => {
+        items.push({ id: uid(), palierId: pId, question: item.question, answer: item.answer, majorHint: item.majorHint, mnemonic: '', level: 0, lastSession: 0, nextSession: 0 });
+      });
+    });
+    state.mentalisme.decks.fetes = { paliers, items };
+  } else {
+    // Migration : renommer anciens paliers + ajouter les paliers manquants
+    const RENAME_MAP = {
+      'Europe Lot 1': 'Europe Lot 1 — phares',
+      'Europe Lot 2': 'Europe Lot 2 — connus',
+      'Europe Lot 3': 'Europe Lot 3 — moyens',
+      'Amériques':    'Amériques Lot 1 — phares',
+      'Asie & Océanie': 'Asie Lot 1 — phares',
+    };
+    const deck = state.mentalisme.decks.fetes;
+    deck.paliers.forEach(p => { if (RENAME_MAP[p.name]) p.name = RENAME_MAP[p.name]; });
+    const existingNames = new Set(deck.paliers.map(p => p.name));
+    MENT_FETES_DATA.forEach(def => {
+      if (!existingNames.has(def.name)) {
+        const pId = uid();
+        deck.paliers.push({ id: pId, name: def.name, unlockedAt: null });
+        def.items.forEach(item => {
+          deck.items.push({ id: uid(), palierId: pId, question: item.question, answer: item.answer, majorHint: item.majorHint, mnemonic: '', level: 0, lastSession: 0, nextSession: 0 });
+        });
+      }
+    });
+  }
+  if (!state.mentalisme.decks.anniversaires || typeof state.mentalisme.decks.anniversaires !== 'object') {
+    const ap1 = uid();
+    state.mentalisme.decks.anniversaires = {
+      paliers: [{ id:ap1, name:'Mes célébrités', unlockedAt: Date.now() }],
+      items:   []
+    };
+  }
+
   state.techniques.forEach(t => {
     if (!t.id) t.id = uid();
     if (!t.updated) t.updated = t.last || Date.now();
@@ -93,7 +143,7 @@ async function save() {
 }
 
 /* ============ navigation ============ */
-const SCREENS = ['login','library','manage','editor','setup','drill','recap','settings','stats','data','tours','tours-editor','mentalisme','physique','physique-categories','physique-editor','physique-routines','physique-routine-editor','physique-session'];
+const SCREENS = ['login','library','manage','editor','setup','drill','recap','settings','stats','data','tours','tours-editor','mentalisme','mentalisme-session','mentalisme-browse','mentalisme-stats','mentalisme-paliers','mentalisme-item-editor','physique','physique-categories','physique-editor','physique-routines','physique-routine-editor','physique-session'];
 const NAV_SCREENS = new Set(['library','tours','mentalisme','physique']);
 
 function show(name) {

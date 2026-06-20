@@ -290,16 +290,126 @@
   </div>
 </section>
 
-<!-- ===================== MENTALISME ===================== -->
+<!-- ===================== MENTALISME — hub ===================== -->
 <section id="screen-mentalisme" class="screen hidden">
   <div class="topbar">
     <div><p class="eyebrow">Magie</p><h1 class="serif">Mentalisme</h1></div>
+    <button class="link" id="mentStatsBtn" aria-label="Statistiques" style="font-size:1.2rem">📊</button>
   </div>
-  <div class="module-coming">
-    <div class="module-coming-icon">🧠</div>
-    <div class="module-coming-title">Mentalisme</div>
-    <div class="module-coming-desc">Mémorisation d'anniversaires de personnalités et de fêtes nationales avec répétition espacée et système majeur</div>
-    <div class="module-coming-badge">Bientôt disponible</div>
+  <div id="mentHubMsg" class="ment-hub-msg hidden"></div>
+  <div id="mentBody" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding-bottom:4px"></div>
+</section>
+
+<!-- ===================== MENTALISME — session ===================== -->
+<section id="screen-mentalisme-session" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="mentSessQuit" style="font-size:1.1rem">✕</button>
+    <span id="mentSessTitle" style="font-weight:600;font-size:.95rem;color:var(--text)"></span>
+    <span id="mentSessProgress" style="color:var(--muted);font-size:.85rem;min-width:44px;text-align:right"></span>
+  </div>
+
+  <!-- Carte active -->
+  <div id="mentSessCardWrap" class="ment-card-wrap">
+    <div id="mentSessLvl" class="ment-dots-row"></div>
+    <div class="ment-flash-card">
+      <div id="mentSessQ" class="ment-flash-q serif"></div>
+      <div id="mentSessAnswerBlock" class="ment-answer-block hidden">
+        <div id="mentSessDate" class="ment-flash-date serif"></div>
+        <div id="mentSessMajorRow" class="ment-flash-major"></div>
+        <textarea id="mentSessMnemInput" class="ment-mnem-area"
+          placeholder="Ton aide-mémoire personnel… (enregistré automatiquement)"
+          style="-webkit-user-select:auto;user-select:auto"></textarea>
+      </div>
+    </div>
+    <button class="btn btn-ghost" id="mentSessRevealBtn">Révéler la réponse</button>
+    <div id="mentSessRating" class="ment-rating hidden">
+      <button id="mentSessBtnBad"  class="ment-rating-btn">❌<small>Raté</small></button>
+      <button id="mentSessBtnOk"   class="ment-rating-btn">😐<small>Hésitant</small></button>
+      <button id="mentSessBtnGood" class="ment-rating-btn">✅<small>Maîtrisé</small></button>
+    </div>
+  </div>
+
+  <!-- Récap fin de session -->
+  <div id="mentSessRecap" class="ment-recap-wrap hidden">
+    <div id="mentSessRecapText" class="ment-recap-card"></div>
+    <div class="actions" style="width:100%;margin-top:24px">
+      <button class="btn btn-primary" id="mentSessRecapBack">Retour</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MENTALISME — consulter ===================== -->
+<section id="screen-mentalisme-browse" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="mentBrowseBack">‹ Retour</button>
+    <h1 class="serif" id="mentBrowseTitle"></h1>
+    <button class="link" id="mentBrowseAddBtn">+ Ajouter</button>
+  </div>
+  <input type="search" id="mentBrowseSearch" placeholder="Rechercher…" style="margin-bottom:10px;flex-shrink:0">
+  <div class="tech-list" id="mentBrowseList"></div>
+</section>
+
+<!-- ===================== MENTALISME — stats ===================== -->
+<section id="screen-mentalisme-stats" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="mentStatsBack">‹ Retour</button>
+    <h1 class="serif">Statistiques</h1>
+    <span style="width:54px"></span>
+  </div>
+  <div class="stats-body" id="mentStatsBody"></div>
+</section>
+
+<!-- ===================== MENTALISME — paliers ===================== -->
+<section id="screen-mentalisme-paliers" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="mentPaliersBack">‹ Retour</button>
+    <h1 class="serif" id="mentPaliersTitle"></h1>
+    <span style="width:54px"></span>
+  </div>
+  <div class="tech-list" id="mentPaliersList"></div>
+  <div class="actions" style="gap:8px;flex-shrink:0">
+    <input type="text" id="mentPalierNewName" placeholder="Nom du nouveau palier…" style="flex:1">
+    <button class="btn btn-primary" id="mentPalierAddBtn" style="flex:none;padding:15px 20px">+</button>
+  </div>
+</section>
+
+<!-- ===================== MENTALISME — éditeur carte ===================== -->
+<section id="screen-mentalisme-item-editor" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="mentItemCancel">‹ Annuler</button>
+    <h1 class="serif" id="mentItemEditorTitle">Carte</h1>
+    <span style="width:54px"></span>
+  </div>
+  <div class="form">
+    <div class="field">
+      <label>Palier</label>
+      <select id="mentItemPalier"></select>
+    </div>
+    <div class="field">
+      <label id="mentItemQLabel">Question</label>
+      <input type="text" id="mentItemQ" placeholder="ex. France">
+    </div>
+    <div class="field">
+      <label id="mentItemALabel">Réponse</label>
+      <input type="text" id="mentItemA" placeholder="ex. 14 juillet">
+    </div>
+    <div id="mentItemLvlRow" class="field hidden">
+      <label>Niveau actuel</label>
+      <div id="mentItemLvlDots" class="ment-dots-row" style="margin-top:2px"></div>
+    </div>
+    <div class="field">
+      <label>Aide Système Majeur <span class="hint" style="display:inline">optionnel</span></label>
+      <input type="text" id="mentItemMajor" placeholder="ex. 14→T·R | 07→S·K">
+      <p class="hint">0→S/Z · 1→T/D · 2→N · 3→M · 4→R · 5→L · 6→J/CH · 7→K/G · 8→F/V · 9→P/B</p>
+    </div>
+    <div class="field">
+      <label>Ton aide-mémoire <span class="hint" style="display:inline">optionnel</span></label>
+      <textarea id="mentItemMnem" placeholder="Mot-image, histoire, association…"></textarea>
+    </div>
+    <button class="btn btn-danger hidden" id="mentItemDelete">Supprimer cette carte</button>
+  </div>
+  <div class="actions">
+    <button class="btn btn-primary" id="mentItemSave">Enregistrer</button>
   </div>
 </section>
 
@@ -554,6 +664,8 @@
 <script src="js/auth.js"></script>
 <script src="js/physique.js"></script>
 <script src="js/tours.js"></script>
+<script src="js/mentalisme-data.js"></script>
+<script src="js/mentalisme.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
