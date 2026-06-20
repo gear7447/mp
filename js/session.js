@@ -216,7 +216,7 @@ document.getElementById('drillStage').addEventListener('click', () => {
   if (t && t.mode === 'tap') rollConsigne(t);
 });
 document.getElementById('nextBtn').addEventListener('click', () => { if (!S || S.paused) return; openNextConfirm(); });
-document.getElementById('endBtn').addEventListener('click', endSession);
+document.getElementById('endBtn').addEventListener('click', () => endSession());
 document.getElementById('pauseBtn').addEventListener('click', togglePause);
 
 /* pause */
