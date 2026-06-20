@@ -9,6 +9,7 @@
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       show(tab.dataset.module);
+      if (tab.dataset.module === 'home') renderHome();
       if (tab.dataset.module === 'physique') renderPhyExList();
       if (tab.dataset.module === 'tours') { renderTourStatusPills(); renderTourList(); }
       if (tab.dataset.module === 'mentalisme') renderMentalisme();
@@ -24,5 +25,6 @@
 
   await load();
   renderLibrary();
-  show('library');
+  renderHome();
+  show('home');
 })();

@@ -468,6 +468,51 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
   letter-spacing: .12em; text-transform: uppercase; margin-top: 4px;
 }
 
+/* ---------- Accueil ---------- */
+.home-hero {
+  background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 14px; padding: 18px 16px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.home-streak-wrap {
+  display: flex; align-items: center; gap: 14px;
+}
+.home-streak-icon { font-size: 2rem; line-height: 1; }
+.home-streak-n {
+  font-size: 2rem; font-weight: 700; color: var(--brass); line-height: 1;
+  font-family: "Georgia", serif;
+}
+.home-streak-lbl { font-size: .75rem; color: var(--muted); margin-top: 2px; }
+.home-week {
+  display: flex; justify-content: space-between;
+}
+.home-day { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.home-day-dot {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--panel); border: 2px solid var(--line);
+  transition: background .2s;
+}
+.home-day-dot.active { background: var(--brass); border-color: var(--brass); }
+.home-day-dot.today:not(.active) { border-color: var(--brass-soft); }
+.home-day-letter { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+
+.home-modules { display: flex; flex-direction: column; gap: 8px; }
+.home-mod-card {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 12px; padding: 14px 16px; cursor: pointer;
+  transition: border-color .15s; width: 100%; text-align: left;
+}
+.home-mod-card:hover, .home-mod-card:active { border-color: var(--brass-soft); }
+.home-mod-card.has-due { border-color: rgba(202,168,95,.4); background: rgba(202,168,95,.06); }
+.home-mod-icon { font-size: 1.5rem; flex-shrink: 0; }
+.home-mod-body { flex: 1; min-width: 0; }
+.home-mod-name { font-size: .95rem; font-weight: 600; }
+.home-mod-sub { font-size: .8rem; color: var(--muted); margin-top: 2px; }
+.home-urgent { color: var(--brass) !important; font-weight: 600; }
+.home-ok { color: #4a8 !important; }
+.home-mod-arrow { color: var(--muted); font-size: 1.2rem; flex-shrink: 0; }
+
 /* ---------- Budget ---------- */
 #screen-budget { padding-bottom: calc(env(safe-area-inset-bottom) + 80px); }
 #screen-budget-gestion { padding-bottom: calc(env(safe-area-inset-bottom) + 80px); }
