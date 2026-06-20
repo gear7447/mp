@@ -52,9 +52,11 @@ function renderLibrary() {
     const nCount = (state.notes[t.id] || []).length;
     el.innerHTML = techRowHTML(t) + `
       <div class="tech-actions">
+        <button class="cours-btn" data-id="${t.id}" title="Cours liés">📅</button>
         <button class="notes-btn ${nCount ? 'has-notes' : ''}" data-id="${t.id}" title="Notes" aria-label="Notes">📝${nCount ? `<span class="notes-count">${nCount}</span>` : ''}</button>
         <span class="star ${t.focus ? 'on' : ''}" style="pointer-events:none">${t.focus ? '★' : '☆'}</span>
       </div>`;
+    el.querySelector('.cours-btn').addEventListener('click', e => { e.stopPropagation(); showBudgetTechCours(t.id); });
     el.querySelector('.notes-btn').addEventListener('click', e => { e.stopPropagation(); openNotes(t.id); });
     list.appendChild(el);
   }

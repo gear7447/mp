@@ -631,6 +631,149 @@
   </div>
 </div>
 
+<!-- ===================== BUDGET MAGIE ===================== -->
+<section id="screen-budget" class="screen hidden">
+  <div class="topbar">
+    <h1 class="serif">Budget Magie</h1>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost btn-sm" id="budgetStatsBtn">Stats</button>
+      <button class="btn btn-ghost btn-sm" id="budgetGestionBtn">⚙</button>
+    </div>
+  </div>
+  <div id="budgetCoaches"></div>
+  <div class="budget-action-row">
+    <button class="btn btn-primary" id="budgetAddVersement">+ Versement</button>
+    <button class="btn btn-primary" id="budgetAddCours">+ Cours</button>
+    <button class="btn btn-ghost" id="budgetAddDepense">+ Dépense</button>
+  </div>
+  <div class="bsection-h">Activité récente</div>
+  <div id="budgetActivity"></div>
+</section>
+
+<!-- budget — gestion -->
+<section id="screen-budget-gestion" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="bgBack">‹ Retour</button>
+    <h1 class="serif">Gestion</h1>
+  </div>
+  <div class="bsection-h">Coaches <button class="btn btn-ghost btn-sm" id="bgAddCoach" style="margin-left:8px">+ Ajouter</button></div>
+  <div id="bgCoachList"></div>
+  <div class="bsection-h" style="margin-top:22px">Catégories de dépenses <button class="btn btn-ghost btn-sm" id="bgAddCat" style="margin-left:8px">+ Ajouter</button></div>
+  <div id="bgCatList"></div>
+  <!-- dialog inline coach -->
+  <div id="bgCoachDialog" class="overlay hidden">
+    <div class="dialog">
+      <div class="field"><label>Nom du coach</label><input id="bgCoachName" type="text" placeholder="Michel Dupont"></div>
+      <div class="field"><label>Prix par séance (€)</label><input id="bgCoachPrice" type="number" min="0" step="5" placeholder="50"></div>
+      <div class="dlg-btns">
+        <button class="btn btn-ghost" id="bgCoachCancel">Annuler</button>
+        <button class="btn btn-primary" id="bgCoachSave">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- budget — versement editor -->
+<section id="screen-budget-versement-editor" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="bvBack">‹ Retour</button>
+    <h1 class="serif" id="bvTitle">Nouveau versement</h1>
+  </div>
+  <div class="field"><label>Coach</label><select id="bvCoach"></select></div>
+  <div class="field"><label>Montant (€)</label><input id="bvAmount" type="number" min="0" step="5" placeholder="150"></div>
+  <div class="field"><label>Date</label><input id="bvDate" type="date"></div>
+  <div class="field"><label>Note <span class="muted">(optionnel)</span></label><textarea id="bvNote" placeholder="Ex : avance pour 3 séances…" style="min-height:60px"></textarea></div>
+  <div class="actions" style="margin-top:16px">
+    <button class="btn btn-danger hidden" id="bvDelBtn">Supprimer</button>
+    <button class="btn btn-primary" id="bvSave">Enregistrer</button>
+  </div>
+</section>
+
+<!-- budget — cours editor -->
+<section id="screen-budget-cours-editor" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="bcBack">‹ Retour</button>
+    <h1 class="serif" id="bcTitle">Nouveau cours</h1>
+  </div>
+  <div class="field"><label>Coach</label><select id="bcCoach"></select></div>
+  <div class="field"><label>Date</label><input id="bcDate" type="date"></div>
+  <div class="field">
+    <label>Statut</label>
+    <div class="status-toggle">
+      <button class="btn btn-ghost active" id="bcStatusPrev">📅 Prévu</button>
+      <button class="btn btn-ghost" id="bcStatusDone">✅ Effectué</button>
+    </div>
+  </div>
+  <div class="field"><label>Note <span class="muted">(optionnel)</span></label><textarea id="bcNote" placeholder="Ce qu'on a travaillé…" style="min-height:60px"></textarea></div>
+  <details class="bpick-section">
+    <summary>Techniques travaillées</summary>
+    <div id="bcTechList" class="bpick-list"></div>
+    <button class="btn btn-ghost btn-sm" id="bcNewTech" style="margin-top:8px">+ Créer une technique dans Cartomagie</button>
+  </details>
+  <details class="bpick-section">
+    <summary>Tours travaillés</summary>
+    <div id="bcTourList" class="bpick-list"></div>
+    <button class="btn btn-ghost btn-sm" id="bcNewTour" style="margin-top:8px">+ Créer un tour dans Tours</button>
+  </details>
+  <div class="actions" style="margin-top:16px">
+    <button class="btn btn-danger hidden" id="bcDelBtn">Supprimer</button>
+    <button class="btn btn-primary" id="bcSave">Enregistrer</button>
+  </div>
+</section>
+
+<!-- budget — dépense editor -->
+<section id="screen-budget-depense-editor" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="bdBack">‹ Retour</button>
+    <h1 class="serif" id="bdTitle">Nouvelle dépense</h1>
+  </div>
+  <div class="field"><label>Catégorie</label><select id="bdCat"></select></div>
+  <div class="field"><label>Montant (€)</label><input id="bdAmount" type="number" min="0" step="1" placeholder="25"></div>
+  <div class="field"><label>Description</label><input id="bdDesc" type="text" placeholder="Ex : Fournier 605, Expert at the Card Table…"></div>
+  <div class="field"><label>Date</label><input id="bdDate" type="date"></div>
+  <div class="actions" style="margin-top:16px">
+    <button class="btn btn-danger hidden" id="bdDelBtn">Supprimer</button>
+    <button class="btn btn-primary" id="bdSave">Enregistrer</button>
+  </div>
+</section>
+
+<!-- budget — stats -->
+<section id="screen-budget-stats" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="bstatBack">‹ Retour</button>
+    <h1 class="serif">Statistiques</h1>
+  </div>
+  <div class="tile" style="text-align:center;padding:20px">
+    <div class="muted" style="font-size:.82rem;margin-bottom:4px">Total investi</div>
+    <div id="bstatTotal" style="font-size:2.2rem;font-weight:700;color:var(--brass)">0 €</div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:10px">
+    <div class="tile" style="flex:1;text-align:center;padding:14px">
+      <div class="muted" style="font-size:.78rem">Cours</div>
+      <div id="bstatCours" style="font-size:1.3rem;font-weight:600">0 €</div>
+    </div>
+    <div class="tile" style="flex:1;text-align:center;padding:14px">
+      <div class="muted" style="font-size:.78rem">Matériel & autres</div>
+      <div id="bstatDepenses" style="font-size:1.3rem;font-weight:600">0 €</div>
+    </div>
+  </div>
+  <div class="bsection-h" style="margin-top:20px">Dépenses par catégorie</div>
+  <div class="tile" id="bstatCatRows"></div>
+  <div class="bsection-h" style="margin-top:16px">Par coach</div>
+  <div class="tile" id="bstatCoachRows"></div>
+  <div class="bsection-h" style="margin-top:16px">Historique complet</div>
+  <div id="bstatHistory"></div>
+</section>
+
+<!-- budget — modal liens technique/tour → cours -->
+<div id="blinkOverlay" class="overlay hidden">
+  <div class="dialog">
+    <div class="dlg-t" id="blinkTitle"></div>
+    <div id="blinkBody" style="line-height:1.8;font-size:.9rem;margin-top:8px"></div>
+    <button class="btn btn-ghost" id="blinkClose" style="margin-top:16px;width:100%">Fermer</button>
+  </div>
+</div>
+
 <!-- ===================== NAVIGATION ===================== -->
 <nav id="bottomNav" class="bottom-nav hidden" role="navigation" aria-label="Modules">
   <button class="nav-tab" data-module="library">
@@ -648,6 +791,10 @@
   <button class="nav-tab" data-module="physique">
     <span class="nav-icon">💪</span>
     <span class="nav-label">Physique</span>
+  </button>
+  <button class="nav-tab nav-tab-budget" data-module="budget">
+    <span class="nav-icon" style="font-size:1.1rem;font-weight:700">€</span>
+    <span class="nav-label">Budget</span>
   </button>
 </nav>
 
@@ -669,6 +816,7 @@
 <script src="js/tours.js"></script>
 <script src="js/mentalisme-data.js"></script>
 <script src="js/mentalisme.js"></script>
+<script src="js/budget.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

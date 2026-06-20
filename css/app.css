@@ -467,3 +467,103 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
   padding: 6px 16px; font-size: .65rem;
   letter-spacing: .12em; text-transform: uppercase; margin-top: 4px;
 }
+
+/* ---------- Budget ---------- */
+#screen-budget { padding-bottom: calc(env(safe-area-inset-bottom) + 80px); }
+#screen-budget-gestion { padding-bottom: calc(env(safe-area-inset-bottom) + 80px); }
+#screen-budget-stats { padding-bottom: calc(env(safe-area-inset-bottom) + 80px); }
+
+.bsection-h {
+  font-size: .66rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--brass-soft); margin: 18px 0 8px; font-weight: 600;
+}
+.bc-card {
+  background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 10px;
+}
+.bc-card-name { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+.bc-card-meta { font-size: .8rem; color: var(--muted); margin-bottom: 10px; }
+.bc-bars { display: flex; gap: 6px; align-items: center; margin: 8px 0; }
+.bc-bar {
+  height: 10px; border-radius: 5px;
+  background: rgba(202,168,95,.18); flex: 1;
+}
+.bc-bar.used { background: var(--brass); }
+.bc-bar.avail { background: rgba(202,168,95,.45); }
+
+.bgest-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--panel); border-radius: 10px;
+  padding: 11px 13px; margin-bottom: 7px;
+  border: 1px solid var(--line);
+}
+.bgest-row-body { flex: 1; min-width: 0; }
+.bgest-row-name { font-size: .93rem; font-weight: 500; }
+.bgest-row-meta { font-size: .77rem; color: var(--muted); margin-top: 2px; }
+.bgest-row-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.bact-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--panel); border-radius: 10px;
+  padding: 11px 13px; margin-bottom: 7px;
+  border: 1px solid var(--line);
+}
+.bact-row-body { flex: 1; min-width: 0; }
+.bact-row-title { font-size: .93rem; font-weight: 500; }
+.bact-row-meta { font-size: .77rem; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+.bact-row-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.bstat-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 0; border-bottom: 1px solid var(--line);
+}
+.bstat-row:last-child { border-bottom: none; }
+.bstat-row-label { font-size: .87rem; color: var(--muted); }
+.bstat-row-val { font-size: .95rem; font-weight: 600; color: var(--brass); }
+
+.bpick-section { margin-bottom: 14px; }
+.bpick-section-h { font-size: .75rem; color: var(--muted); margin-bottom: 5px; letter-spacing: .06em; text-transform: uppercase; }
+.bpick-list { display: flex; flex-direction: column; gap: 5px; }
+.bpick-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--panel); border-radius: 8px; padding: 9px 12px;
+  border: 1px solid var(--line); cursor: pointer;
+  transition: border-color .15s;
+}
+.bpick-row.selected { border-color: var(--brass); background: rgba(202,168,95,.08); }
+.bpick-row-name { flex: 1; font-size: .88rem; }
+.bpick-row-check { font-size: 1rem; color: var(--brass); opacity: 0; }
+.bpick-row.selected .bpick-row-check { opacity: 1; }
+
+.btn-sm {
+  background: var(--panel-2); border: 1px solid var(--line);
+  color: var(--muted); border-radius: 7px;
+  padding: 5px 10px; font-size: .8rem; cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.btn-sm:hover { border-color: var(--brass-soft); color: var(--text); }
+.btn-sm.danger { color: var(--red); }
+.btn-sm.danger:hover { border-color: var(--red); }
+
+.status-toggle {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.status-toggle button {
+  background: var(--panel); border: 1px solid var(--line);
+  color: var(--muted); border-radius: 999px;
+  padding: 5px 13px; font-size: .8rem; cursor: pointer;
+  transition: all .15s;
+}
+.status-toggle button.active {
+  background: rgba(202,168,95,.15); border-color: var(--brass-soft); color: var(--brass);
+}
+
+.nav-tab-budget { opacity: .7; }
+.nav-tab-budget.active { opacity: 1; }
+
+.cours-btn {
+  background: none; border: none; font-size: 1.05rem;
+  padding: 4px 5px; opacity: .55; cursor: pointer;
+  transition: opacity .15s;
+}
+.cours-btn:hover { opacity: 1; }

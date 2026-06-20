@@ -107,6 +107,22 @@ function normalize() {
     };
   }
 
+  if (!state.budget || typeof state.budget !== 'object') state.budget = {};
+  if (!Array.isArray(state.budget.coaches)) state.budget.coaches = [];
+  if (!Array.isArray(state.budget.versements)) state.budget.versements = [];
+  if (!Array.isArray(state.budget.cours)) state.budget.cours = [];
+  if (!Array.isArray(state.budget.depenses)) state.budget.depenses = [];
+  if (!Array.isArray(state.budget.categories) || !state.budget.categories.length) {
+    state.budget.categories = ['Cartes','Tour acheté','Livre / DVD','Matériel','Autre'].map(name => ({ id: uid(), name }));
+  }
+  ['coaches','versements','cours','depenses','categories'].forEach(key => {
+    state.budget[key].forEach(item => { if (!item.id) item.id = uid(); });
+  });
+  state.budget.cours.forEach(c => {
+    if (!Array.isArray(c.techniqueIds)) c.techniqueIds = [];
+    if (!Array.isArray(c.tourIds)) c.tourIds = [];
+  });
+
   state.techniques.forEach(t => {
     if (!t.id) t.id = uid();
     if (!t.updated) t.updated = t.last || Date.now();
@@ -165,8 +181,8 @@ async function save() {
 }
 
 /* ============ navigation ============ */
-const SCREENS = ['login','library','manage','editor','setup','drill','recap','settings','stats','data','tours','tours-editor','mentalisme','mentalisme-session','mentalisme-browse','mentalisme-stats','mentalisme-paliers','mentalisme-item-editor','physique','physique-categories','physique-editor','physique-routines','physique-routine-editor','physique-session'];
-const NAV_SCREENS = new Set(['library','tours','mentalisme','physique']);
+const SCREENS = ['login','library','manage','editor','setup','drill','recap','settings','stats','data','tours','tours-editor','mentalisme','mentalisme-session','mentalisme-browse','mentalisme-stats','mentalisme-paliers','mentalisme-item-editor','physique','physique-categories','physique-editor','physique-routines','physique-routine-editor','physique-session','budget','budget-gestion','budget-versement-editor','budget-cours-editor','budget-depense-editor','budget-stats'];
+const NAV_SCREENS = new Set(['library','tours','mentalisme','physique','budget']);
 
 function show(name) {
   SCREENS.forEach(s => document.getElementById('screen-' + s).classList.toggle('hidden', s !== name));

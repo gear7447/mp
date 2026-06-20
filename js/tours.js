@@ -70,8 +70,10 @@ function renderTourList() {
         ${t.effect ? `<div class="tour-effect-preview">${escapeHtml(t.effect)}</div>` : ''}
       </div>
       <div class="tech-actions">
+        <button class="cours-btn" data-id="${t.id}" title="Cours liés">📅</button>
         <button class="notes-btn ${nCount ? 'has-notes' : ''}" data-id="${t.id}" title="Notes">📝${nCount ? `<span class="notes-count">${nCount}</span>` : ''}</button>
       </div>`;
+    el.querySelector('.cours-btn').addEventListener('click', e => { e.stopPropagation(); showBudgetTourCours(t.id); });
     el.querySelector('.notes-btn').addEventListener('click', e => {
       e.stopPropagation();
       openNotes(t.id, t.name, renderTourList);
