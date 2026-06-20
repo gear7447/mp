@@ -130,6 +130,7 @@ function mentRenderCard() {
   mentSess.cardStartTime = Date.now();
 
   document.getElementById('mentSessInputWrap').classList.remove('hidden');
+  document.getElementById('mentSessGiveUpBtn').classList.remove('hidden');
   document.getElementById('mentSessAnswerBlock').classList.add('hidden');
   document.getElementById('mentSessContinueBtn').classList.add('hidden');
 
@@ -203,6 +204,32 @@ function mentSubmitAnswer() {
   }
 
   document.getElementById('mentSessInputWrap').classList.add('hidden');
+  document.getElementById('mentSessGiveUpBtn').classList.add('hidden');
+  document.getElementById('mentSessAnswerBlock').classList.remove('hidden');
+  document.getElementById('mentSessContinueBtn').classList.remove('hidden');
+  document.getElementById('mentSessContinueBtn').focus();
+}
+
+function mentGiveUp() {
+  if (!mentSess || mentSess.answered) return;
+  const { deckId, queue, idx } = mentSess;
+  const item = queue[idx];
+  mentSess.answered = true;
+  const si = mentDeck(deckId).items.find(i => i.id === item.id);
+  if (si) {
+    si.level = Math.max(0, si.level - 1);
+    const sc = state.mentalisme.sessionCount;
+    si.lastSession = sc;
+    si.nextSession = sc + MENT_INTERVALS[si.level];
+    save();
+  }
+  mentSess.rc.bad++;
+  const jjmm = answerToJJMM(item.answer);
+  const feedbackLine = document.getElementById('mentSessFeedbackLine');
+  feedbackLine.innerHTML = `❓ Je ne sais pas — <b>${escapeHtml(jjmm)}</b> · ${escapeHtml(item.answer)}`;
+  feedbackLine.className = 'ment-feedback-line bad';
+  document.getElementById('mentSessInputWrap').classList.add('hidden');
+  document.getElementById('mentSessGiveUpBtn').classList.add('hidden');
   document.getElementById('mentSessAnswerBlock').classList.remove('hidden');
   document.getElementById('mentSessContinueBtn').classList.remove('hidden');
   document.getElementById('mentSessContinueBtn').focus();
@@ -558,6 +585,7 @@ document.getElementById('mentSessInput').addEventListener('input', function() {
   let d = this.value.replace(/\D/g, '').slice(0, 4);
   this.value = d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d;
 });
+document.getElementById('mentSessGiveUpBtn').addEventListener('click', mentGiveUp);
 document.getElementById('mentSessContinueBtn').addEventListener('click', mentContinue);
 document.getElementById('mentSessRecapBack').addEventListener('click', () => { show('mentalisme'); renderMentalisme(); });
 document.getElementById('mentSessQuit').addEventListener('click', () => {

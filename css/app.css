@@ -391,6 +391,7 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 }
 .ment-input:focus { border-color: var(--brass); }
 .ment-input-wrap .btn { flex-shrink: 0; padding: 14px 20px; font-size: .95rem; }
+.ment-giveup-btn { width: 100%; margin-top: 6px; font-size: .85rem; opacity: .65; }
 #mentSessContinueBtn { width: 100%; margin-top: 4px; }
 
 /* Ligne de feedback (correct / raté / hésitant) */
