@@ -80,9 +80,8 @@ function renderHome() {
           return `
           <div class="home-day">
             <div class="home-day-bar-wrap">
-              ${d.carto > 0 ? `<div class="home-day-seg carto" style="height:${Math.round(d.carto*2/maxTotal*36)}px"></div>` : ''}
-              ${d.ment  > 0 ? `<div class="home-day-seg ment"  style="height:${Math.round(d.ment /maxTotal*36)}px"></div>` : ''}
-              ${d.total === 0 ? `<div class="home-day-seg empty" style="height:4px"></div>` : ''}
+              ${d.carto > 0 ? `<div class="home-day-seg carto" style="height:${Math.max(4,Math.round(d.carto*2/maxTotal*34))}px"></div>` : ''}
+              ${d.ment  > 0 ? `<div class="home-day-seg ment"  style="height:${Math.max(4,Math.round(d.ment /maxTotal*34))}px"></div>` : ''}
             </div>
             <div class="home-day-letter${d.isToday ? ' today' : ''}">${d.letter}</div>
           </div>`;

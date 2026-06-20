@@ -488,16 +488,17 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 }
 .home-day { display: flex; flex-direction: column; align-items: center; gap: 5px; }
 .home-day-bar-wrap {
-  width: 30px; height: 40px; display: flex; flex-direction: column;
-  justify-content: flex-end; align-items: center; gap: 2px;
+  width: 28px; height: 36px;
+  background: rgba(255,255,255,.04); border: 1px solid var(--line);
+  border-radius: 5px; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-end;
 }
 .home-day-seg {
-  width: 100%; border-radius: 3px; transition: height .3s;
+  width: 100%; flex-shrink: 0;
 }
 .home-day-seg.carto { background: var(--brass); }
-.home-day-seg.ment  { background: #7a9; }
-.home-day-seg.empty { background: var(--panel); border: 1px solid var(--line); border-radius: 3px; }
-.home-day-letter { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.home-day-seg.ment  { background: #5a9; }
+.home-day-letter { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-top: 4px; }
 .home-day-letter.today { color: var(--brass-soft); font-weight: 700; }
 
 .home-modules { display: flex; flex-direction: column; gap: 8px; }
