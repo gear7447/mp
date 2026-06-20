@@ -314,6 +314,7 @@
     <div class="ment-flash-card">
       <div id="mentSessQ" class="ment-flash-q serif"></div>
       <div id="mentSessAnswerBlock" class="ment-answer-block hidden">
+        <div id="mentSessFeedbackLine" class="ment-feedback-line"></div>
         <div id="mentSessDate" class="ment-flash-date serif"></div>
         <div id="mentSessMajorRow" class="ment-flash-major"></div>
         <textarea id="mentSessMnemInput" class="ment-mnem-area"
@@ -321,12 +322,12 @@
           style="-webkit-user-select:auto;user-select:auto"></textarea>
       </div>
     </div>
-    <button class="btn btn-ghost" id="mentSessRevealBtn">Révéler la réponse</button>
-    <div id="mentSessRating" class="ment-rating hidden">
-      <button id="mentSessBtnBad"  class="ment-rating-btn">❌<small>Raté</small></button>
-      <button id="mentSessBtnOk"   class="ment-rating-btn">😐<small>Hésitant</small></button>
-      <button id="mentSessBtnGood" class="ment-rating-btn">✅<small>Maîtrisé</small></button>
+    <div id="mentSessInputWrap" class="ment-input-wrap">
+      <input id="mentSessInput" type="text" class="ment-input" placeholder="Tape la date…"
+        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
+      <button id="mentSessSubmitBtn" class="btn btn-primary">Valider</button>
     </div>
+    <button id="mentSessContinueBtn" class="btn btn-primary hidden">Continuer →</button>
   </div>
 
   <!-- Récap fin de session -->

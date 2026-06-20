@@ -124,46 +124,76 @@ function mentRenderCard() {
   document.getElementById('mentSessQ').textContent        = item.question;
   document.getElementById('mentSessLvl').innerHTML        = mentLevelDots(item.level);
 
-  mentSess.flipped = false;
-  document.getElementById('mentSessRevealBtn').classList.remove('hidden');
+  mentSess.answered      = false;
+  mentSess.cardStartTime = Date.now();
+
+  document.getElementById('mentSessInputWrap').classList.remove('hidden');
   document.getElementById('mentSessAnswerBlock').classList.add('hidden');
-  document.getElementById('mentSessRating').classList.add('hidden');
+  document.getElementById('mentSessContinueBtn').classList.add('hidden');
 
   document.getElementById('mentSessDate').textContent = item.answer;
   const majorEl = document.getElementById('mentSessMajorRow');
   majorEl.textContent = item.majorHint || '';
   majorEl.classList.toggle('hidden', !item.majorHint);
-  document.getElementById('mentSessMnemInput').value    = item.mnemonic || '';
+  document.getElementById('mentSessMnemInput').value = item.mnemonic || '';
+
+  const inp = document.getElementById('mentSessInput');
+  inp.value = '';
+  setTimeout(() => inp.focus(), 50);
 }
 
-function mentReveal() {
-  if (!mentSess || mentSess.flipped) return;
-  mentSess.flipped = true;
-  document.getElementById('mentSessRevealBtn').classList.add('hidden');
-  document.getElementById('mentSessAnswerBlock').classList.remove('hidden');
-  document.getElementById('mentSessRating').classList.remove('hidden');
+function mentCheckAnswer(typed, correct) {
+  function norm(s) {
+    return (s || '').toLowerCase().trim().replace(/\b1er\b/g, '1').replace(/\s+/g, ' ');
+  }
+  return norm(typed) === norm(correct);
 }
 
-function mentRate(rating) {
-  if (!mentSess) return;
+function mentSubmitAnswer() {
+  if (!mentSess || mentSess.answered) return;
+  const inp   = document.getElementById('mentSessInput');
+  const typed = inp.value.trim();
+  if (!typed) return;
+
+  const elapsed = Date.now() - mentSess.cardStartTime;
   const { deckId, queue, idx } = mentSess;
-  const item = queue[idx];
-  const si = mentDeck(deckId).items.find(i => i.id === item.id);
+  const item    = queue[idx];
+  const correct = mentCheckAnswer(typed, item.answer);
+  const rating  = !correct ? 'bad' : elapsed < 3000 ? 'good' : 'ok';
 
+  mentSess.answered = true;
+
+  const si = mentDeck(deckId).items.find(i => i.id === item.id);
   if (si) {
     if (rating === 'bad')  si.level = Math.max(0, si.level - 1);
     if (rating === 'good') si.level = Math.min(5, si.level + 1);
     const sc = state.mentalisme.sessionCount;
     si.lastSession = sc;
     si.nextSession = sc + MENT_INTERVALS[si.level];
-    const mn = document.getElementById('mentSessMnemInput').value.trim();
-    if (mn !== si.mnemonic) si.mnemonic = mn;
     save();
   }
-
   mentSess.rc[rating]++;
 
-  if (idx + 1 < queue.length) {
+  const feedbackLine = document.getElementById('mentSessFeedbackLine');
+  if (correct) {
+    feedbackLine.textContent = rating === 'good' ? '✅ Correct !' : '😐 Correct, mais hésitant…';
+    feedbackLine.className   = `ment-feedback-line ${rating}`;
+  } else {
+    feedbackLine.innerHTML = `❌ Raté — bonne réponse : <b>${escapeHtml(item.answer)}</b>`;
+    feedbackLine.className = 'ment-feedback-line bad';
+  }
+
+  document.getElementById('mentSessInputWrap').classList.add('hidden');
+  document.getElementById('mentSessAnswerBlock').classList.remove('hidden');
+  document.getElementById('mentSessContinueBtn').classList.remove('hidden');
+  document.getElementById('mentSessContinueBtn').focus();
+}
+
+function mentContinue() {
+  if (!mentSess) return;
+  const item = mentDeck(mentSess.deckId).items.find(i => i.id === mentSess.queue[mentSess.idx]?.id);
+  if (item) { item.mnemonic = document.getElementById('mentSessMnemInput').value.trim(); save(); }
+  if (mentSess.idx + 1 < mentSess.queue.length) {
     mentSess.idx++;
     mentRenderCard();
   } else {
@@ -503,10 +533,9 @@ document.getElementById('mentStatsBtn').addEventListener('click', mentOpenStats)
 document.getElementById('mentStatsBack').addEventListener('click', () => { show('mentalisme'); renderMentalisme(); });
 
 // Session
-document.getElementById('mentSessRevealBtn').addEventListener('click', mentReveal);
-document.getElementById('mentSessBtnBad').addEventListener('click',  () => mentRate('bad'));
-document.getElementById('mentSessBtnOk').addEventListener('click',   () => mentRate('ok'));
-document.getElementById('mentSessBtnGood').addEventListener('click', () => mentRate('good'));
+document.getElementById('mentSessSubmitBtn').addEventListener('click', mentSubmitAnswer);
+document.getElementById('mentSessInput').addEventListener('keydown', e => { if (e.key === 'Enter') mentSubmitAnswer(); });
+document.getElementById('mentSessContinueBtn').addEventListener('click', mentContinue);
 document.getElementById('mentSessRecapBack').addEventListener('click', () => { show('mentalisme'); renderMentalisme(); });
 document.getElementById('mentSessQuit').addEventListener('click', () => {
   if (mentSess) {
