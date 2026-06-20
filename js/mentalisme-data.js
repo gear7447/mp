@@ -1,15 +1,11 @@
 /* ============ DONNÉES FÊTES NATIONALES ============
-   195 pays · 23 paliers · 5 rounds continentaux × notoriété
-
+   195 pays · 38 paliers · lots de 5 pays
    Ordre : Europe → Amériques → Afrique → Asie → Océanie
-   Asie inclut Moyen-Orient + Asie centrale.
-   Océanie inclut Australie/NZ + îles du Pacifique.
-
    Système Majeur : 0→S/Z · 1→T/D · 2→N · 3→M · 4→R · 5→L · 6→J/CH · 7→K/G · 8→F/V · 9→P/B
 */
 const MENT_FETES_DATA = [
 
-  /* ══════ ROUND 1 — PHARES ══════ */
+  /* ══════ ROUND 1a — PHARES ══════ */
   {
     name: 'Europe Lot 1 — phares',
     items: [
@@ -18,11 +14,6 @@ const MENT_FETES_DATA = [
       { question: 'Italie',         answer: '2 juin',         majorHint: '02→S·N | 06→S·J' },
       { question: 'Espagne',        answer: '12 octobre',     majorHint: '12→T·N | 10→T·S' },
       { question: 'Portugal',       answer: '10 juin',        majorHint: '10→T·S | 06→S·J' },
-      { question: 'Pays-Bas',       answer: '27 avril',       majorHint: '27→N·K | 04→S·R' },
-      { question: 'Belgique',       answer: '21 juillet',     majorHint: '21→N·T | 07→S·K' },
-      { question: 'Suisse',         answer: '1er août',       majorHint: '01→S·T | 08→S·F' },
-      { question: 'Autriche',       answer: '26 octobre',     majorHint: '26→N·J | 10→T·S' },
-      { question: 'Grèce',          answer: '25 mars',        majorHint: '25→N·L | 03→S·M' },
     ]
   },
   {
@@ -33,11 +24,6 @@ const MENT_FETES_DATA = [
       { question: 'Mexique',        answer: '16 septembre',   majorHint: '16→T·J | 09→S·P' },
       { question: 'Brésil',         answer: '7 septembre',    majorHint: '07→S·K | 09→S·P' },
       { question: 'Argentine',      answer: '25 mai',         majorHint: '25→N·L | 05→S·L' },
-      { question: 'Colombie',       answer: '20 juillet',     majorHint: '20→N·S | 07→S·K' },
-      { question: 'Cuba',           answer: '1er janvier',    majorHint: '01→S·T | 01→S·T' },
-      { question: 'Chili',          answer: '18 septembre',   majorHint: '18→T·F | 09→S·P' },
-      { question: 'Pérou',          answer: '28 juillet',     majorHint: '28→N·F | 07→S·K' },
-      { question: 'Venezuela',      answer: '5 juillet',      majorHint: '05→S·L | 07→S·K' },
     ]
   },
   {
@@ -48,11 +34,6 @@ const MENT_FETES_DATA = [
       { question: 'Afrique du Sud', answer: '27 avril',       majorHint: '27→N·K | 04→S·R' },
       { question: 'Nigeria',        answer: '1er octobre',    majorHint: '01→S·T | 10→T·S' },
       { question: 'Kenya',          answer: '12 décembre',    majorHint: '12→T·N | 12→T·N' },
-      { question: 'Éthiopie',       answer: '28 mai',         majorHint: '28→N·F | 05→S·L' },
-      { question: 'Algérie',        answer: '5 juillet',      majorHint: '05→S·L | 07→S·K' },
-      { question: 'Ghana',          answer: '6 mars',         majorHint: '06→S·J | 03→S·M' },
-      { question: 'Sénégal',        answer: '4 avril',        majorHint: '04→S·R | 04→S·R' },
-      { question: 'Côte d\'Ivoire', answer: '7 août',         majorHint: '07→S·K | 08→S·F' },
     ]
   },
   {
@@ -63,11 +44,6 @@ const MENT_FETES_DATA = [
       { question: 'Inde',           answer: '15 août',        majorHint: '15→T·L | 08→S·F' },
       { question: 'Corée du Sud',   answer: '15 août',        majorHint: '15→T·L | 08→S·F' },
       { question: 'Vietnam',        answer: '2 septembre',    majorHint: '02→S·N | 09→S·P' },
-      { question: 'Indonésie',      answer: '17 août',        majorHint: '17→T·K | 08→S·F' },
-      { question: 'Philippines',    answer: '12 juin',        majorHint: '12→T·N | 06→S·J' },
-      { question: 'Israël',         answer: '14 mai',         majorHint: '14→T·R | 05→S·L' },
-      { question: 'Arabie saoudite',answer: '23 septembre',   majorHint: '23→N·M | 09→S·P' },
-      { question: 'Iran',           answer: '11 février',     majorHint: '11→T·T | 02→S·N' },
     ]
   },
   {
@@ -82,15 +58,94 @@ const MENT_FETES_DATA = [
     ]
   },
 
-  /* ══════ ROUND 2 — CONNUS ══════ */
+  /* ══════ ROUND 1b — PHARES (suite) ══════ */
   {
-    name: 'Europe Lot 2 — connus',
+    name: 'Europe Lot 2 — phares',
+    items: [
+      { question: 'Pays-Bas',       answer: '27 avril',       majorHint: '27→N·K | 04→S·R' },
+      { question: 'Belgique',       answer: '21 juillet',     majorHint: '21→N·T | 07→S·K' },
+      { question: 'Suisse',         answer: '1er août',       majorHint: '01→S·T | 08→S·F' },
+      { question: 'Autriche',       answer: '26 octobre',     majorHint: '26→N·J | 10→T·S' },
+      { question: 'Grèce',          answer: '25 mars',        majorHint: '25→N·L | 03→S·M' },
+    ]
+  },
+  {
+    name: 'Amériques Lot 2 — phares',
+    items: [
+      { question: 'Colombie',       answer: '20 juillet',     majorHint: '20→N·S | 07→S·K' },
+      { question: 'Cuba',           answer: '1er janvier',    majorHint: '01→S·T | 01→S·T' },
+      { question: 'Chili',          answer: '18 septembre',   majorHint: '18→T·F | 09→S·P' },
+      { question: 'Pérou',          answer: '28 juillet',     majorHint: '28→N·F | 07→S·K' },
+      { question: 'Venezuela',      answer: '5 juillet',      majorHint: '05→S·L | 07→S·K' },
+    ]
+  },
+  {
+    name: 'Afrique Lot 2 — phares',
+    items: [
+      { question: 'Éthiopie',       answer: '28 mai',         majorHint: '28→N·F | 05→S·L' },
+      { question: 'Algérie',        answer: '5 juillet',      majorHint: '05→S·L | 07→S·K' },
+      { question: 'Ghana',          answer: '6 mars',         majorHint: '06→S·J | 03→S·M' },
+      { question: 'Sénégal',        answer: '4 avril',        majorHint: '04→S·R | 04→S·R' },
+      { question: 'Côte d\'Ivoire', answer: '7 août',         majorHint: '07→S·K | 08→S·F' },
+    ]
+  },
+  {
+    name: 'Asie Lot 2 — phares',
+    items: [
+      { question: 'Indonésie',      answer: '17 août',        majorHint: '17→T·K | 08→S·F' },
+      { question: 'Philippines',    answer: '12 juin',        majorHint: '12→T·N | 06→S·J' },
+      { question: 'Israël',         answer: '14 mai',         majorHint: '14→T·R | 05→S·L' },
+      { question: 'Arabie saoudite',answer: '23 septembre',   majorHint: '23→N·M | 09→S·P' },
+      { question: 'Iran',           answer: '11 février',     majorHint: '11→T·T | 02→S·N' },
+    ]
+  },
+
+  /* ══════ ROUND 2a — CONNUS ══════ */
+  {
+    name: 'Europe Lot 3 — connus',
     items: [
       { question: 'Pologne',        answer: '11 novembre',    majorHint: '11→T·T | 11→T·T' },
       { question: 'Suède',          answer: '6 juin',         majorHint: '06→S·J | 06→S·J' },
       { question: 'Norvège',        answer: '17 mai',         majorHint: '17→T·K | 05→S·L' },
       { question: 'Danemark',       answer: '5 juin',         majorHint: '05→S·L | 06→S·J' },
       { question: 'Finlande',       answer: '6 décembre',     majorHint: '06→S·J | 12→T·N' },
+    ]
+  },
+  {
+    name: 'Amériques Lot 3 — connus',
+    items: [
+      { question: 'Équateur',       answer: '10 août',        majorHint: '10→T·S | 08→S·F' },
+      { question: 'Bolivie',        answer: '6 août',         majorHint: '06→S·J | 08→S·F' },
+      { question: 'Paraguay',       answer: '14 mai',         majorHint: '14→T·R | 05→S·L' },
+      { question: 'Uruguay',        answer: '25 août',        majorHint: '25→N·L | 08→S·F' },
+      { question: 'Guatemala',      answer: '15 septembre',   majorHint: '15→T·L | 09→S·P' },
+    ]
+  },
+  {
+    name: 'Afrique Lot 3 — connus',
+    items: [
+      { question: 'Tunisie',        answer: '20 mars',        majorHint: '20→N·S | 03→S·M' },
+      { question: 'Madagascar',     answer: '26 juin',        majorHint: '26→N·J | 06→S·J' },
+      { question: 'RD Congo',       answer: '30 juin',        majorHint: '30→M·S | 06→S·J' },
+      { question: 'Cameroun',       answer: '20 mai',         majorHint: '20→N·S | 05→S·L' },
+      { question: 'Tanzanie',       answer: '26 avril',       majorHint: '26→N·J | 04→S·R' },
+    ]
+  },
+  {
+    name: 'Asie Lot 3 — connus',
+    items: [
+      { question: 'Pakistan',       answer: '14 août',        majorHint: '14→T·R | 08→S·F' },
+      { question: 'Irak',           answer: '3 octobre',      majorHint: '03→S·M | 10→T·S' },
+      { question: 'Liban',          answer: '22 novembre',    majorHint: '22→N·N | 11→T·T' },
+      { question: 'Jordanie',       answer: '25 mai',         majorHint: '25→N·L | 05→S·L' },
+      { question: 'Émirats arabes', answer: '2 décembre',     majorHint: '02→S·N | 12→T·N' },
+    ]
+  },
+
+  /* ══════ ROUND 2b — CONNUS (suite) ══════ */
+  {
+    name: 'Europe Lot 4 — connus',
+    items: [
       { question: 'Irlande',        answer: '17 mars',        majorHint: '17→T·K | 03→S·M' },
       { question: 'Russie',         answer: '12 juin',        majorHint: '12→T·N | 06→S·J' },
       { question: 'Ukraine',        answer: '24 août',        majorHint: '24→N·R | 08→S·F' },
@@ -99,13 +154,8 @@ const MENT_FETES_DATA = [
     ]
   },
   {
-    name: 'Amériques Lot 2 — connus',
+    name: 'Amériques Lot 4 — connus',
     items: [
-      { question: 'Équateur',       answer: '10 août',        majorHint: '10→T·S | 08→S·F' },
-      { question: 'Bolivie',        answer: '6 août',         majorHint: '06→S·J | 08→S·F' },
-      { question: 'Paraguay',       answer: '14 mai',         majorHint: '14→T·R | 05→S·L' },
-      { question: 'Uruguay',        answer: '25 août',        majorHint: '25→N·L | 08→S·F' },
-      { question: 'Guatemala',      answer: '15 septembre',   majorHint: '15→T·L | 09→S·P' },
       { question: 'Honduras',       answer: '15 septembre',   majorHint: '15→T·L | 09→S·P' },
       { question: 'El Salvador',    answer: '15 septembre',   majorHint: '15→T·L | 09→S·P' },
       { question: 'Nicaragua',      answer: '15 septembre',   majorHint: '15→T·L | 09→S·P' },
@@ -114,13 +164,8 @@ const MENT_FETES_DATA = [
     ]
   },
   {
-    name: 'Afrique Lot 2 — connus',
+    name: 'Afrique Lot 4 — connus',
     items: [
-      { question: 'Tunisie',        answer: '20 mars',        majorHint: '20→N·S | 03→S·M' },
-      { question: 'Madagascar',     answer: '26 juin',        majorHint: '26→N·J | 06→S·J' },
-      { question: 'RD Congo',       answer: '30 juin',        majorHint: '30→M·S | 06→S·J' },
-      { question: 'Cameroun',       answer: '20 mai',         majorHint: '20→N·S | 05→S·L' },
-      { question: 'Tanzanie',       answer: '26 avril',       majorHint: '26→N·J | 04→S·R' },
       { question: 'Mali',           answer: '22 septembre',   majorHint: '22→N·N | 09→S·P' },
       { question: 'Ouganda',        answer: '9 octobre',      majorHint: '09→S·P | 10→T·S' },
       { question: 'Zimbabwe',       answer: '18 avril',       majorHint: '18→T·F | 04→S·R' },
@@ -129,13 +174,8 @@ const MENT_FETES_DATA = [
     ]
   },
   {
-    name: 'Asie Lot 2 — connus',
+    name: 'Asie Lot 4 — connus',
     items: [
-      { question: 'Pakistan',       answer: '14 août',        majorHint: '14→T·R | 08→S·F' },
-      { question: 'Irak',           answer: '3 octobre',      majorHint: '03→S·M | 10→T·S' },
-      { question: 'Liban',          answer: '22 novembre',    majorHint: '22→N·N | 11→T·T' },
-      { question: 'Jordanie',       answer: '25 mai',         majorHint: '25→N·L | 05→S·L' },
-      { question: 'Émirats arabes', answer: '2 décembre',     majorHint: '02→S·N | 12→T·N' },
       { question: 'Thaïlande',      answer: '28 juillet',     majorHint: '28→N·F | 07→S·K' },
       { question: 'Malaisie',       answer: '31 août',        majorHint: '31→M·T | 08→S·F' },
       { question: 'Singapour',      answer: '9 août',         majorHint: '09→S·P | 08→S·F' },
@@ -144,15 +184,52 @@ const MENT_FETES_DATA = [
     ]
   },
 
-  /* ══════ ROUND 3 — MOYENS ══════ */
+  /* ══════ ROUND 3a — MOYENS ══════ */
   {
-    name: 'Europe Lot 3 — moyens',
+    name: 'Europe Lot 5 — moyens',
     items: [
       { question: 'Hongrie',        answer: '20 août',        majorHint: '20→N·S | 08→S·F' },
       { question: 'Rép. tchèque',   answer: '28 octobre',     majorHint: '28→N·F | 10→T·S' },
       { question: 'Slovaquie',      answer: '1er janvier',    majorHint: '01→S·T | 01→S·T' },
       { question: 'Croatie',        answer: '30 mai',         majorHint: '30→M·S | 05→S·L' },
       { question: 'Serbie',         answer: '15 février',     majorHint: '15→T·L | 02→S·N' },
+    ]
+  },
+  {
+    name: 'Amériques Lot 5 — Caraïbes',
+    items: [
+      { question: 'Haïti',                 answer: '1er janvier',  majorHint: '01→S·T | 01→S·T' },
+      { question: 'Rép. dominicaine',      answer: '27 février',   majorHint: '27→N·K | 02→S·N' },
+      { question: 'Jamaïque',              answer: '6 août',       majorHint: '06→S·J | 08→S·F' },
+      { question: 'Trinidad-et-Tobago',    answer: '31 août',      majorHint: '31→M·T | 08→S·F' },
+      { question: 'Bahamas',               answer: '10 juillet',   majorHint: '10→T·S | 07→S·K' },
+    ]
+  },
+  {
+    name: 'Afrique Lot 5 — moyens',
+    items: [
+      { question: 'Libye',          answer: '24 décembre',    majorHint: '24→N·R | 12→T·N' },
+      { question: 'Namibie',        answer: '21 mars',        majorHint: '21→N·T | 03→S·M' },
+      { question: 'Rwanda',         answer: '1er juillet',    majorHint: '01→S·T | 07→S·K' },
+      { question: 'Zambie',         answer: '24 octobre',     majorHint: '24→N·R | 10→T·S' },
+      { question: 'Burkina Faso',   answer: '11 décembre',    majorHint: '11→T·T | 12→T·N' },
+    ]
+  },
+  {
+    name: 'Asie Lot 5 — moyens',
+    items: [
+      { question: 'Sri Lanka',      answer: '4 février',      majorHint: '04→S·R | 02→S·N' },
+      { question: 'Myanmar',        answer: '4 janvier',      majorHint: '04→S·R | 01→S·T' },
+      { question: 'Cambodge',       answer: '9 novembre',     majorHint: '09→S·P | 11→T·T' },
+      { question: 'Laos',           answer: '2 décembre',     majorHint: '02→S·N | 12→T·N' },
+      { question: 'Mongolie',       answer: '11 juillet',     majorHint: '11→T·T | 07→S·K' },
+    ]
+  },
+
+  /* ══════ ROUND 3b — MOYENS (suite) ══════ */
+  {
+    name: 'Europe Lot 6 — moyens',
+    items: [
       { question: 'Luxembourg',     answer: '23 juin',        majorHint: '23→N·M | 06→S·J' },
       { question: 'Islande',        answer: '17 juin',        majorHint: '17→T·K | 06→S·J' },
       { question: 'Bulgarie',       answer: '3 mars',         majorHint: '03→S·M | 03→S·M' },
@@ -161,13 +238,8 @@ const MENT_FETES_DATA = [
     ]
   },
   {
-    name: 'Amériques Lot 3 — Caraïbes',
+    name: 'Amériques Lot 6 — Caraïbes',
     items: [
-      { question: 'Haïti',                 answer: '1er janvier',  majorHint: '01→S·T | 01→S·T' },
-      { question: 'Rép. dominicaine',      answer: '27 février',   majorHint: '27→N·K | 02→S·N' },
-      { question: 'Jamaïque',              answer: '6 août',       majorHint: '06→S·J | 08→S·F' },
-      { question: 'Trinidad-et-Tobago',    answer: '31 août',      majorHint: '31→M·T | 08→S·F' },
-      { question: 'Bahamas',               answer: '10 juillet',   majorHint: '10→T·S | 07→S·K' },
       { question: 'Barbade',               answer: '30 novembre',  majorHint: '30→M·S | 11→T·T' },
       { question: 'Belize',                answer: '21 septembre', majorHint: '21→N·T | 09→S·P' },
       { question: 'Guyana',                answer: '26 mai',       majorHint: '26→N·J | 05→S·L' },
@@ -176,13 +248,8 @@ const MENT_FETES_DATA = [
     ]
   },
   {
-    name: 'Afrique Lot 3 — moyens',
+    name: 'Afrique Lot 6 — moyens',
     items: [
-      { question: 'Libye',          answer: '24 décembre',    majorHint: '24→N·R | 12→T·N' },
-      { question: 'Namibie',        answer: '21 mars',        majorHint: '21→N·T | 03→S·M' },
-      { question: 'Rwanda',         answer: '1er juillet',    majorHint: '01→S·T | 07→S·K' },
-      { question: 'Zambie',         answer: '24 octobre',     majorHint: '24→N·R | 10→T·S' },
-      { question: 'Burkina Faso',   answer: '11 décembre',    majorHint: '11→T·T | 12→T·N' },
       { question: 'Niger',          answer: '3 août',         majorHint: '03→S·M | 08→S·F' },
       { question: 'Bénin',          answer: '1er août',       majorHint: '01→S·T | 08→S·F' },
       { question: 'Togo',           answer: '27 avril',       majorHint: '27→N·K | 04→S·R' },
@@ -191,13 +258,8 @@ const MENT_FETES_DATA = [
     ]
   },
   {
-    name: 'Asie Lot 3 — moyens',
+    name: 'Asie Lot 6 — moyens',
     items: [
-      { question: 'Sri Lanka',      answer: '4 février',      majorHint: '04→S·R | 02→S·N' },
-      { question: 'Myanmar',        answer: '4 janvier',      majorHint: '04→S·R | 01→S·T' },
-      { question: 'Cambodge',       answer: '9 novembre',     majorHint: '09→S·P | 11→T·T' },
-      { question: 'Laos',           answer: '2 décembre',     majorHint: '02→S·N | 12→T·N' },
-      { question: 'Mongolie',       answer: '11 juillet',     majorHint: '11→T·T | 07→S·K' },
       { question: 'Népal',          answer: '29 mai',         majorHint: '29→N·P | 05→S·L' },
       { question: 'Qatar',          answer: '18 décembre',    majorHint: '18→T·F | 12→T·N' },
       { question: 'Koweït',         answer: '25 février',     majorHint: '25→N·L | 02→S·N' },
@@ -206,24 +268,19 @@ const MENT_FETES_DATA = [
     ]
   },
 
-  /* ══════ ROUND 4 — PEU CONNUS ══════ */
+  /* ══════ ROUND 4a — PEU CONNUS ══════ */
   {
-    name: 'Europe Lot 4 — peu connus',
+    name: 'Europe Lot 7 — peu connus',
     items: [
       { question: 'Macédoine du Nord', answer: '8 septembre',  majorHint: '08→S·F | 09→S·P' },
       { question: 'Monténégro',        answer: '13 juillet',   majorHint: '13→T·M | 07→S·K' },
       { question: 'Bosnie-Herzégovine',answer: '25 novembre',  majorHint: '25→N·L | 11→T·T' },
       { question: 'Kosovo',            answer: '17 février',   majorHint: '17→T·K | 02→S·N' },
       { question: 'Moldavie',          answer: '27 août',      majorHint: '27→N·K | 08→S·F' },
-      { question: 'Biélorussie',       answer: '3 juillet',    majorHint: '03→S·M | 07→S·K' },
-      { question: 'Lituanie',          answer: '16 février',   majorHint: '16→T·J | 02→S·N' },
-      { question: 'Lettonie',          answer: '18 novembre',  majorHint: '18→T·F | 11→T·T' },
-      { question: 'Estonie',           answer: '24 février',   majorHint: '24→N·R | 02→S·N' },
-      { question: 'Chypre',            answer: '1er octobre',  majorHint: '01→S·T | 10→T·S' },
     ]
   },
   {
-    name: 'Amériques Lot 4 — petits États',
+    name: 'Amériques Lot 7 — petits États',
     items: [
       { question: 'Saint-Kitts-et-Nevis',           answer: '19 septembre', majorHint: '19→T·P | 09→S·P' },
       { question: 'Antigua-et-Barbuda',              answer: '1er novembre', majorHint: '01→S·T | 11→T·T' },
@@ -233,33 +290,23 @@ const MENT_FETES_DATA = [
     ]
   },
   {
-    name: 'Afrique Lot 4 — peu connus',
+    name: 'Afrique Lot 7 — peu connus',
     items: [
       { question: 'Soudan',         answer: '1er janvier',    majorHint: '01→S·T | 01→S·T' },
       { question: 'Mauritanie',     answer: '28 novembre',    majorHint: '28→N·F | 11→T·T' },
       { question: 'Soudan du Sud',  answer: '9 juillet',      majorHint: '09→S·P | 07→S·K' },
       { question: 'Centrafrique',   answer: '1er décembre',   majorHint: '01→S·T | 12→T·N' },
       { question: 'Tchad',          answer: '11 août',        majorHint: '11→T·T | 08→S·F' },
-      { question: 'Congo',          answer: '15 août',        majorHint: '15→T·L | 08→S·F' },
-      { question: 'Gabon',          answer: '17 août',        majorHint: '17→T·K | 08→S·F' },
-      { question: 'Érythrée',       answer: '24 mai',         majorHint: '24→N·R | 05→S·L' },
-      { question: 'Djibouti',       answer: '27 juin',        majorHint: '27→N·K | 06→S·J' },
-      { question: 'Malawi',         answer: '6 juillet',      majorHint: '06→S·J | 07→S·K' },
     ]
   },
   {
-    name: 'Asie Lot 4 — peu connus',
+    name: 'Asie Lot 7 — peu connus',
     items: [
       { question: 'Afghanistan',    answer: '19 août',        majorHint: '19→T·P | 08→S·F' },
       { question: 'Bahreïn',        answer: '16 décembre',    majorHint: '16→T·J | 12→T·N' },
       { question: 'Oman',           answer: '18 novembre',    majorHint: '18→T·F | 11→T·T' },
       { question: 'Yémen',          answer: '22 mai',         majorHint: '22→N·N | 05→S·L' },
       { question: 'Palestine',      answer: '15 novembre',    majorHint: '15→T·L | 11→T·T' },
-      { question: 'Azerbaïdjan',    answer: '28 mai',         majorHint: '28→N·F | 05→S·L' },
-      { question: 'Arménie',        answer: '21 septembre',   majorHint: '21→N·T | 09→S·P' },
-      { question: 'Géorgie',        answer: '26 mai',         majorHint: '26→N·J | 05→S·L' },
-      { question: 'Ouzbékistan',    answer: '1er septembre',  majorHint: '01→S·T | 09→S·P' },
-      { question: 'Brunei',         answer: '23 février',     majorHint: '23→N·M | 02→S·N' },
     ]
   },
   {
@@ -272,9 +319,41 @@ const MENT_FETES_DATA = [
     ]
   },
 
+  /* ══════ ROUND 4b — PEU CONNUS (suite) ══════ */
+  {
+    name: 'Europe Lot 8 — peu connus',
+    items: [
+      { question: 'Biélorussie',    answer: '3 juillet',      majorHint: '03→S·M | 07→S·K' },
+      { question: 'Lituanie',       answer: '16 février',     majorHint: '16→T·J | 02→S·N' },
+      { question: 'Lettonie',       answer: '18 novembre',    majorHint: '18→T·F | 11→T·T' },
+      { question: 'Estonie',        answer: '24 février',     majorHint: '24→N·R | 02→S·N' },
+      { question: 'Chypre',         answer: '1er octobre',    majorHint: '01→S·T | 10→T·S' },
+    ]
+  },
+  {
+    name: 'Afrique Lot 8 — peu connus',
+    items: [
+      { question: 'Congo',          answer: '15 août',        majorHint: '15→T·L | 08→S·F' },
+      { question: 'Gabon',          answer: '17 août',        majorHint: '17→T·K | 08→S·F' },
+      { question: 'Érythrée',       answer: '24 mai',         majorHint: '24→N·R | 05→S·L' },
+      { question: 'Djibouti',       answer: '27 juin',        majorHint: '27→N·K | 06→S·J' },
+      { question: 'Malawi',         answer: '6 juillet',      majorHint: '06→S·J | 07→S·K' },
+    ]
+  },
+  {
+    name: 'Asie Lot 8 — peu connus',
+    items: [
+      { question: 'Azerbaïdjan',    answer: '28 mai',         majorHint: '28→N·F | 05→S·L' },
+      { question: 'Arménie',        answer: '21 septembre',   majorHint: '21→N·T | 09→S·P' },
+      { question: 'Géorgie',        answer: '26 mai',         majorHint: '26→N·J | 05→S·L' },
+      { question: 'Ouzbékistan',    answer: '1er septembre',  majorHint: '01→S·T | 09→S·P' },
+      { question: 'Brunei',         answer: '23 février',     majorHint: '23→N·M | 02→S·N' },
+    ]
+  },
+
   /* ══════ ROUND 5 — TRÈS PEU CONNUS / MICRO-ÉTATS ══════ */
   {
-    name: 'Europe Lot 5 — micro-États',
+    name: 'Europe Lot 9 — micro-États',
     items: [
       { question: 'Monaco',         answer: '19 novembre',    majorHint: '19→T·P | 11→T·T' },
       { question: 'Andorre',        answer: '8 septembre',    majorHint: '08→S·F | 09→S·P' },
@@ -285,7 +364,7 @@ const MENT_FETES_DATA = [
     ]
   },
   {
-    name: 'Afrique Lot 5 — petits États',
+    name: 'Afrique Lot 9 — petits États',
     items: [
       { question: 'Sierra Leone',       answer: '27 avril',      majorHint: '27→N·K | 04→S·R' },
       { question: 'Liberia',            answer: '26 juillet',    majorHint: '26→N·J | 07→S·K' },
@@ -297,7 +376,7 @@ const MENT_FETES_DATA = [
     ]
   },
   {
-    name: 'Afrique Lot 6 — micro-États',
+    name: 'Afrique Lot 10 — micro-États',
     items: [
       { question: 'Cap-Vert',              answer: '5 juillet',    majorHint: '05→S·L | 07→S·K' },
       { question: 'São Tomé-et-Príncipe',  answer: '12 juillet',   majorHint: '12→T·N | 07→S·K' },
@@ -309,7 +388,7 @@ const MENT_FETES_DATA = [
     ]
   },
   {
-    name: 'Asie Lot 5 — très peu connus',
+    name: 'Asie Lot 9 — très peu connus',
     items: [
       { question: 'Timor-Leste',    answer: '20 mai',         majorHint: '20→N·S | 05→S·L' },
       { question: 'Bhoutan',        answer: '17 décembre',    majorHint: '17→T·K | 12→T·N' },
