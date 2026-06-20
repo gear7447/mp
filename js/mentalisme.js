@@ -796,6 +796,9 @@ document.getElementById('mentItemCancel').addEventListener('click', mentItemGoBa
 document.getElementById('mentItemSave').addEventListener('click', saveMentItem);
 document.getElementById('mentItemDelete').addEventListener('click', deleteMentItem);
 
+document.getElementById('mentItemImgLabel').addEventListener('click', () => {
+  document.getElementById('mentItemImgInput').click();
+});
 document.getElementById('mentItemImgInput').addEventListener('change', async e => {
   const file = e.target.files[0]; if (!file) return;
   e.target.value = '';
