@@ -43,13 +43,25 @@ function renderHome() {
   const lastSess = [...(state.history || [])].sort((a, b) => b.date - a.date)[0];
   const toursRep = (state.tours?.list || []).filter(t => t.status === 'repertoire').length;
 
-  const DAY_L  = ['D','L','M','M','J','V','S'];
-  const today  = todayStr();
-  const weekDots = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(Date.now() - (6 - i) * 86400000);
-    const s = d.toISOString().slice(0, 10);
-    return { s, letter: DAY_L[d.getDay()], active: actDates.has(s), isToday: s === today };
+  const DAY_L   = ['D','L','M','M','J','V','S'];
+  const today   = todayStr();
+  const daily   = state.settings.dailyStats || {};
+
+  // cartomagie sessions par jour depuis state.history
+  const cartoByDay = {};
+  (state.history || []).forEach(s => {
+    const d = new Date(s.date).toISOString().slice(0, 10);
+    cartoByDay[d] = (cartoByDay[d] || 0) + 1;
   });
+
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const d   = new Date(Date.now() - (6 - i) * 86400000);
+    const s   = d.toISOString().slice(0, 10);
+    const carto = cartoByDay[s] || 0;
+    const ment  = (daily[s] || {}).ment || 0;
+    return { s, letter: DAY_L[d.getDay()], active: actDates.has(s), isToday: s === today, carto, ment, total: carto * 2 + ment };
+  });
+  const maxTotal = Math.max(1, ...weekDays.map(d => d.total));
 
   const streakIcon = streak.count >= 7 ? '🔥' : streak.count >= 3 ? '✨' : streak.count >= 1 ? '⚡' : '💤';
 
@@ -63,12 +75,18 @@ function renderHome() {
         </div>
       </div>
       <div class="home-week">
-        ${weekDots.map(d => `
+        ${weekDays.map(d => {
+          const h = d.total > 0 ? Math.max(6, Math.round(d.total / maxTotal * 36)) : 4;
+          return `
           <div class="home-day">
-            <div class="home-day-dot${d.active ? ' active' : ''}${d.isToday ? ' today' : ''}"></div>
-            <div class="home-day-letter">${d.letter}</div>
-          </div>
-        `).join('')}
+            <div class="home-day-bar-wrap">
+              ${d.carto > 0 ? `<div class="home-day-seg carto" style="height:${Math.round(d.carto*2/maxTotal*36)}px"></div>` : ''}
+              ${d.ment  > 0 ? `<div class="home-day-seg ment"  style="height:${Math.round(d.ment /maxTotal*36)}px"></div>` : ''}
+              ${d.total === 0 ? `<div class="home-day-seg empty" style="height:4px"></div>` : ''}
+            </div>
+            <div class="home-day-letter${d.isToday ? ' today' : ''}">${d.letter}</div>
+          </div>`;
+        }).join('')}
       </div>
     </div>
 

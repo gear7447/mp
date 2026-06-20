@@ -25,6 +25,10 @@ function endSession() {
       perTech,
       names
     });
+    const today = new Date().toISOString().slice(0, 10);
+    if (!state.settings.dailyStats) state.settings.dailyStats = {};
+    if (!state.settings.dailyStats[today]) state.settings.dailyStats[today] = { carto: 0, ment: 0 };
+    state.settings.dailyStats[today].carto++;
   }
   save();
   const mins = Math.max(1, Math.round(totalSec / 60));

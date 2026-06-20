@@ -487,14 +487,18 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
   display: flex; justify-content: space-between;
 }
 .home-day { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-.home-day-dot {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: var(--panel); border: 2px solid var(--line);
-  transition: background .2s;
+.home-day-bar-wrap {
+  width: 30px; height: 40px; display: flex; flex-direction: column;
+  justify-content: flex-end; align-items: center; gap: 2px;
 }
-.home-day-dot.active { background: var(--brass); border-color: var(--brass); }
-.home-day-dot.today:not(.active) { border-color: var(--brass-soft); }
+.home-day-seg {
+  width: 100%; border-radius: 3px; transition: height .3s;
+}
+.home-day-seg.carto { background: var(--brass); }
+.home-day-seg.ment  { background: #7a9; }
+.home-day-seg.empty { background: var(--panel); border: 1px solid var(--line); border-radius: 3px; }
 .home-day-letter { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.home-day-letter.today { color: var(--brass-soft); font-weight: 700; }
 
 .home-modules { display: flex; flex-direction: column; gap: 8px; }
 .home-mod-card {

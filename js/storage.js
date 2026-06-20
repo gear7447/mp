@@ -115,6 +115,7 @@ function normalize() {
   if (!state.settings.streak || typeof state.settings.streak !== 'object')
     state.settings.streak = { count: 0, lastDate: '' };
   if (!Array.isArray(state.settings.activityDates)) state.settings.activityDates = [];
+  if (!state.settings.dailyStats || typeof state.settings.dailyStats !== 'object') state.settings.dailyStats = {};
 
   if (!state.budget || typeof state.budget !== 'object') state.budget = {};
   if (!Array.isArray(state.budget.coaches)) state.budget.coaches = [];

@@ -96,9 +96,19 @@ function mentDueItems(deckId) {
   return mentActiveItems(deckId).filter(i => i.nextSession <= sc);
 }
 
-function mentBuildQueue(deckId) {
+function _mentContinentPalierIds(deckId, continent) {
+  if (!continent) return null;
+  const ids = new Set(mentDeck(deckId).paliers.filter(p => p.name.startsWith(continent)).map(p => p.id));
+  return ids;
+}
+
+function mentBuildQueue(deckId, continent) {
   const sc = state.mentalisme.sessionCount;
-  const active = mentActiveItems(deckId);
+  let active = mentActiveItems(deckId);
+  if (continent) {
+    const ids = _mentContinentPalierIds(deckId, continent);
+    active = active.filter(i => ids.has(i.palierId));
+  }
   const due   = active.filter(i => i.nextSession <= sc);
   const maint = active.filter(i => i.level >= 5 && i.nextSession > sc && Math.random() < 0.10);
   const all = [...due, ...maint];
@@ -156,7 +166,10 @@ function renderMentalisme() {
   });
 
   body.querySelectorAll('.ment-btn-start').forEach(b =>
-    b.addEventListener('click', () => mentStartSession(b.dataset.deck)));
+    b.addEventListener('click', () => {
+      if (b.dataset.deck === 'fetes') mentShowContinentPicker();
+      else mentStartSession(b.dataset.deck);
+    }));
   body.querySelectorAll('.ment-btn-paliers').forEach(b =>
     b.addEventListener('click', () => mentOpenPaliers(b.dataset.deck)));
 }
@@ -217,11 +230,31 @@ function renderMentGestion() {
 }
 
 /* ============ SESSION ============ */
-function mentStartSession(deckId) {
-  const queue = mentBuildQueue(deckId);
+function mentShowContinentPicker() {
+  const CONTINENTS = ['Europe','Amériques','Afrique','Asie','Océanie'];
+  const list = document.getElementById('mentContinentList');
+  const dueByC = {};
+  CONTINENTS.forEach(c => {
+    const ids = _mentContinentPalierIds('fetes', c);
+    const due = mentDueItems('fetes').filter(i => ids.has(i.palierId)).length;
+    dueByC[c] = due;
+  });
+  const totalDue = mentDueItems('fetes').length;
+  list.innerHTML = `<button class="btn btn-ghost" data-c="" style="width:100%">🌍 Tous les continents${totalDue > 0 ? ` <b>(${totalDue})</b>` : ''}</button>`
+    + CONTINENTS.map(c => `<button class="btn btn-ghost" data-c="${c}" style="width:100%">${c}${dueByC[c] > 0 ? ` <b>(${dueByC[c]})</b>` : ''}</button>`).join('');
+  list.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    document.getElementById('mentContinentPicker').classList.add('hidden');
+    mentStartSession('fetes', b.dataset.c || null);
+  }));
+  document.getElementById('mentContinentPicker').classList.remove('hidden');
+}
+
+function mentStartSession(deckId, continent) {
+  const queue = mentBuildQueue(deckId, continent);
   if (!queue.length) {
     const msg = document.getElementById('mentHubMsg');
-    msg.textContent = `Rien à réviser pour "${MENT_DECK_INFO[deckId].label}" !`;
+    const label = continent ? `${continent} (${MENT_DECK_INFO[deckId].label})` : MENT_DECK_INFO[deckId].label;
+    msg.textContent = `Rien à réviser pour "${label}" !`;
     msg.classList.remove('hidden');
     setTimeout(() => msg.classList.add('hidden'), 3000);
     return;
@@ -315,7 +348,7 @@ function mentSubmitAnswer() {
 
   const si = mentDeck(deckId).items.find(i => i.id === item.id);
   if (si) {
-    if (rating === 'bad')  si.level = Math.max(0, si.level - 1);
+    if (rating === 'bad') { si.level = Math.max(0, si.level - 1); si.errorCount = (si.errorCount || 0) + 1; }
     if (rating === 'good') si.level = Math.min(5, si.level + 1);
     const sc = state.mentalisme.sessionCount;
     si.lastSession = sc;
@@ -349,6 +382,7 @@ function mentGiveUp() {
   const si = mentDeck(deckId).items.find(i => i.id === item.id);
   if (si) {
     si.level = Math.max(0, si.level - 1);
+    si.errorCount = (si.errorCount || 0) + 1;
     const sc = state.mentalisme.sessionCount;
     si.lastSession = sc;
     si.nextSession = sc + MENT_INTERVALS[si.level];
@@ -378,9 +412,19 @@ function mentContinue() {
   }
 }
 
+function _mentTrackDaily() {
+  const today = new Date().toISOString().slice(0, 10);
+  if (!state.settings.dailyStats) state.settings.dailyStats = {};
+  if (!state.settings.dailyStats[today]) state.settings.dailyStats[today] = { carto: 0, ment: 0 };
+  state.settings.dailyStats[today].ment++;
+  const cutoff = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
+  Object.keys(state.settings.dailyStats).forEach(k => { if (k < cutoff) delete state.settings.dailyStats[k]; });
+}
+
 function mentSessionEnd() {
   if (!mentSess) return;
   state.mentalisme.sessionCount++;
+  _mentTrackDaily();
   save();
   const rc    = { ...mentSess.rc };
   const total = rc.bad + rc.ok + rc.good;
@@ -525,6 +569,29 @@ function renderMentStats() {
     });
     html += `</div></div>`;
   });
+
+  // Top erreurs tous decks confondus
+  const allErrors = [];
+  ['fetes','anniversaires'].forEach(deckId => {
+    mentDeck(deckId).items.forEach(item => {
+      if ((item.errorCount || 0) > 0) allErrors.push({ ...item, deckId });
+    });
+  });
+  allErrors.sort((a, b) => (b.errorCount || 0) - (a.errorCount || 0));
+  if (allErrors.length) {
+    html += `<div class="ment-stat-card" style="margin-top:8px">`;
+    html += `<div class="ment-stat-hdr">❌ Erreurs fréquentes</div>`;
+    html += `<div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">`;
+    allErrors.slice(0, 10).forEach(item => {
+      html += `
+        <div style="display:flex;align-items:center;gap:10px;background:var(--panel);border-radius:8px;padding:8px 12px;border:1px solid var(--line)">
+          <span style="flex:1;font-size:.88rem;font-weight:500">${escapeHtml(item.question)}</span>
+          <span style="font-size:.8rem;color:var(--muted)">${escapeHtml(item.answer)}</span>
+          <span style="font-size:.78rem;color:var(--red);font-weight:700;flex-shrink:0">×${item.errorCount}</span>
+        </div>`;
+    });
+    html += `</div></div>`;
+  }
 
   body.innerHTML = html;
 }
@@ -751,6 +818,9 @@ document.getElementById('mentSessHintBtn').addEventListener('click', () => {
   el.classList.toggle('hidden');
   btn.textContent = el.classList.contains('hidden') ? '💬 Aide' : '💬 Masquer';
 });
+document.getElementById('mentContinentCancel').addEventListener('click', () =>
+  document.getElementById('mentContinentPicker').classList.add('hidden'));
+
 document.getElementById('mentTabRevision').addEventListener('click', () => {
   mentHubMode = 'revision'; renderMentalisme();
 });
