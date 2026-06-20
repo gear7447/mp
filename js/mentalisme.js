@@ -16,6 +16,65 @@ let mentEditDeck   = null;
 let mentEditPalier = null;
 let mentEditItem   = null;
 let mentEditorFrom = null;  // 'browse' | 'paliers'
+let _mentNewItemId    = null; // pré-généré pour les nouveaux items
+let _mentPendingImg   = null; // Blob en attente d'upload
+let _mentDeleteImg    = false;
+let _mentImgBlobUrl   = null; // object URL temporaire pour preview
+
+/* ─── Supabase Storage — images mnémotechniques ─── */
+const MENT_IMG_BUCKET = 'mentalisme-images';
+
+async function _mentCompressImg(file) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const bUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      const MAX = 700;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) { const r = Math.min(MAX / w, MAX / h); w = Math.round(w * r); h = Math.round(h * r); }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(bUrl);
+      canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.78);
+    };
+    img.src = bUrl;
+  });
+}
+
+async function _mentUserId() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  return session ? session.user.id : null;
+}
+
+async function _mentUploadImg(itemId, blob) {
+  const userId = await _mentUserId(); if (!userId) return null;
+  const path = `${userId}/${itemId}`;
+  const { error } = await supabaseClient.storage.from(MENT_IMG_BUCKET).upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
+  if (error) { console.error('image upload:', error.message); return null; }
+  const { data } = supabaseClient.storage.from(MENT_IMG_BUCKET).getPublicUrl(path);
+  return data.publicUrl;
+}
+
+async function _mentRemoveImg(itemId) {
+  const userId = await _mentUserId(); if (!userId) return;
+  await supabaseClient.storage.from(MENT_IMG_BUCKET).remove([`${userId}/${itemId}`]);
+}
+
+function _mentSetImgUI(url) {
+  const preview = document.getElementById('mentItemImgPreview');
+  const label   = document.getElementById('mentItemImgLabel');
+  const delBtn  = document.getElementById('mentItemImgDel');
+  if (url) {
+    preview.src = url; preview.classList.remove('hidden');
+    label.textContent = '📷 Changer l\'image';
+    delBtn.classList.remove('hidden');
+  } else {
+    preview.src = ''; preview.classList.add('hidden');
+    label.textContent = '📷 Ajouter une image';
+    delBtn.classList.add('hidden');
+  }
+}
 
 /* ---- helpers ---- */
 function mentDeck(id) { return state.mentalisme.decks[id]; }
@@ -139,6 +198,10 @@ function mentRenderCard() {
   majorEl.textContent = item.majorHint || '';
   majorEl.classList.toggle('hidden', !item.majorHint);
   document.getElementById('mentSessMnemInput').value = item.mnemonic || '';
+
+  const imgEl = document.getElementById('mentSessImg');
+  if (item.imageUrl) { imgEl.src = item.imageUrl; imgEl.classList.remove('hidden'); }
+  else { imgEl.src = ''; imgEl.classList.add('hidden'); }
 
   const inp = document.getElementById('mentSessInput');
   inp.value = '';
@@ -509,8 +572,13 @@ function mentOpenItemEditor() {
   document.getElementById('mentItemQLabel').textContent = info.qLabel;
   document.getElementById('mentItemALabel').textContent = info.aLabel;
 
+  // reset image state
+  _mentPendingImg = null; _mentDeleteImg = false;
+  if (_mentImgBlobUrl) { URL.revokeObjectURL(_mentImgBlobUrl); _mentImgBlobUrl = null; }
+
   if (mentEditItem) {
     const item = deck.items.find(i => i.id === mentEditItem);
+    _mentNewItemId = null;
     document.getElementById('mentItemEditorTitle').textContent = 'Modifier la carte';
     document.getElementById('mentItemQ').value     = item.question;
     document.getElementById('mentItemA').value     = item.answer;
@@ -519,7 +587,9 @@ function mentOpenItemEditor() {
     document.getElementById('mentItemLvlRow').classList.remove('hidden');
     document.getElementById('mentItemLvlDots').innerHTML = mentLevelDots(item.level);
     document.getElementById('mentItemDelete').classList.remove('hidden');
+    _mentSetImgUI(item.imageUrl || '');
   } else {
+    _mentNewItemId = uid();
     document.getElementById('mentItemEditorTitle').textContent = 'Nouvelle carte';
     document.getElementById('mentItemQ').value     = '';
     document.getElementById('mentItemA').value     = '';
@@ -527,6 +597,7 @@ function mentOpenItemEditor() {
     document.getElementById('mentItemMnem').value  = '';
     document.getElementById('mentItemLvlRow').classList.add('hidden');
     document.getElementById('mentItemDelete').classList.add('hidden');
+    _mentSetImgUI('');
   }
 
   show('mentalisme-item-editor');
@@ -542,19 +613,29 @@ function mentItemGoBack() {
   }
 }
 
-function saveMentItem() {
+async function saveMentItem() {
   const q = document.getElementById('mentItemQ').value.trim();
   const a = document.getElementById('mentItemA').value.trim();
   if (!q || !a) return;
-  const deck     = mentDeck(mentEditDeck);
-  const palierId = document.getElementById('mentItemPalier').value;
-  const major    = document.getElementById('mentItemMajor').value.trim();
-  const mnem     = document.getElementById('mentItemMnem').value.trim();
+  const deck      = mentDeck(mentEditDeck);
+  const palierId  = document.getElementById('mentItemPalier').value;
+  const major     = document.getElementById('mentItemMajor').value.trim();
+  const mnem      = document.getElementById('mentItemMnem').value.trim();
+  const resolvedId = mentEditItem || _mentNewItemId;
+
+  let imageUrl = mentEditItem ? ((deck.items.find(i => i.id === mentEditItem) || {}).imageUrl || '') : '';
+
+  if (_mentDeleteImg && mentEditItem && imageUrl) { await _mentRemoveImg(mentEditItem); imageUrl = ''; }
+  if (_mentPendingImg) {
+    const url = await _mentUploadImg(resolvedId, _mentPendingImg);
+    if (url) imageUrl = url;
+    _mentPendingImg = null;
+  }
 
   if (mentEditItem) {
-    Object.assign(deck.items.find(i => i.id === mentEditItem), { question:q, answer:a, majorHint:major, mnemonic:mnem, palierId });
+    Object.assign(deck.items.find(i => i.id === mentEditItem), { question:q, answer:a, majorHint:major, mnemonic:mnem, palierId, imageUrl });
   } else {
-    deck.items.push({ id:uid(), palierId, question:q, answer:a, majorHint:major, mnemonic:mnem, level:0, lastSession:0, nextSession:0 });
+    deck.items.push({ id:resolvedId, palierId, question:q, answer:a, majorHint:major, mnemonic:mnem, imageUrl, level:0, lastSession:0, nextSession:0 });
   }
   save();
   mentItemGoBack();
@@ -566,7 +647,8 @@ function deleteMentItem() {
   confirmDelete(
     `Supprimer "${item.question}" ?`,
     'Cette carte et sa progression seront perdues.',
-    () => {
+    async () => {
+      if (item.imageUrl) await _mentRemoveImg(mentEditItem);
       deck.items = deck.items.filter(i => i.id !== mentEditItem);
       save();
       mentItemGoBack();
@@ -625,3 +707,19 @@ document.getElementById('mentPalierNewName').addEventListener('keydown', e => { 
 document.getElementById('mentItemCancel').addEventListener('click', mentItemGoBack);
 document.getElementById('mentItemSave').addEventListener('click', saveMentItem);
 document.getElementById('mentItemDelete').addEventListener('click', deleteMentItem);
+
+document.getElementById('mentItemImgInput').addEventListener('change', async e => {
+  const file = e.target.files[0]; if (!file) return;
+  e.target.value = '';
+  if (_mentImgBlobUrl) { URL.revokeObjectURL(_mentImgBlobUrl); _mentImgBlobUrl = null; }
+  _mentPendingImg = await _mentCompressImg(file);
+  _mentImgBlobUrl = URL.createObjectURL(_mentPendingImg);
+  _mentDeleteImg = false;
+  _mentSetImgUI(_mentImgBlobUrl);
+});
+
+document.getElementById('mentItemImgDel').addEventListener('click', () => {
+  _mentPendingImg = null; _mentDeleteImg = true;
+  if (_mentImgBlobUrl) { URL.revokeObjectURL(_mentImgBlobUrl); _mentImgBlobUrl = null; }
+  _mentSetImgUI('');
+});

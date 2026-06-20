@@ -313,6 +313,7 @@
     <div id="mentSessLvl" class="ment-dots-row"></div>
     <div class="ment-flash-card">
       <div id="mentSessQ" class="ment-flash-q serif"></div>
+      <img id="mentSessImg" class="ment-sess-img hidden" alt="">
       <div id="mentSessAnswerBlock" class="ment-answer-block hidden">
         <div id="mentSessFeedbackLine" class="ment-feedback-line"></div>
         <div id="mentSessDate" class="ment-flash-date serif"></div>
@@ -408,6 +409,15 @@
     <div class="field">
       <label>Ton aide-mémoire <span class="hint" style="display:inline">optionnel</span></label>
       <textarea id="mentItemMnem" placeholder="Mot-image, histoire, association…"></textarea>
+    </div>
+    <div class="field">
+      <label>Image <span class="hint" style="display:inline">optionnel</span></label>
+      <img id="mentItemImgPreview" class="ment-img-preview hidden" alt="">
+      <label class="btn btn-ghost ment-img-upload-btn" id="mentItemImgLabel">
+        📷 Ajouter une image
+        <input type="file" id="mentItemImgInput" accept="image/*" style="display:none">
+      </label>
+      <button class="btn btn-ghost hidden" id="mentItemImgDel" style="margin-top:6px;color:var(--red)">Supprimer l'image</button>
     </div>
     <button class="btn btn-danger hidden" id="mentItemDelete">Supprimer cette carte</button>
   </div>

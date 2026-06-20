@@ -51,7 +51,7 @@ function normalize() {
     MENT_FETES_DATA.forEach(def => {
       const pId = palierMap[def.name];
       def.items.forEach(item => {
-        items.push({ id: uid(), palierId: pId, question: item.question, answer: item.answer, majorHint: item.majorHint, mnemonic: '', level: 0, lastSession: 0, nextSession: 0 });
+        items.push({ id: uid(), palierId: pId, question: item.question, answer: item.answer, majorHint: item.majorHint, mnemonic: '', imageUrl: '', level: 0, lastSession: 0, nextSession: 0 });
       });
     });
     state.mentalisme.decks.fetes = { paliers, items };
@@ -80,7 +80,7 @@ function normalize() {
         const pId = palierMap[def.name];
         def.items.forEach(item => {
           const prog = progressByQ[item.question] || {};
-          items.push({ id: uid(), palierId: pId, question: item.question, answer: item.answer, majorHint: item.majorHint, mnemonic: prog.mnemonic || '', level: prog.level || 0, lastSession: prog.lastSession || 0, nextSession: prog.nextSession || 0 });
+          items.push({ id: uid(), palierId: pId, question: item.question, answer: item.answer, majorHint: item.majorHint, mnemonic: prog.mnemonic || '', imageUrl: prog.imageUrl || '', level: prog.level || 0, lastSession: prog.lastSession || 0, nextSession: prog.nextSession || 0 });
         });
       });
       state.mentalisme.decks.fetes = { paliers, items };
@@ -92,7 +92,7 @@ function normalize() {
           const pId = uid();
           deck.paliers.push({ id: pId, name: def.name, unlockedAt: null });
           def.items.forEach(item => {
-            deck.items.push({ id: uid(), palierId: pId, question: item.question, answer: item.answer, majorHint: item.majorHint, mnemonic: '', level: 0, lastSession: 0, nextSession: 0 });
+            deck.items.push({ id: uid(), palierId: pId, question: item.question, answer: item.answer, majorHint: item.majorHint, mnemonic: '', imageUrl: '', level: 0, lastSession: 0, nextSession: 0 });
           });
         }
       });
@@ -106,6 +106,11 @@ function normalize() {
       items:   []
     };
   }
+
+  // assure imageUrl sur tous les items mentalisme existants
+  Object.values(state.mentalisme.decks).forEach(deck => {
+    if (Array.isArray(deck.items)) deck.items.forEach(item => { if (!('imageUrl' in item)) item.imageUrl = ''; });
+  });
 
   if (!state.budget || typeof state.budget !== 'object') state.budget = {};
   if (!Array.isArray(state.budget.coaches)) state.budget.coaches = [];
