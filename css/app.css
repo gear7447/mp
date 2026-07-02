@@ -111,6 +111,14 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 .consigne .red { color: var(--red); }
 .consigne .black { color: #efe7d6; }
 .taphint { font-size: .78rem; color: var(--brass-soft); letter-spacing: .04em; min-height: 1.2em; }
+.cull-strip { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.cull-chip {
+  padding: 5px 13px; border-radius: 20px; font-size: .8rem; cursor: pointer;
+  border: 1px solid var(--line); background: var(--panel-2); color: var(--muted);
+  transition: border-color .15s, color .15s;
+}
+.cull-chip.active { border-color: rgba(202,168,95,.45); color: var(--brass); background: rgba(202,168,95,.1); }
+.cull-suit-lbl { font-size: 1rem; color: var(--muted); margin-left: 4px; }
 
 /* carte rendue */
 .card {

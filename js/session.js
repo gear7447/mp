@@ -44,6 +44,15 @@ document.getElementById('beginBtn').addEventListener('click', startSession);
 
 /* ============ moteur de séance ============ */
 let S = null;
+let _cullMode = 'carte'; // 'carte' | 'carre' | 'couleur' | 'mixte'
+
+document.getElementById('drillCullStrip').addEventListener('click', e => {
+  const chip = e.target.closest('.cull-chip');
+  if (!chip) return;
+  _cullMode = chip.dataset.mode;
+  document.querySelectorAll('.cull-chip').forEach(c => c.classList.toggle('active', c === chip));
+  if (S) rollConsigne(techById(S.prevId));
+});
 let masterTimer = null, metroTimer = null, audioCtx = null;
 
 function initAudio() {
@@ -154,6 +163,8 @@ function nextBlock(first) {
   const hint = document.getElementById('d_hint');
   hint.textContent = t.mode === 'tap' ? 'Touche pour une nouvelle carte'
     : (t.mode === 'interval' ? 'Change toutes les ' + t.intervalSec + ' s' : '');
+  const isCull = t.family === 'Cull / triage';
+  document.getElementById('drillCullStrip').classList.toggle('hidden', !isCull);
   rollConsigne(t);
   if (t.metro) startMetro(t.bpm);
 }
@@ -167,10 +178,26 @@ function rollConsigne(t) {
     txt = txt.replace(/\{n\}/g, n).replace(/\{nx\}/g, NX[n] || ('' + n + '×'));
   }
   if (/\{carte\}/.test(txt)) {
-    const r = Math.floor(Math.random() * 13), s = Math.floor(Math.random() * 4);
-    card = {r, s};
-    const suit = SUITS[s];
-    txt = txt.replace(/\{carte\}/g, `<b class="${suit.cls}">${RANKS[r]}${suit.sym}</b>`);
+    const isCull = techById(S?.prevId)?.family === 'Cull / triage';
+    const mode = (isCull && _cullMode === 'mixte')
+      ? ['carte','carre','couleur'][Math.floor(Math.random() * 3)]
+      : (isCull ? _cullMode : 'carte');
+
+    if (mode === 'carre') {
+      const r = Math.floor(Math.random() * 13);
+      const allSuits = SUITS.map(s => `<b class="${s.cls}">${s.sym}</b>`).join(' ');
+      txt = `Culle les 4 <b>${RANKS[r]}</b> &nbsp;${allSuits}`;
+    } else if (mode === 'couleur') {
+      const s = Math.floor(Math.random() * 4);
+      const suit = SUITS[s];
+      const suitName = suit.fr.replace('de ', '');
+      txt = `Culle toute la couleur <b class="${suit.cls}">${suit.sym}</b> <span class="cull-suit-lbl">${suitName}</span>`;
+    } else {
+      const r = Math.floor(Math.random() * 13), s = Math.floor(Math.random() * 4);
+      card = {r, s};
+      const suit = SUITS[s];
+      txt = txt.replace(/\{carte\}/g, `<b class="${suit.cls}">${RANKS[r]}${suit.sym}</b>`);
+    }
   }
   txt = txt.replace(/(^|[^\d])1 cartes\b/g, '$11 carte');
   document.getElementById('d_consigne').innerHTML = txt;
