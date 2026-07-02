@@ -858,6 +858,51 @@
   </div>
 </div>
 
+<!-- ===================== VIDÉOTHÈQUE ===================== -->
+<section id="screen-videos" class="screen hidden">
+  <div class="topbar">
+    <div><p class="eyebrow">Magie</p><h1 class="serif">Vidéothèque</h1></div>
+    <button class="link" id="videoAddBtn">+ Ajouter</button>
+  </div>
+  <div style="flex:none;margin-bottom:10px">
+    <input type="search" id="videoSearch" placeholder="Rechercher…" style="width:100%;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--text);font-size:.92rem">
+  </div>
+  <div class="phy-cat-filter" id="videoTagFilter"></div>
+  <div class="video-grid" id="videoList"></div>
+</section>
+
+<!-- ===================== VIDÉOTHÈQUE — éditeur ===================== -->
+<section id="screen-videos-editor" class="screen hidden">
+  <div class="topbar">
+    <button class="link" id="videoEditorCancel">‹ Retour</button>
+    <h1 class="serif" id="videoEditorTitle">Vidéo</h1>
+    <span style="width:54px"></span>
+  </div>
+  <div class="form">
+    <div class="field">
+      <label>Lien vidéo</label>
+      <input type="url" id="video_url" placeholder="https://www.youtube.com/watch?v=…">
+    </div>
+    <img id="videoThumbPreview" class="video-editor-thumb hidden" alt="">
+    <div class="field">
+      <label>Titre <span class="hint" style="display:inline">— auto-complété depuis YouTube si vide</span></label>
+      <input type="text" id="video_title" placeholder="Nom de la vidéo">
+    </div>
+    <div class="field">
+      <label>Tags</label>
+      <div id="videoTagsLinks" class="tour-tags-sel"></div>
+    </div>
+    <div class="field">
+      <label>Mes notes</label>
+      <textarea id="video_notes" placeholder="Ce que j'ai appris, passages importants, timestamp clés…" style="min-height:120px"></textarea>
+    </div>
+    <button class="btn btn-danger hidden" id="videoDeleteBtn">Supprimer cette vidéo</button>
+  </div>
+  <div class="actions">
+    <button class="btn btn-primary" id="videoSaveBtn">Enregistrer</button>
+  </div>
+</section>
+
 <!-- ===================== NAVIGATION ===================== -->
 <nav id="bottomNav" class="bottom-nav hidden" role="navigation" aria-label="Modules">
   <button class="nav-tab" data-module="home">
@@ -884,6 +929,10 @@
     <span class="nav-icon" style="font-size:1.1rem;font-weight:700">€</span>
     <span class="nav-label">Budget</span>
   </button>
+  <button class="nav-tab" data-module="videos">
+    <span class="nav-icon">📹</span>
+    <span class="nav-label">Vidéos</span>
+  </button>
 </nav>
 
 <!-- scripts dans l'ordre des dépendances -->
@@ -906,6 +955,7 @@
 <script src="js/mentalisme.js"></script>
 <script src="js/home.js"></script>
 <script src="js/budget.js"></script>
+<script src="js/videos.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

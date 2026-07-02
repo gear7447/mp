@@ -14,6 +14,7 @@
       if (tab.dataset.module === 'tours') { renderTourStatusPills(); renderTourList(); }
       if (tab.dataset.module === 'mentalisme') renderMentalisme();
       if (tab.dataset.module === 'budget') renderBudget();
+      if (tab.dataset.module === 'videos') renderVideos();
     });
   });
 

@@ -140,6 +140,13 @@ function normalize() {
   ['coaches','versements','cours','depenses','categories'].forEach(key => {
     state.budget[key].forEach(item => { if (!item.id) item.id = uid(); });
   });
+  if (!state.videos || typeof state.videos !== 'object') state.videos = {};
+  if (!Array.isArray(state.videos.list)) state.videos.list = [];
+  state.videos.list.forEach(v => {
+    if (!Array.isArray(v.tags)) v.tags = [];
+    if (!v.notes) v.notes = '';
+  });
+
   state.budget.cours.forEach(c => {
     if (!Array.isArray(c.techniqueIds)) c.techniqueIds = [];
     if (!Array.isArray(c.tourIds)) c.tourIds = [];
@@ -203,8 +210,8 @@ async function save() {
 }
 
 /* ============ navigation ============ */
-const SCREENS = ['login','home','library','manage','editor','setup','drill','recap','settings','stats','data','tours','tours-editor','tours-setlist','tours-setlist-view','mentalisme','mentalisme-session','mentalisme-browse','mentalisme-stats','mentalisme-paliers','mentalisme-item-editor','physique','physique-categories','physique-editor','physique-routines','physique-routine-editor','physique-session','budget','budget-gestion','budget-versement-editor','budget-cours-editor','budget-depense-editor','budget-stats'];
-const NAV_SCREENS = new Set(['home','library','tours','mentalisme','physique','budget']);
+const SCREENS = ['login','home','library','manage','editor','setup','drill','recap','settings','stats','data','tours','tours-editor','tours-setlist','tours-setlist-view','mentalisme','mentalisme-session','mentalisme-browse','mentalisme-stats','mentalisme-paliers','mentalisme-item-editor','physique','physique-categories','physique-editor','physique-routines','physique-routine-editor','physique-session','budget','budget-gestion','budget-versement-editor','budget-cours-editor','budget-depense-editor','budget-stats','videos','videos-editor'];
+const NAV_SCREENS = new Set(['home','library','tours','mentalisme','physique','budget','videos']);
 
 function show(name) {
   SCREENS.forEach(s => document.getElementById('screen-' + s).classList.toggle('hidden', s !== name));
