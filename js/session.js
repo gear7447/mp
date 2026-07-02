@@ -46,26 +46,31 @@ document.getElementById('beginBtn').addEventListener('click', startSession);
 let S = null;
 let _cullMode = 'carte'; // 'carte' | 'carre' | 'couleur'
 
+function _cullCarteFace(r, s) {
+  const rank = RANKS[r], suit = SUITS[s];
+  return `
+    <div class="corner tl ${suit.cls}"><span class="s">${suit.sym}</span></div>
+    <div class="corner tr ${suit.cls}"><span class="s">${suit.sym}</span></div>
+    <div class="corner bl ${suit.cls}"><span class="s">${suit.sym}</span></div>
+    <div class="corner br ${suit.cls}"><span class="s">${suit.sym}</span></div>
+    <div class="cull-rank-center">${rank}</div>`;
+}
 function _cullCarreFace(r) {
   const rank = RANKS[r];
   return `
-    <div class="corner tl black"><span class="r">${rank}</span><span class="s">${SUITS[0].sym}</span></div>
-    <div class="corner tr red"><span class="r">${rank}</span><span class="s">${SUITS[1].sym}</span></div>
-    <div class="corner bl red"><span class="r">${rank}</span><span class="s">${SUITS[2].sym}</span></div>
-    <div class="corner br black"><span class="r">${rank}</span><span class="s">${SUITS[3].sym}</span></div>
-    <div class="carre-center">
-      <div class="carre-rank">${rank}</div>
-      <div class="carre-suits-grid">
-        <span class="black">${SUITS[0].sym}</span><span class="red">${SUITS[1].sym}</span>
-        <span class="red">${SUITS[2].sym}</span><span class="black">${SUITS[3].sym}</span>
-      </div>
-    </div>`;
+    <div class="corner tl black"><span class="s">${SUITS[0].sym}</span></div>
+    <div class="corner tr red"><span class="s">${SUITS[1].sym}</span></div>
+    <div class="corner bl red"><span class="s">${SUITS[2].sym}</span></div>
+    <div class="corner br black"><span class="s">${SUITS[3].sym}</span></div>
+    <div class="cull-rank-center">${rank}</div>`;
 }
 function _cullCouleurFace(s) {
   const suit = SUITS[s];
   return `
-    <div class="corner tl ${suit.cls}"><span class="s" style="font-size:16cqw">${suit.sym}</span></div>
-    <div class="corner br ${suit.cls}"><span class="s" style="font-size:16cqw">${suit.sym}</span></div>
+    <div class="corner tl ${suit.cls}"><span class="s">${suit.sym}</span></div>
+    <div class="corner tr ${suit.cls}"><span class="s">${suit.sym}</span></div>
+    <div class="corner bl ${suit.cls}"><span class="s">${suit.sym}</span></div>
+    <div class="corner br ${suit.cls}"><span class="s">${suit.sym}</span></div>
     <div class="cbig ${suit.cls}">${suit.sym}</div>`;
 }
 
@@ -211,7 +216,7 @@ function rollConsigne(t) {
       txt = '';
     } else {
       const r = Math.floor(Math.random() * 13), s = Math.floor(Math.random() * 4);
-      card = { r, s };
+      card = { r, s, isCull };
       if (!isCull) {
         const suit = SUITS[s];
         txt = txt.replace(/\{carte\}/g, `<b class="${suit.cls}">${RANKS[r]}${suit.sym}</b>`);
@@ -228,9 +233,10 @@ function rollConsigne(t) {
     cardEl.classList.remove('flip');
     void cardEl.offsetWidth;
     cardEl.classList.add('flip');
-    if (card.carre !== undefined)   cardEl.innerHTML = _cullCarreFace(card.carre);
+    if (card.carre !== undefined)       cardEl.innerHTML = _cullCarreFace(card.carre);
     else if (card.couleur !== undefined) cardEl.innerHTML = _cullCouleurFace(card.couleur);
-    else cardEl.innerHTML = cardFace(card.r, card.s);
+    else if (card.isCull)               cardEl.innerHTML = _cullCarteFace(card.r, card.s);
+    else                                cardEl.innerHTML = cardFace(card.r, card.s);
     S.currentCard = card;
   } else {
     cardEl.classList.add('hidden');
