@@ -602,6 +602,18 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 .home-urgent { color: var(--brass) !important; font-weight: 600; }
 .home-ok { color: #4a8 !important; }
 .home-mod-arrow { color: var(--muted); font-size: 1.2rem; flex-shrink: 0; }
+.home-action {
+  display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
+  background: rgba(202,168,95,.07); border: 1px solid rgba(202,168,95,.28);
+  border-radius: 12px; padding: 13px 16px; cursor: pointer;
+  transition: border-color .15s;
+}
+.home-action:active { border-color: var(--brass); }
+.home-action-icon { font-size: 1.25rem; flex: none; }
+.home-action-body { flex: 1; min-width: 0; }
+.home-action-lbl { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--brass-soft); }
+.home-action-count { font-size: .92rem; color: var(--text); font-weight: 600; margin-top: 2px; }
+.home-action-cta { font-size: .8rem; color: var(--brass); white-space: nowrap; flex: none; }
 
 /* ---------- Budget ---------- */
 #screen-budget { padding-bottom: calc(env(safe-area-inset-bottom) + 80px); }

@@ -119,8 +119,13 @@ function renderHome() {
     </div>
 
     ${mentDueTotal > 0 ? `
-    <button class="btn btn-primary" id="homeActionMent">
-      🧠 Réviser maintenant — ${mentDueTotal} carte${mentDueTotal > 1 ? 's' : ''}
+    <button class="home-action" id="homeActionMent">
+      <span class="home-action-icon">🧠</span>
+      <div class="home-action-body">
+        <div class="home-action-lbl">Révision en attente</div>
+        <div class="home-action-count">${mentDueTotal} carte${mentDueTotal > 1 ? 's' : ''} à revoir</div>
+      </div>
+      <span class="home-action-cta">Commencer →</span>
     </button>` : ''}
   `;
 
