@@ -145,6 +145,14 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 .corner .s { font-size: 11cqw; margin-top: .05em; }
 .corner.tl { top: 6%; left: 6.5%; }
 .corner.br { bottom: 6%; right: 6.5%; transform: rotate(180deg); }
+.corner.tr { top: 6%; right: 6.5%; }
+.corner.bl { bottom: 6%; left: 6.5%; transform: rotate(180deg); }
+.carre-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .08em;
+}
+.carre-rank { font-size: 36cqw; font-family: Georgia, serif; font-weight: 700; color: var(--ink); line-height: 1; }
+.carre-suits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .05em .15em; font-size: 19cqw; line-height: 1; }
 .pips { position: absolute; inset: 15% 19%; }
 .pip { position: absolute; transform: translate(-50%, -50%); font-size: 17cqw; line-height: 1; }
 .pip.f { transform: translate(-50%, -50%) rotate(180deg); }

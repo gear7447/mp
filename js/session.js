@@ -44,7 +44,30 @@ document.getElementById('beginBtn').addEventListener('click', startSession);
 
 /* ============ moteur de séance ============ */
 let S = null;
-let _cullMode = 'carte'; // 'carte' | 'carre' | 'couleur' | 'mixte'
+let _cullMode = 'carte'; // 'carte' | 'carre' | 'couleur'
+
+function _cullCarreFace(r) {
+  const rank = RANKS[r];
+  return `
+    <div class="corner tl black"><span class="r">${rank}</span><span class="s">${SUITS[0].sym}</span></div>
+    <div class="corner tr red"><span class="r">${rank}</span><span class="s">${SUITS[1].sym}</span></div>
+    <div class="corner bl red"><span class="r">${rank}</span><span class="s">${SUITS[2].sym}</span></div>
+    <div class="corner br black"><span class="r">${rank}</span><span class="s">${SUITS[3].sym}</span></div>
+    <div class="carre-center">
+      <div class="carre-rank">${rank}</div>
+      <div class="carre-suits-grid">
+        <span class="black">${SUITS[0].sym}</span><span class="red">${SUITS[1].sym}</span>
+        <span class="red">${SUITS[2].sym}</span><span class="black">${SUITS[3].sym}</span>
+      </div>
+    </div>`;
+}
+function _cullCouleurFace(s) {
+  const suit = SUITS[s];
+  return `
+    <div class="corner tl ${suit.cls}"><span class="s" style="font-size:16cqw">${suit.sym}</span></div>
+    <div class="corner br ${suit.cls}"><span class="s" style="font-size:16cqw">${suit.sym}</span></div>
+    <div class="cbig ${suit.cls}">${suit.sym}</div>`;
+}
 
 document.getElementById('drillCullStrip').addEventListener('click', e => {
   const chip = e.target.closest('.cull-chip');
@@ -179,24 +202,22 @@ function rollConsigne(t) {
   }
   if (/\{carte\}/.test(txt)) {
     const isCull = techById(S?.prevId)?.family === 'Cull / triage';
-    const mode = (isCull && _cullMode === 'mixte')
-      ? ['carte','carre','couleur'][Math.floor(Math.random() * 3)]
-      : (isCull ? _cullMode : 'carte');
-
+    const mode = isCull ? _cullMode : 'carte';
     if (mode === 'carre') {
-      const r = Math.floor(Math.random() * 13);
-      const allSuits = SUITS.map(s => `<b class="${s.cls}">${s.sym}</b>`).join(' ');
-      txt = `Culle les 4 <b>${RANKS[r]}</b> &nbsp;${allSuits}`;
+      card = { carre: Math.floor(Math.random() * 13) };
+      txt = '';
     } else if (mode === 'couleur') {
-      const s = Math.floor(Math.random() * 4);
-      const suit = SUITS[s];
-      const suitName = suit.fr.replace('de ', '');
-      txt = `Culle toute la couleur <b class="${suit.cls}">${suit.sym}</b> <span class="cull-suit-lbl">${suitName}</span>`;
+      card = { couleur: Math.floor(Math.random() * 4) };
+      txt = '';
     } else {
       const r = Math.floor(Math.random() * 13), s = Math.floor(Math.random() * 4);
-      card = {r, s};
-      const suit = SUITS[s];
-      txt = txt.replace(/\{carte\}/g, `<b class="${suit.cls}">${RANKS[r]}${suit.sym}</b>`);
+      card = { r, s };
+      if (!isCull) {
+        const suit = SUITS[s];
+        txt = txt.replace(/\{carte\}/g, `<b class="${suit.cls}">${RANKS[r]}${suit.sym}</b>`);
+      } else {
+        txt = '';
+      }
     }
   }
   txt = txt.replace(/(^|[^\d])1 cartes\b/g, '$11 carte');
@@ -207,7 +228,9 @@ function rollConsigne(t) {
     cardEl.classList.remove('flip');
     void cardEl.offsetWidth;
     cardEl.classList.add('flip');
-    cardEl.innerHTML = cardFace(card.r, card.s);
+    if (card.carre !== undefined)   cardEl.innerHTML = _cullCarreFace(card.carre);
+    else if (card.couleur !== undefined) cardEl.innerHTML = _cullCouleurFace(card.couleur);
+    else cardEl.innerHTML = cardFace(card.r, card.s);
     S.currentCard = card;
   } else {
     cardEl.classList.add('hidden');
