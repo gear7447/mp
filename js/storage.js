@@ -210,7 +210,7 @@ async function save() {
 }
 
 /* ============ navigation ============ */
-const SCREENS = ['login','home','library','manage','editor','setup','drill','recap','settings','stats','data','tours','tours-editor','tours-setlist','tours-setlist-view','mentalisme','mentalisme-session','mentalisme-browse','mentalisme-stats','mentalisme-paliers','mentalisme-item-editor','physique','physique-categories','physique-editor','physique-routines','physique-routine-editor','physique-session','budget','budget-gestion','budget-versement-editor','budget-cours-editor','budget-depense-editor','budget-stats','videos','videos-editor'];
+const SCREENS = ['login','reset-pwd','home','library','manage','editor','setup','drill','recap','settings','stats','data','tours','tours-editor','tours-setlist','tours-setlist-view','mentalisme','mentalisme-session','mentalisme-browse','mentalisme-stats','mentalisme-paliers','mentalisme-item-editor','physique','physique-categories','physique-editor','physique-routines','physique-routine-editor','physique-session','budget','budget-gestion','budget-versement-editor','budget-cours-editor','budget-depense-editor','budget-stats','videos','videos-editor'];
 const NAV_SCREENS = new Set(['home','library','tours','mentalisme','physique','budget','videos']);
 
 function show(name) {

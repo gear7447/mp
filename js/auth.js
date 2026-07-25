@@ -55,3 +55,40 @@ async function signOut() {
   state = { techniques: [] };
   show('login');
 }
+
+document.getElementById('homeLogoutBtn').addEventListener('click', signOut);
+
+document.getElementById('forgotPwdBtn').addEventListener('click', async () => {
+  const email = document.getElementById('login_email').value.trim();
+  const errEl = document.getElementById('login_err');
+  if (!email) {
+    errEl.style.color = '#d98';
+    errEl.textContent = 'Saisis ton email d\'abord.';
+    return;
+  }
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://gear7447.github.io/mp/'
+  });
+  errEl.style.color = 'var(--brass)';
+  errEl.textContent = error ? error.message : 'Email envoyé ! Vérifie ta boîte mail.';
+});
+
+document.getElementById('resetPwdBtn').addEventListener('click', async () => {
+  const pwd  = document.getElementById('new_pwd').value;
+  const pwd2 = document.getElementById('new_pwd2').value;
+  const errEl = document.getElementById('reset_err');
+  errEl.style.color = '#d98';
+  errEl.textContent = '';
+  if (pwd.length < 6) { errEl.textContent = 'Minimum 6 caractères.'; return; }
+  if (pwd !== pwd2)   { errEl.textContent = 'Les mots de passe ne correspondent pas.'; return; }
+  const { error } = await supabaseClient.auth.updateUser({ password: pwd });
+  if (error) { errEl.textContent = error.message; return; }
+  errEl.style.color = 'var(--brass)';
+  errEl.textContent = 'Mot de passe modifié !';
+  await load(); renderLibrary(); renderHome();
+  setTimeout(() => show('home'), 1200);
+});
+
+supabaseClient.auth.onAuthStateChange((event) => {
+  if (event === 'PASSWORD_RECOVERY') show('reset-pwd');
+});

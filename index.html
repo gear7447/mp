@@ -18,6 +18,7 @@
 <section id="screen-home" class="screen hidden">
   <div class="topbar">
     <div><p class="eyebrow">Magie</p><h1 class="serif">Accueil</h1></div>
+    <button class="link" id="homeLogoutBtn" style="font-size:.82rem;color:var(--muted)">Déconnexion</button>
   </div>
   <div id="homeBody" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding-bottom:calc(env(safe-area-inset-bottom)+80px)"></div>
 </section>
@@ -37,6 +38,7 @@
       <label>Mot de passe</label>
       <input type="password" id="login_pwd" placeholder="••••••••" autocomplete="current-password">
     </div>
+    <button class="link" id="forgotPwdBtn" style="text-align:right;font-size:.8rem;padding:2px 0;color:var(--muted)">Mot de passe oublié ?</button>
     <div id="login_err" class="hint" style="min-height:1.2em;color:#d98"></div>
   </div>
   <div class="actions" style="margin-top:18px">
@@ -45,6 +47,28 @@
   <button class="link" id="signupToggle" style="margin-top:18px;text-align:center;width:100%">
     Pas encore de compte ? Créer un compte
   </button>
+</section>
+
+<!-- ===================== RESET MOT DE PASSE ===================== -->
+<section id="screen-reset-pwd" class="screen hidden" style="justify-content:center;gap:0">
+  <div style="text-align:center;margin-bottom:36px">
+    <p class="eyebrow">Sécurité</p>
+    <h1 class="serif" style="font-size:1.8rem;margin:6px 0 0">Nouveau mot de passe</h1>
+  </div>
+  <div class="form" style="flex:none;gap:14px">
+    <div class="field">
+      <label>Nouveau mot de passe</label>
+      <input type="password" id="new_pwd" placeholder="••••••••" autocomplete="new-password">
+    </div>
+    <div class="field">
+      <label>Confirmer</label>
+      <input type="password" id="new_pwd2" placeholder="••••••••" autocomplete="new-password">
+    </div>
+    <div id="reset_err" class="hint" style="min-height:1.2em;color:#d98"></div>
+  </div>
+  <div class="actions" style="margin-top:18px">
+    <button class="btn btn-primary" id="resetPwdBtn">Enregistrer</button>
+  </div>
 </section>
 
 <!-- ===================== BIBLIOTHÈQUE ===================== -->
