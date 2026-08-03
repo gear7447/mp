@@ -199,7 +199,7 @@ function nextBlock(first) {
 
 function rollConsigne(t) {
   const cardEl = document.getElementById('d_card');
-  let txt = t.template || t.name, card = null;
+  let txt = escapeHtml(t.template || t.name), card = null;
   if (/\{n\}|\{nx\}/.test(txt)) {
     const lo = Math.min(t.nMin, t.nMax), hi = Math.max(t.nMin, t.nMax);
     const n = lo + Math.floor(Math.random() * (hi - lo + 1));

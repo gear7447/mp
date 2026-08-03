@@ -29,7 +29,8 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
     } else {
       await load();
       renderLibrary();
-      show('library');
+      renderHome();
+      show('home');
     }
   }
   btn.disabled = false;
