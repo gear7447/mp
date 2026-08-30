@@ -145,7 +145,7 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 }
 .corner { position: absolute; display: flex; flex-direction: column; align-items: center; line-height: .8; font-family: Georgia, "Times New Roman", serif; font-weight: 600; }
 .corner .r { font-size: 14cqw; }
-.corner .s { font-size: 11cqw; margin-top: .05em; }
+.corner .s { font-size: 14cqw; margin-top: .05em; }
 .corner.tl { top: 6%; left: 6.5%; }
 .corner.br { bottom: 6%; right: 6.5%; transform: rotate(180deg); }
 .corner.tr { top: 6%; right: 6.5%; }
@@ -162,8 +162,8 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 .pip.f { transform: translate(-50%, -50%) rotate(180deg); }
 .cbig { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 54cqw; }
 .court { position: absolute; inset: 12%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .02em; }
-.court::before { content: ""; position: absolute; inset: 0; border: 1.6px solid currentColor; border-radius: 3px; opacity: .55; }
-.court::after { content: ""; position: absolute; inset: 6%; border: .8px solid currentColor; border-radius: 2px; opacity: .32; }
+.court::before { display: none; }
+.court::after { display: none; }
 .court .cs { font-size: 21cqw; line-height: 1; }
 .court .l { font-size: 34cqw; line-height: .9; font-weight: 600; font-family: Georgia, serif; }
 .red { color: var(--red); }
