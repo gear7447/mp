@@ -47,32 +47,14 @@ let S = null;
 let _cullMode = 'carte'; // 'carte' | 'carre' | 'couleur'
 let _cullTiming = 'tap'; // 'tap' | '5' | '10' | '15' | '20'
 
-function _cullCarteFace(r, s) {
-  const rank = RANKS[r], suit = SUITS[s];
-  return `
-    <div class="corner tl ${suit.cls}"><span class="s">${suit.sym}</span></div>
-    <div class="corner tr ${suit.cls}"><span class="s">${suit.sym}</span></div>
-    <div class="corner bl ${suit.cls}"><span class="s">${suit.sym}</span></div>
-    <div class="corner br ${suit.cls}"><span class="s">${suit.sym}</span></div>
-    <div class="cull-rank-center">${rank}</div>`;
-}
 function _cullCarreFace(r) {
   const rank = RANKS[r];
   return `
-    <div class="corner tl black"><span class="s">${SUITS[0].sym}</span></div>
-    <div class="corner tr red"><span class="s">${SUITS[1].sym}</span></div>
-    <div class="corner bl red"><span class="s">${SUITS[2].sym}</span></div>
-    <div class="corner br black"><span class="s">${SUITS[3].sym}</span></div>
+    <div class="corner tl black"><span class="r">${rank}</span><span class="s">${SUITS[0].sym}</span></div>
+    <div class="corner tr red"><span class="r">${rank}</span><span class="s">${SUITS[1].sym}</span></div>
+    <div class="corner bl red"><span class="r">${rank}</span><span class="s">${SUITS[2].sym}</span></div>
+    <div class="corner br black"><span class="r">${rank}</span><span class="s">${SUITS[3].sym}</span></div>
     <div class="cull-rank-center">${rank}</div>`;
-}
-function _cullCouleurFace(s) {
-  const suit = SUITS[s];
-  return `
-    <div class="corner tl ${suit.cls}"><span class="s">${suit.sym}</span></div>
-    <div class="corner tr ${suit.cls}"><span class="s">${suit.sym}</span></div>
-    <div class="corner bl ${suit.cls}"><span class="s">${suit.sym}</span></div>
-    <div class="corner br ${suit.cls}"><span class="s">${suit.sym}</span></div>
-    <div class="cbig ${suit.cls}">${suit.sym}</div>`;
 }
 
 document.getElementById('drillCullStrip').addEventListener('click', e => {
@@ -226,7 +208,7 @@ function rollConsigne(t) {
       card = { carre: Math.floor(Math.random() * 13) };
       txt = '';
     } else if (mode === 'couleur') {
-      card = { couleur: Math.floor(Math.random() * 4) };
+      card = { couleur: Math.floor(Math.random() * 4), r: Math.floor(Math.random() * 13) };
       txt = '';
     } else {
       const r = Math.floor(Math.random() * 13), s = Math.floor(Math.random() * 4);
@@ -252,10 +234,9 @@ function rollConsigne(t) {
     cardEl.classList.remove('flip');
     void cardEl.offsetWidth;
     cardEl.classList.add('flip');
-    if (card.carre !== undefined)       cardEl.innerHTML = _cullCarreFace(card.carre);
-    else if (card.couleur !== undefined) cardEl.innerHTML = _cullCouleurFace(card.couleur);
-    else if (card.isCull)               cardEl.innerHTML = _cullCarteFace(card.r, card.s);
-    else                                cardEl.innerHTML = cardFace(card.r, card.s);
+    if (card.carre !== undefined)        cardEl.innerHTML = _cullCarreFace(card.carre);
+    else if (card.couleur !== undefined) cardEl.innerHTML = cardFace(card.r, card.couleur);
+    else                                 cardEl.innerHTML = cardFace(card.r, card.s);
     S.currentCard = card;
   } else {
     cardEl.classList.add('hidden');
