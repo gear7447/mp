@@ -192,9 +192,18 @@
     <div class="drill-tech"><div class="fam" id="d_fam"></div><div class="nm" id="d_name"></div></div>
     <div class="card hidden" id="d_card"></div>
     <div class="cull-strip hidden" id="drillCullStrip">
-      <button class="cull-chip active" data-mode="carte">Carte</button>
-      <button class="cull-chip" data-mode="carre">Carré</button>
-      <button class="cull-chip" data-mode="couleur">Couleur</button>
+      <div class="cull-row">
+        <button class="cull-chip active" data-mode="carte">Carte</button>
+        <button class="cull-chip" data-mode="carre">Carré</button>
+        <button class="cull-chip" data-mode="couleur">Couleur</button>
+      </div>
+      <div class="cull-row">
+        <button class="cull-chip active" data-timing="tap">Tap</button>
+        <button class="cull-chip" data-timing="5">5 s</button>
+        <button class="cull-chip" data-timing="10">10 s</button>
+        <button class="cull-chip" data-timing="15">15 s</button>
+        <button class="cull-chip" data-timing="20">20 s</button>
+      </div>
     </div>
     <div class="consigne serif" id="d_consigne"></div>
     <div class="taphint" id="d_hint"></div>

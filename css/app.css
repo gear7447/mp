@@ -111,7 +111,8 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 .consigne .red { color: var(--red); }
 .consigne .black { color: #efe7d6; }
 .taphint { font-size: .78rem; color: var(--brass-soft); letter-spacing: .04em; min-height: 1.2em; }
-.cull-strip { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.cull-strip { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.cull-row { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
 .cull-chip {
   padding: 5px 13px; border-radius: 20px; font-size: .8rem; cursor: pointer;
   border: 1px solid var(--line); background: var(--panel-2); color: var(--muted);
