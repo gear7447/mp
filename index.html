@@ -94,10 +94,25 @@
   <div class="topbar">
     <button class="link" id="manageBack">‹ Retour</button>
     <h1 class="serif">Gérer les techniques</h1>
-    <button class="link" id="manageAdd">+ Ajouter</button>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="link" id="importOpen" style="font-size:.85rem;color:var(--muted)">Import</button>
+      <button class="link" id="manageAdd">+ Ajouter</button>
+    </div>
   </div>
   <div class="tech-list" id="manageList"></div>
 </section>
+
+<div class="overlay hidden" id="importOverlay">
+  <div class="dialog" style="text-align:left">
+    <p style="font-weight:600;margin:0 0 8px;color:var(--text)">Import rapide</p>
+    <p class="hint" style="margin:0 0 12px">Une technique par ligne. Famille «&nbsp;Autre&nbsp;» par défaut — à modifier ensuite dans l'éditeur.</p>
+    <textarea id="importText" placeholder="Double lift&#10;Cull classique&#10;Saut de coupe&#10;..." style="width:100%;min-height:160px;margin-bottom:12px;font-size:.9rem"></textarea>
+    <div class="actions" style="margin:0">
+      <button class="btn btn-ghost" id="importCancel">Annuler</button>
+      <button class="btn btn-primary" id="importConfirm">Importer</button>
+    </div>
+  </div>
+</div>
 
 <!-- ===================== ÉDITEUR ===================== -->
 <section id="screen-editor" class="screen hidden">

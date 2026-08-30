@@ -93,3 +93,31 @@ document.getElementById('deleteBtn').addEventListener('click', () => {
     }
   );
 });
+
+/* ---- import rapide ---- */
+document.getElementById('importOpen').addEventListener('click', () => {
+  document.getElementById('importText').value = '';
+  document.getElementById('importOverlay').classList.remove('hidden');
+  setTimeout(() => document.getElementById('importText').focus(), 80);
+});
+document.getElementById('importCancel').addEventListener('click', () => {
+  document.getElementById('importOverlay').classList.add('hidden');
+});
+document.getElementById('importConfirm').addEventListener('click', () => {
+  const lines = document.getElementById('importText').value
+    .split('\n').map(l => l.trim()).filter(l => l);
+  if (!lines.length) return;
+  const now = Date.now();
+  lines.forEach(name => {
+    state.techniques.push({
+      id: uid(), name, last: 0, updated: now,
+      family: FAMILIES[FAMILIES.length - 1],
+      mode: 'tap', intervalSec: 10, blockSec: 300,
+      level: 1, template: name,
+      nMin: 1, nMax: 6,
+      focus: false, metro: false, bpm: 60, learnedAt: null,
+    });
+  });
+  save(); renderLibrary(); renderManage();
+  document.getElementById('importOverlay').classList.add('hidden');
+});
