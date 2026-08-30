@@ -82,12 +82,19 @@ document.getElementById('drillCullStrip').addEventListener('click', e => {
     _cullMode = chip.dataset.mode;
     document.querySelectorAll('.cull-chip[data-mode]').forEach(c => c.classList.toggle('active', c === chip));
     if (S) rollConsigne(techById(S.prevId));
-  } else if (chip.dataset.timing) {
-    _cullTiming = chip.dataset.timing;
-    document.querySelectorAll('.cull-chip[data-timing]').forEach(c => c.classList.toggle('active', c === chip));
-    if (_cullTiming !== 'tap' && S) S.nextRoll = Date.now() + parseInt(_cullTiming) * 1000;
+  } else if (chip.dataset.timing === 'tap') {
+    _cullTiming = 'tap';
+    chip.classList.add('active');
   }
 });
+document.getElementById('cullTimingInput').addEventListener('change', e => {
+  const val = Math.max(2, Math.min(300, parseInt(e.target.value) || 10));
+  e.target.value = val;
+  _cullTiming = String(val);
+  document.querySelector('.cull-chip[data-timing]').classList.remove('active');
+  if (S) S.nextRoll = Date.now() + val * 1000;
+});
+
 let masterTimer = null, metroTimer = null, audioCtx = null;
 
 function initAudio() {
