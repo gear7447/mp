@@ -117,7 +117,18 @@ document.getElementById('cullTimingInput').addEventListener('change', e => {
   }
 });
 
-let masterTimer = null, metroTimer = null, audioCtx = null;
+let masterTimer = null, metroTimer = null, audioCtx = null, _wakeLock = null;
+
+async function _acquireWakeLock() {
+  if (!('wakeLock' in navigator)) return;
+  try { _wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}
+}
+function _releaseWakeLock() {
+  if (_wakeLock) { _wakeLock.release(); _wakeLock = null; }
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && S && !S.paused) _acquireWakeLock();
+});
 
 function initAudio() {
   try {
@@ -170,6 +181,7 @@ function startSession() {
   updatePauseUI();
   nextBlock(true);
   masterTimer = setInterval(tick, 200);
+  _acquireWakeLock();
 }
 
 function techById(id) { return state.techniques.find(t => t.id === id); }

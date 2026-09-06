@@ -1,5 +1,6 @@
 /* ============ récapitulatif de séance ============ */
 function endSession() {
+  _releaseWakeLock();
   if (masterTimer) { clearInterval(masterTimer); masterTimer = null; }
   clearMetro();
   if (S.paused) {
