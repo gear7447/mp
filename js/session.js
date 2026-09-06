@@ -45,7 +45,8 @@ document.getElementById('beginBtn').addEventListener('click', startSession);
 /* ============ moteur de séance ============ */
 let S = null;
 let _cullMode = 'carte'; // 'carte' | 'carre' | 'couleur'
-let _cullTiming = 'tap'; // 'tap' | '5' | '10' | '15' | '20'
+let _cullTap = true;      // tap sur l'écran avance la carte
+let _cullAutoSec = null;  // null = off, nombre = intervalle auto en secondes
 let _cullDecks = { carte: [], carre: [], couleur: [] };
 
 function _cullPick(mode) {
@@ -81,16 +82,22 @@ document.getElementById('drillCullStrip').addEventListener('click', e => {
     document.querySelectorAll('.cull-chip[data-mode]').forEach(c => c.classList.toggle('active', c === chip));
     if (S) rollConsigne(techById(S.prevId));
   } else if (chip.dataset.timing === 'tap') {
-    _cullTiming = 'tap';
-    chip.classList.add('active');
+    _cullTap = !_cullTap;
+    chip.classList.toggle('active', _cullTap);
+  } else if (chip.dataset.timing === 'auto') {
+    const wasOn = _cullAutoSec !== null;
+    _cullAutoSec = wasOn ? null : (parseInt(document.getElementById('cullTimingInput').value) || 10);
+    chip.classList.toggle('active', !wasOn);
+    if (!wasOn && S) S.nextRoll = Date.now() + _cullAutoSec * 1000;
   }
 });
 document.getElementById('cullTimingInput').addEventListener('change', e => {
   const val = Math.max(2, Math.min(300, parseInt(e.target.value) || 10));
   e.target.value = val;
-  _cullTiming = String(val);
-  document.querySelector('.cull-chip[data-timing]').classList.remove('active');
-  if (S) S.nextRoll = Date.now() + val * 1000;
+  if (_cullAutoSec !== null) {
+    _cullAutoSec = val;
+    if (S) S.nextRoll = Date.now() + val * 1000;
+  }
 });
 
 let masterTimer = null, metroTimer = null, audioCtx = null;
@@ -242,8 +249,8 @@ function rollConsigne(t) {
   }
   txt = txt.replace(/(^|[^\d])1 cartes\b/g, '$11 carte');
   document.getElementById('d_consigne').innerHTML = txt;
-  if (t.family === 'Cull / triage' && _cullTiming !== 'tap' && S) {
-    S.nextRoll = Date.now() + parseInt(_cullTiming) * 1000;
+  if (t.family === 'Cull / triage' && _cullAutoSec !== null && S) {
+    S.nextRoll = Date.now() + _cullAutoSec * 1000;
   } else if (t.mode === 'interval' && S) {
     S.nextRoll = Date.now() + t.intervalSec * 1000;
   }
@@ -276,7 +283,7 @@ function tick() {
   if (br <= 0) { bell(); nextBlock(false); return; }
   const cur = techById(S.prevId);
   const isCullTech = cur?.family === 'Cull / triage';
-  if (isCullTech && _cullTiming !== 'tap' && now >= S.nextRoll) { rollConsigne(cur); return; }
+  if (isCullTech && _cullAutoSec !== null && now >= S.nextRoll) { rollConsigne(cur); return; }
   if (cur && cur.mode === 'interval' && now >= S.nextRoll) rollConsigne(cur);
 }
 
@@ -290,7 +297,7 @@ document.getElementById('drillStage').addEventListener('click', () => {
   if (!S || S.paused) return;
   const t = techById(S.prevId);
   if (!t) return;
-  if (t.family === 'Cull / triage' && _cullTiming === 'tap') { rollConsigne(t); return; }
+  if (t.family === 'Cull / triage' && _cullTap) { rollConsigne(t); return; }
   if (t.mode === 'tap') rollConsigne(t);
 });
 document.getElementById('nextBtn').addEventListener('click', () => { if (!S || S.paused) return; openNextConfirm(); });
