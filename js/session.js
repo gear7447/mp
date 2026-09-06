@@ -21,19 +21,36 @@ function syncSetupVis() {
   document.getElementById('pickHint').textContent = showPick ? '(coche + règle la durée de chaque bloc)' : '';
 }
 
+function makePickRow(t, checked) {
+  const row = document.createElement('div');
+  row.className = 'pick-row';
+  row.innerHTML = `<input type="checkbox" data-id="${t.id}"${checked ? ' checked' : ''}>
+    <span class="nm">${escapeHtml(t.name)} ${t.focus ? '⭐' : ''}</span>
+    <span class="dur"><input type="number" min="0.5" step="0.5" value="${t.blockSec / 60}" data-dur="${t.id}"> min</span>`;
+  row.querySelector('[data-dur]').addEventListener('change', e => {
+    sessionDur[t.id] = Math.max(15, Math.round((parseFloat(e.target.value) || 5) * 60));
+  });
+  return row;
+}
+
 function renderPick() {
   const wrap = document.getElementById('pickList');
   wrap.innerHTML = '';
-  for (const t of state.techniques) {
-    const row = document.createElement('div');
-    row.className = 'pick-row';
-    row.innerHTML = `<input type="checkbox" data-id="${t.id}" checked>
-      <span class="nm">${escapeHtml(t.name)} ${t.focus ? '⭐' : ''}</span>
-      <span class="dur"><input type="number" min="0.5" step="0.5" value="${t.blockSec / 60}" data-dur="${t.id}"> min</span>`;
-    row.querySelector('[data-dur]').addEventListener('change', e => {
-      sessionDur[t.id] = Math.max(15, Math.round((parseFloat(e.target.value) || 5) * 60));
-    });
-    wrap.appendChild(row);
+  const lastIds = new Set(state.settings.lastPickIds || []);
+  const hasSaved = lastIds.size > 0 && state.techniques.some(t => lastIds.has(t.id));
+  const selected = hasSaved ? state.techniques.filter(t => lastIds.has(t.id)) : state.techniques;
+  const others   = hasSaved ? state.techniques.filter(t => !lastIds.has(t.id)) : [];
+
+  for (const t of selected) wrap.appendChild(makePickRow(t, true));
+
+  if (others.length) {
+    const details = document.createElement('details');
+    details.className = 'pick-more';
+    const summary = document.createElement('summary');
+    summary.textContent = `▾ Ajouter une technique (${others.length})`;
+    details.appendChild(summary);
+    for (const t of others) details.appendChild(makePickRow(t, false));
+    wrap.appendChild(details);
   }
 }
 
@@ -134,6 +151,7 @@ function startSession() {
     ids = [...document.querySelectorAll('#pickList input[type=checkbox]:checked')].map(c => c.dataset.id);
   }
   if (!ids.length) { alert('Sélectionne au moins une technique.'); return; }
+  if (mode !== 'once') { state.settings.lastPickIds = ids; save(); }
   _cullDecks = { carte: [], carre: [], couleur: [] };
 
   S = { mode, ids, durOf:{}, order:null, idx:-1, appeared:new Set(), prevId:null,

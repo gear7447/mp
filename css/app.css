@@ -92,6 +92,10 @@ textarea { min-height: 74px; resize: vertical; line-height: 1.5; }
 .pick-row .nm { flex: 1; font-size: .95rem; }
 .pick-row .dur { display: flex; align-items: center; gap: 5px; font-size: .8rem; color: var(--muted); }
 .pick-row .dur input { width: 62px; padding: 7px; text-align: center; }
+.pick-more { margin-top: 4px; }
+.pick-more > summary { list-style: none; cursor: pointer; font-size: .85rem; color: var(--brass); padding: 6px 2px; -webkit-tap-highlight-color: transparent; }
+.pick-more > summary::-webkit-details-marker { display: none; }
+.pick-more > .pick-row { margin-top: 8px; }
 
 /* ---------- drill ---------- */
 #screen-drill { justify-content: space-between; text-align: center; position: relative; }
