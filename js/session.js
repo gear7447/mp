@@ -46,6 +46,22 @@ document.getElementById('beginBtn').addEventListener('click', startSession);
 let S = null;
 let _cullMode = 'carte'; // 'carte' | 'carre' | 'couleur'
 let _cullTiming = 'tap'; // 'tap' | '5' | '10' | '15' | '20'
+let _cullDecks = { carte: [], carre: [], couleur: [] };
+
+function _cullPick(mode) {
+  const deck = _cullDecks[mode];
+  if (!deck.length) {
+    if (mode === 'carte') {
+      for (let r = 0; r < 13; r++) for (let s = 0; s < 4; s++) deck.push({ r, s });
+    } else if (mode === 'carre') {
+      for (let r = 0; r < 13; r++) deck.push(r);
+    } else {
+      for (let s = 0; s < 4; s++) deck.push(s);
+    }
+    shuffle(deck);
+  }
+  return deck.pop();
+}
 
 function _cullCarreFace(r) {
   const rank = RANKS[r];
@@ -111,6 +127,7 @@ function startSession() {
     ids = [...document.querySelectorAll('#pickList input[type=checkbox]:checked')].map(c => c.dataset.id);
   }
   if (!ids.length) { alert('Sélectionne au moins une technique.'); return; }
+  _cullDecks = { carte: [], carre: [], couleur: [] };
 
   S = { mode, ids, durOf:{}, order:null, idx:-1, appeared:new Set(), prevId:null,
         sessionEnd:0, blockEnd:0, nextRoll:0, currentCard:null, blocks:0, startedAt:Date.now(),
@@ -205,13 +222,15 @@ function rollConsigne(t) {
     const isCull = techById(S?.prevId)?.family === 'Cull / triage';
     const mode = isCull ? _cullMode : 'carte';
     if (mode === 'carre') {
-      card = { carre: Math.floor(Math.random() * 13) };
+      card = { carre: _cullPick('carre') };
       txt = '';
     } else if (mode === 'couleur') {
-      card = { couleur: Math.floor(Math.random() * 4), r: Math.floor(Math.random() * 13) };
+      card = { couleur: _cullPick('couleur'), r: Math.floor(Math.random() * 13) };
       txt = '';
     } else {
-      const r = Math.floor(Math.random() * 13), s = Math.floor(Math.random() * 4);
+      let r, s;
+      if (isCull) { const p = _cullPick('carte'); r = p.r; s = p.s; }
+      else { r = Math.floor(Math.random() * 13); s = Math.floor(Math.random() * 4); }
       card = { r, s, isCull };
       if (!isCull) {
         const suit = SUITS[s];
