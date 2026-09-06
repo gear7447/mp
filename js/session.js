@@ -118,6 +118,20 @@ document.getElementById('cullTimingInput').addEventListener('change', e => {
 });
 
 let masterTimer = null, metroTimer = null, audioCtx = null, _wakeLock = null;
+let _drillSound = false;
+
+function _speak(text) {
+  if (!_drillSound || !window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'fr-FR'; u.rate = 0.88;
+  speechSynthesis.speak(u);
+}
+
+document.getElementById('drillSoundBtn').addEventListener('click', () => {
+  _drillSound = !_drillSound;
+  document.getElementById('drillSoundBtn').textContent = _drillSound ? '🔊' : '🔇';
+});
 
 async function _acquireWakeLock() {
   if (!('wakeLock' in navigator)) return;
@@ -290,9 +304,9 @@ function rollConsigne(t) {
     cardEl.classList.remove('flip');
     void cardEl.offsetWidth;
     cardEl.classList.add('flip');
-    if (card.carre !== undefined)        cardEl.innerHTML = _cullCarreFace(card.carre);
-    else if (card.couleur !== undefined) cardEl.innerHTML = cardFace(card.r, card.couleur);
-    else                                 cardEl.innerHTML = cardFace(card.r, card.s);
+    if (card.carre !== undefined)        { cardEl.innerHTML = _cullCarreFace(card.carre); _speak(RANKS_FR[card.carre]); }
+    else if (card.couleur !== undefined) { cardEl.innerHTML = cardFace(card.r, card.couleur); _speak(SUITS_FR[card.couleur]); }
+    else                                 { cardEl.innerHTML = cardFace(card.r, card.s); _speak(RANKS_FR[card.r] + ' ' + SUITS[card.s].fr); }
     S.currentCard = card;
   } else {
     cardEl.classList.add('hidden');

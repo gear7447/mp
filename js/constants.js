@@ -9,6 +9,8 @@ const SUITS = [
   {sym:'♣︎',cls:'black',fr:'de trèfle'}
 ];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+const RANKS_FR = ['As','Deux','Trois','Quatre','Cinq','Six','Sept','Huit','Neuf','Dix','Valet','Dame','Roi'];
+const SUITS_FR = ['Pique','Cœur','Carreau','Trèfle'];
 const MODE_LABEL = { tap:'au tap', interval:'intervalle', fixed:'fixe' };
 
 const _X = {L:24, C:50, R:76};
